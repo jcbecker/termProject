@@ -1,0 +1,53 @@
+
+%%=============================================================================
+%% Trampa para corrigir o bug do hyperref que redefine o caption das figuras e das
+%% tabelas, n�o colocando o nome ``Figura'' antes do n�mero do mesmo na lista
+%%=============================================================================
+
+\makeatletter
+
+\long\def\@caption#1[#2]#3{%
+  \expandafter\ifx\csname if@capstart\expandafter\endcsname
+                  \csname iftrue\endcsname
+    \global\let\@currentHref\hc@currentHref
+  \else
+    \hyper@makecurrent{\@captype}%
+  \fi
+  \@ifundefined{NR@gettitle}{%
+    \def\@currentlabelname{#2}%
+  }{%
+    \NR@gettitle{#2}%
+  }%
+  \par\addcontentsline{\csname ext@#1\endcsname}{#1}{%
+    \protect\numberline{\csname fnum@#1\endcsname ~-- }{\ignorespaces #2}%
+  }%
+  \begingroup
+    \@parboxrestore
+    \if@minipage
+      \@setminipage
+    \fi
+    \normalsize
+    \expandafter\ifx\csname if@capstart\expandafter\endcsname
+                    \csname iftrue\endcsname
+      \global\@capstartfalse
+      \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces#3}%
+    \else
+      \@makecaption{\csname fnum@#1\endcsname}{%
+        \ignorespaces
+        \ifHy@nesting
+          \expandafter\hyper@@anchor\expandafter{\@currentHref}{#3}%
+        \else
+          \Hy@raisedlink{%
+            \expandafter\hyper@@anchor\expandafter{%
+              \@currentHref
+            }{\relax}%
+          }%
+          #3%
+        \fi
+      }%
+    \fi
+    \par
+  \endgroup
+}
+
+\makeatother

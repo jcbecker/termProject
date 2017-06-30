@@ -1,0 +1,308 @@
+%\listfiles
+\documentclass[tg]{mdtuffs}
+% um tipo específico de monografia pode ser informado como parâmetro opcional:
+%\documentclass[tese]{mdtuffs}
+% a opção `openright' pode ser usada para forçar inícios de capítulos
+% em páginas ímpares
+% \documentclass[openright]{mdtuffs}
+% para gerar uma versão frente-e-verso, use a opção 'twoside':
+% \documentclass[twoside]{mdtuffs}
+%\usepackage{hyperref}	
+%\usepackage{breakurl}
+\usepackage[T1]{fontenc}        % pacote para conj. de caracteres correto
+\usepackage{fix-cm} %para funcionar corretamente o tamanho das fontes da capa
+\usepackage{times, color,xcolor}       % pacote para usar fonte Adobe Times e cores
+\usepackage[utf8]{inputenc}   % pacote para acentuação
+\usepackage{graphicx}  % pacote para importar figuras
+\usepackage{caption}
+
+%\usepackage[brazil]{babel}   
+\usepackage{enumerate}
+\usepackage{amsmath,latexsym,amssymb} %Pacotes matemáticos
+\usepackage[%hidelinks%, 
+            bookmarksopen=true,linktoc=none,colorlinks=true,
+            linkcolor=black,citecolor=black,filecolor=magenta,urlcolor=blue,
+            pdftitle={Título da Dissertação ou Trabalho ....},
+            pdfauthor={Nome Autor Sobrenome},
+            pdfsubject={Projeto/Trabalho de Conclusão de Curso},
+            pdfkeywords={Monografia, Modelo, LaTeX}
+            ]{hyperref} %hidelinks disponível no pacote hyperref a partir da versão 2011-02-05  6.82a
+%Nesse caso, hidelinks retira os retângulos em volta dos links das referências
+
+%Definição de minha autoria pra funcionar as XML
+%\def\lnl#1#2{{\scriptsize\bfseries #1}\hspace{#2em}}
+\usepackage{setspace}
+%---------------------------------------------------
+% Definições dos XML
+%---------------------------------------------------
+\usepackage{verbatim}
+\usepackage{listings}
+%\usepackage[usenames,dvipsnames]{color}
+	%\def\mlnl#1#2{{\scriptsize\bfseries #1}\hspace{#2em}}
+
+%---------------------------------------------------
+% Definições dos Algoritmos
+%---------------------------------------------------
+	\usepackage[portuguese,ruled,linesnumbered]{algorithm2e}
+	\usepackage{etoolbox}
+	\makeatletter
+	\patchcmd{\@algocf@start}{%
+		\begin{lrbox}{\algocf@algobox}%
+	}{%
+	  \rule{0.\textwidth}{\z@}%
+	  \begin{lrbox}{\algocf@algobox}%
+	  \begin{minipage}{1.\textwidth}%
+	}{}{}
+	\patchcmd{\@algocf@finish}{%
+	  \end{lrbox}%
+	}{%
+	  \end{minipage}%
+	  \end{lrbox}%
+	}{}{}
+	\makeatother
+
+	\SetAlFnt{\tt}
+	
+	\SetKwFunction{FRecurs}{FnRecursive}%
+%-------------------------------------------------
+
+     
+\sloppy
+%%Margens conforme MDT 1ª edição, arrumar diretamente no mdtuffs.cls para funcionar a opção twoside *PENDENTE*
+\usepackage[inner=30mm,outer=20mm,top=30mm,bottom=20mm]{geometry} 
+
+%==============================================================================
+% Se o pacote hyperref foi carregado a linha abaixo corrige um bug na hora
+% de montar o sumário da lista de figuras e tabelas
+% Se o pacote não foi carregado, comentar a linha %
+%==============================================================================
+\input{macros/bugcaption}
+
+%==============================================================================
+% Identificação do trabalho
+%==============================================================================
+\title{Título}
+
+\author{Sobrenome}{Nome}
+%Descomentar se for uma "autora"
+%\autoratrue
+
+\course{Curso de Ciência da Computação}
+\altcourse{Curso de Ciência da Computação}
+
+%não usado por enquanto
+\institute{Ciência da Computação}
+\degree{Bacharel em Ciência da Computação}
+
+% Número do TG (verificar na secretaria do curso)
+% Para mestrado deixar sem opção dentro do {}
+\trabalhoNumero{}
+
+%Orientador
+\advisor[Prof.]{Dr.}{Sobrenome}{Nome}
+%Se for uma ``orientadora'' descomentar a linha baixo
+%\orientadoratrue
+
+%Co orientador, comentar se não existir
+%\coadvisor[Prof.]{Drª.}{Pereira}{Maria Regina}
+%\coorientadoratrue %Se for uma ``Co-Orientadora''
+
+%Avaliadores (Banca)
+\committee[Dr.]{Sobrenome}{Nome}{UFFS}
+\committee[Me.]{Sobrenome}{Nome}{UFFS}
+
+% a data deve ser a da defesa; se nao especificada, são gerados
+% mes e ano correntes
+\date{1}{Janeiro}{2014}
+
+%Palavras chave
+%\keyword{Dissertação} 
+%\keyword{Modelo}
+%\keyword{LaTeX}
+
+%%=============================================================================
+%% Início do documento
+%%=============================================================================
+\begin{document}
+
+%%=============================================================================
+%% Capa e folha de rosto
+%%=============================================================================
+\maketitle
+
+%%=============================================================================
+%% Catalogação e Folha de aprovação
+%%=============================================================================
+\clearpage
+Somente para TCC 2: Está página deve ser substituida pela ficha de catalogação antes de sua entrega na biblioteca. 
+%Somente obrigatório para dissertação, para TG, remover as linhas	77	%
+%Como a CIP vai ser impressa atrás da página de rosto, as margens inner e outer	
+%devem ser invertidas.
+%\newgeometry{inner=20mm,outer=30mm,top=30mm,bottom=20mm}	
+%\makeCIP{email@email.com} %email do autor		
+%\restoregeometry
+
+%Se for usar a catalogação gerada pelo gerador do site da biblioteca comentar as linhas
+%acima e utilizar o comando abaixo
+%\includeCIP{CIP.pdf}
+
+%folha de aprovação
+
+%IMPORTANTE: Esta folha deverá ser impressa e assinada pela banca e depois digitalizada e inserida no arquivo final para entrega no repositório institucional.
+\makeapprove
+
+%%=============================================================================
+%% Dedicatória (opcional)
+%%=============================================================================
+%\clearpage
+%\begin{flushright}
+%\begin{onehalfspacing}
+%\mbox{}\vfill
+
+%{Texto da dedicatória ......}
+
+%\end{onehalfspacing}
+%\end{flushright}
+
+%%=============================================================================
+%% Agradecimentos (opcional)
+%%=============================================================================
+%\clearpage
+%{
+%\centering
+%\textbf{AGRADECIMENTOS}\\
+%}
+%\vspace{1.5cm}
+%\begin{onehalfspacing}
+
+%Texto de agradecimento. 
+
+%\end{onehalfspacing}
+
+
+%%=============================================================================
+%% Epígrafe (opcional)
+%%=============================================================================
+%\clearpage
+%\begin{flushright}
+%\mbox{}\vfill
+%{\sffamily\itshape
+%``Frase da epígrafe'' \\ }
+%--- \textsc{Autor da frase}
+%\end{flushright}
+
+
+%%=============================================================================
+%% Resumo
+%%=============================================================================
+\begin{abstract}
+Resumo...
+\end{abstract}
+
+%%=============================================================================
+%% Abstract
+%%=============================================================================
+% resumo na outra língua
+% como parametros devem ser passados o titulo, o nome do curso,
+% as palavras-chave na outra língua, separadas por vírgulas, o mês em inglês
+%o a sigla do dia em inglês: st, nd, th ...
+\begin{englishabstract}
+{Title}
+{Bachelor of Computer Science}
+{Keywords1. Keyword2}
+{March}
+{st}
+Abstract... 
+\end{englishabstract}
+
+%% Lista de Ilustrações (opc)
+%% Lista de Símbolos (opc)
+%% Lista de Anexos e Apêndices (opc)
+
+%%=============================================================================
+%% Lista de figuras (comentar se não houver)
+%%=============================================================================
+\listoffigures
+
+%%=============================================================================
+%% Lista de tabelas (comentar se não houver)
+%%=============================================================================
+\listoftables
+
+%%=============================================================================
+%% Lista de Apêndices (comentar se não houver)
+%%=============================================================================
+%\listofappendix
+
+%%=============================================================================
+%% Lista de Anexos (comentar se não houver)
+%%=============================================================================
+%\listofannex
+
+%%=============================================================================
+%% Lista de abreviaturas e siglas
+%%=============================================================================
+ %o parametro deve ser a abreviatura mais longa
+%\begin{listofabbrv}{UbiComp}
+%   \item [BNF] \textit{Backus-Naur Form}
+ %  \item [UbiComp] Computação Ubíqua
+%\end{listofabbrv}
+
+
+%%=============================================================================
+%% Lista de simbolos (opcional)
+%%=============================================================================
+%Simbolos devem aparecer conforme a ordem em que aparecem no texto
+% o parametro deve ser o símbolo mais longo
+%\begin{listofsymbols}{teste}
+ % \item [$\varnothing$] vazio
+ % \item [$\Gamma$]  Gama
+ % \item [$\forall$] Para todo
+%\end{listofsymbols}
+
+%%=============================================================================
+%% Sumário
+%%=============================================================================
+\tableofcontents
+
+
+%%=============================================================================
+%% Início da monografia
+%%=============================================================================
+\setlength{\baselineskip}{1.5\baselineskip}
+
+%Adiciona cada capitulo
+\input{capitulos/introducao}
+\input{capitulos/trabalhosrelacionados}
+
+
+\setlength{\baselineskip}{\baselineskip}
+
+%%=============================================================================
+%% Referências
+%%=============================================================================
+\bibliographystyle{abbrv}
+%\bibliography{referencias/referencias}
+%\bibliographystyle{abnt}
+\bibliography{referencias/referencias}
+
+
+
+%IMPORTANTE: Se precisar usar alguma seção ou subseção dentro dos apêndices ou
+%anexos, utilizar o comando \tocless para não adicionar no Sumário
+%Exemplos: 
+% \tocless\section{Histórico}
+%%=============================================================================
+%% Apêndices
+%%=============================================================================
+%\appendix
+%\include{capitulos/apendicea}
+%\include{capitulos/apendiceb}
+
+%%=============================================================================
+%% Anexos
+%%=============================================================================
+%\annex
+%\include{capitulos/anexoa}
+
+\end{document}
