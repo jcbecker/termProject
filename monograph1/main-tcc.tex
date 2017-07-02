@@ -56,7 +56,7 @@
 	\patchcmd{\@algocf@finish}{%
 	  \end{lrbox}%
 	}{%
-	  \end{minipage}%
+	  \end{minipage}%-----------------------------------------------------------Tem erro de sintaxe aqui
 	  \end{lrbox}%
 	}{}{}
 	\makeatother
@@ -81,9 +81,9 @@
 %==============================================================================
 % Identificação do trabalho
 %==============================================================================
-\title{Título}
+\title{Geração procedural de biomas}
 
-\author{Sobrenome}{Nome}
+\author{Becker}{João Carlos}
 %Descomentar se for uma "autora"
 %\autoratrue
 
@@ -99,7 +99,7 @@
 \trabalhoNumero{}
 
 %Orientador
-\advisor[Prof.]{Dr.}{Sobrenome}{Nome}
+\advisor[Prof.]{Dr.}{Wuerges}{Emílio}
 %Se for uma ``orientadora'' descomentar a linha baixo
 %\orientadoratrue
 
@@ -113,7 +113,7 @@
 
 % a data deve ser a da defesa; se nao especificada, são gerados
 % mes e ano correntes
-\date{1}{Janeiro}{2014}
+\date{30}{Junho}{2017}
 
 %Palavras chave
 %\keyword{Dissertação} 
@@ -281,9 +281,9 @@ Abstract...
 %%=============================================================================
 %% Referências
 %%=============================================================================
-\bibliographystyle{abbrv}
+%\bibliographystyle{abbrv}------------------------------------------------------Original usava essa, mas sem informações da fonte, troca para abnt
 %\bibliography{referencias/referencias}
-%\bibliographystyle{abnt}
+\bibliographystyle{abnt}
 \bibliography{referencias/referencias}
 
 
