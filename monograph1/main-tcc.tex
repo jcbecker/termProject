@@ -133,8 +133,8 @@
 %%=============================================================================
 %% Catalogação e Folha de aprovação
 %%=============================================================================
-\clearpage
-Somente para TCC 2: Está página deve ser substituida pela ficha de catalogação antes de sua entrega na biblioteca. 
+%\clearpage
+%Somente para TCC 2: Está página deve ser substituida pela ficha de catalogação antes de sua entrega na biblioteca. 
 %Somente obrigatório para dissertação, para TG, remover as linhas	77	%
 %Como a CIP vai ser impressa atrás da página de rosto, as margens inner e outer	
 %devem ser invertidas.
@@ -242,11 +242,13 @@ Abstract...
 %%=============================================================================
 %% Lista de abreviaturas e siglas
 %%=============================================================================
- %o parametro deve ser a abreviatura mais longa
-%\begin{listofabbrv}{UbiComp}
+% O parametro deve ser a abreviatura mais longa
+\begin{listofabbrv}{ESA}
+\item [ESA] Entertainment Software Association    
+    
 %   \item [BNF] \textit{Backus-Naur Form}
- %  \item [UbiComp] Computação Ubíqua
-%\end{listofabbrv}
+%  \item [UbiComp] Computação Ubíqua
+\end{listofabbrv}
 
 
 %%=============================================================================
@@ -274,7 +276,6 @@ Abstract...
 %Adiciona cada capitulo
 \input{capitulos/introducao}
 \input{capitulos/projeto}
-\input{capitulos/trabalhosrelacionados}
 
 
 \setlength{\baselineskip}{\baselineskip}
