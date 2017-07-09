@@ -32,3 +32,6 @@ monograph1/main-tcc.out
 monograph1/main-tcc.pdf
 monograph1/main-tcc.toc
 monograph1/main-tcc.bbl
+
+#arquivo de backup criado pelo aspell
+*.bak
