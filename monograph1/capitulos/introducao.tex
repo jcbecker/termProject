@@ -10,7 +10,6 @@ segundo os mesmos, em 2016 o consumidor norte americano gastou em torno de $30.4
 bilhões de dólares na industria dos jogos. No mesmo ano, as companhias de jogos
 norte americanas adicionaram mais de 11.7 bilhões de dólares na \textit{GDP}
 do país \cite{entertainment2017essential}.
-
 \begin{figure}[h]
     \captionsetup{justification=raggedright, singlelinecheck=false}
     \centering
@@ -29,7 +28,6 @@ o conteúdo dos jogos, com equipes de programadores, designers,  roteiristas,
 entre outros. A força de trabalho dos mesmos costuma ser a parte mais cara da
 criação do jogo.
 
-
 \section{Apresentação}
 Uma maneira de conseguir diminuir os gastos no desenvolvimento de conteúdo, é 
 gerando os mesmos proceduralmente, as chamadas técnicas de \textit{PCG}. 
@@ -45,8 +43,57 @@ são criados pseudo-infinitos sistemas planetários, de forma procedural, e em c
 sistema planetário os planetas e seus relevos também são gerados proceduralmente
 \cite{abreu1990toward}.
 
+O algoritmo para criar o terreno deve ser implementado conforme as
+características do bioma alvo, como exemplo, a implementação de 
+\cite{gabrielle2016canion} e \cite{carli2012canion}, ambos geram relevos de
+cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
+\begin{figure}[h]
+    \captionsetup{justification=raggedright, singlelinecheck=false}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figuras/carli2012result.png}
+    \caption{Resultado do trabalho de \cite{carli2012canion}}
+    \label{fig:carli2012result}
+\end{figure}
 
+Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada uma podendo ter
+múltiplos biomas. Para começar é criado um diagrama de voronoi, onde cada \textit{site}
+vai representar uma região do mapa, os \textit{sites} são gerados em posições
+aleatórias, seguido por Lloyd's algorithm no diagrama para deixar as regiões mais relaxadas \ref{fig:voronoi-2-lloyd}.
+Então é usados uma sequencia de ruídos bidimensionais sobre o mapa para decidir
+áreas de oceano ou ilha, altura da região e bioma da região \ref{fig:patel2010tablebiomes} e \ref{fig:patel2010biomes}, seguido por ruídos
+unidimensionais para as bordas da ilha e fronteiras das regiões ter uma aparência mais natural, 
+por fim tendo como resultado final ilustrado na figura. 
+\begin{figure}[H]
+    \captionsetup{justification=raggedright, singlelinecheck=false}
+    \centering
+    \includegraphics[width=0.6\textwidth]{figuras/voronoi-2-lloyd.png}
+    \caption{Diagrama de voronoi com Lloyd's aplicado}
+    \label{fig:voronoi-2-lloyd}
+\end{figure}
 
+\begin{figure}[H]
+    \captionsetup{justification=raggedright, singlelinecheck=false}
+    \centering
+    \includegraphics[width=0.4\textwidth]{figuras/patel2010tablebiomes.png}
+    \caption{Tabela de biomas}
+    \label{fig:patel2010tablebiomes}
+\end{figure}
+
+\begin{figure}[H]
+    \captionsetup{justification=raggedright, singlelinecheck=false}
+    \centering
+    \includegraphics[width=0.4\textwidth]{figuras/patel2010biomes.png}
+    \caption{Regiões com bioma}
+    \label{fig:patel2010biomes}
+\end{figure}
+
+\begin{figure}[H]
+    \captionsetup{justification=raggedright, singlelinecheck=false}
+    \centering
+    \includegraphics[width=0.4\textwidth]{figuras/voronoi-map-goal-distorted.png}
+    \caption{Resultado final de \cite{patel2010polygonal}}
+    \label{fig:voronoi-map-goal-distorted}
+\end{figure}
 
 %\subsubsection{Exemplo de ilustração}
 
