@@ -59,37 +59,12 @@ Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada um
 múltiplos biomas. Para começar é criado um diagrama de voronoi, onde cada \textit{site}
 vai representar uma região do mapa, os \textit{sites} são gerados em posições
 aleatórias, seguido por Lloyd's algorithm no diagrama para
-deixar as regiões mais relaxadas \ref{fig:voronoi-2-lloyd}.
+deixar as regiões mais relaxadas.
 Então é usados uma sequencia de ruídos bidimensionais sobre o mapa para decidir
-áreas de oceano ou ilha, altura da região e bioma da região
-\ref{fig:patel2010tablebiomes} e \ref{fig:patel2010biomes}, seguido por funções
+áreas de oceano ou ilha, altura da região e bioma da região, seguido por funções
 de ruídos unidimensionais para as bordas da ilha e fronteiras das regiões ter
 uma aparência mais natural, por fim tendo como resultado final ilustrado na
-figura. 
-\begin{figure}[H]
-%    \captionsetup{justification=raggedright, singlelinecheck=false}
-    \centering
-    \includegraphics[width=0.6\textwidth]{figuras/voronoi-2-lloyd.png}
-    \caption{Diagrama de voronoi com Lloyd's aplicado}
-    \label{fig:voronoi-2-lloyd}
-\end{figure}
-
-\begin{figure}[H]
-%    \captionsetup{justification=raggedright, singlelinecheck=false}
-    \centering
-    \includegraphics[width=0.4\textwidth]{figuras/patel2010tablebiomes.png}
-    \caption{Tabela de biomas}
-    \label{fig:patel2010tablebiomes}
-\end{figure}
-
-\begin{figure}[H]
-%    \captionsetup{justification=raggedright, singlelinecheck=false}
-    \centering
-    \includegraphics[width=0.4\textwidth]{figuras/patel2010biomes.png}
-    \caption{Regiões com bioma}
-    \label{fig:patel2010biomes}
-\end{figure}
-
+figura \ref{fig:voronoi-map-goal-distorted}.
 \begin{figure}[H]
 %    \captionsetup{justification=raggedright, singlelinecheck=false}
     \centering
@@ -122,7 +97,7 @@ ilustrar fronteiras entre biomas, cada cor no mapa é um bioma \ref{fig:chunkbas
 %    \captionsetup{justification=raggedright, singlelinecheck=false}
     \centering
     \includegraphics[width=0.7\textwidth]{figuras/biomesminecraftgameplay.png}
-    \caption{Perspectiva de um jogador no \textit{minecraft}}
+    \caption{Perspectiva de um jogador no \textit{minecraft}, com visão para fronteira entre três biomas}
     \label{fig:biomesminecraftgameplay}
 \end{figure}
 %\subsubsection{Exemplo de ilustração}
