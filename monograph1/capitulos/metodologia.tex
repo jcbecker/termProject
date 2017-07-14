@@ -1,1 +1,38 @@
 \chapter{Metodologia}
+Nesta seção veremos a metodologia do trabalho desde a busca por fontes e trabalhos
+relacionados até a analise de resultados.
+
+Começando pela leitura de trabalhos relacionados, os primeiros trabalhos lidos
+foram recomendados por professores, a partir destes trabalhos li algumas de suas
+referências mais relevantes, os mesmos continham outras citações relevantes, e
+assim por diante, dessa maneira, tenho em mãos uma "árvore" de citações,
+para preencher algumas lacunas e reforçar alguns argumentos foram necessárias
+mais buscas de artigos e trabalhos.
+
+%Selecionar maneira de separar regiões;
+A primeira etapa da implementação é escolher a maneira em que regiões serão
+separadas, um bioma vai pertencer a um conjunto de regiões, as opções
+pré-selecionadas são: \textit{Triangle strip}, malha de quadrados e diagrama de
+voronoi. Cada uma delas tem sua vantagem, diagrama de voronoi constrói fronteiras
+mais naturais, as outras técnicas tem implementação mais fácil, menor custo
+computacional e geram a possibilidade de trabalhar com mapas pseudo infinitos.
+Então serão implementadas as três e feitas comparações sobre elas para decidir
+qual a melhor opção. A decisão será tomada...
+NÃO FAÇO A MENOR IDEIA DE COMO ESSA DECISÃO VAI SER FEITA.
+
+%Selecionar biomas, e as características dos mesmos a ser representadas;
+Próxima etapa é a escolha de biomas e suas características a serem geradas pelo%estou repetindo de mais a palavra caracteristica, preciso dar um jeito nisso
+algoritmo, a principio a escolha será feita por características fáceis de
+implementar, biomas com características mais distintas, para ser visualmente
+mais fácil de distinguir regiões de um e outro.%Construir algoritmo para manipular ruído de Perlin e gerar características selecionadas do bioma;
+E como já visto no trabalho de \cite{carli2012canion}, podemos manipular o ruído
+de Perlin para imitar as características de alguns padrões da natureza, então, 
+o mesmo será feito para os biomas selecionados.
+
+%Implementar fronteiras contínuas entre biomas;
+Caso não tratado, as fronteiras em biomas podem e provavelmente serão
+descontinuas, tendo uma mudança brusca de altura nas fronteiras e deixando o
+cenário sem sentido, então nesta etapa será analisadas as possibilidades para
+correção da descontinuidade e implementar a mesma.
+
+%Comparar resultado com cenários de jogos e Comparar resultados com a natureza.

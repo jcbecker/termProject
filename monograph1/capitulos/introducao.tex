@@ -58,11 +58,14 @@ cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
 Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada uma podendo ter
 múltiplos biomas. Para começar é criado um diagrama de voronoi, onde cada \textit{site}
 vai representar uma região do mapa, os \textit{sites} são gerados em posições
-aleatórias, seguido por Lloyd's algorithm no diagrama para deixar as regiões mais relaxadas \ref{fig:voronoi-2-lloyd}.
+aleatórias, seguido por Lloyd's algorithm no diagrama para
+deixar as regiões mais relaxadas \ref{fig:voronoi-2-lloyd}.
 Então é usados uma sequencia de ruídos bidimensionais sobre o mapa para decidir
-áreas de oceano ou ilha, altura da região e bioma da região \ref{fig:patel2010tablebiomes} e \ref{fig:patel2010biomes}, seguido por ruídos
-unidimensionais para as bordas da ilha e fronteiras das regiões ter uma aparência mais natural, 
-por fim tendo como resultado final ilustrado na figura. 
+áreas de oceano ou ilha, altura da região e bioma da região
+\ref{fig:patel2010tablebiomes} e \ref{fig:patel2010biomes}, seguido por funções
+de ruídos unidimensionais para as bordas da ilha e fronteiras das regiões ter
+uma aparência mais natural, por fim tendo como resultado final ilustrado na
+figura. 
 \begin{figure}[H]
 %    \captionsetup{justification=raggedright, singlelinecheck=false}
     \centering
@@ -95,11 +98,14 @@ por fim tendo como resultado final ilustrado na figura.
     \label{fig:voronoi-map-goal-distorted}
 \end{figure}
 
-O jogo \textit{minecraft} tem uma implementação de geração procedural, seus mundos são de tamanho pseudo-infinito, 
-o algoritmo é não assistido, ou seja, sem a intervenção do usuário na criação do mundo, nele
+O jogo \textit{minecraft} tem uma implementação de geração procedural,
+seus mundos são de tamanho pseudo-infinito, 
+o algoritmo é não assistido, ou seja, sem a intervenção
+do usuário na criação do mundo, nele
 são gerados múltiplos biomas, em cada um deles existe uma manipulação diferente
 do ruído para recriar as características do bioma. Mesmo em seu mundo
-minimalista, o jogador consegue reconhecer o bioma \cite{short2012teaching}, como na figura \ref{fig:biomesminecraftgameplay}.
+minimalista, o jogador consegue reconhecer o bioma \cite{short2012teaching},
+como na figura \ref{fig:biomesminecraftgameplay}.
 Foi usado o sistema online \textit{Chunck Base} para 
 ilustrar fronteiras entre biomas, cada cor no mapa é um bioma \ref{fig:chunkbasebiomes}.
 
