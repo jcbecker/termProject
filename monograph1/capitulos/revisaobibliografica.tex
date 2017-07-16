@@ -24,28 +24,61 @@ estes biomas serão: cordilheiras (cadeias de montanha), planícies.
 
 \section{Representação das Regiões}
 Neste trabalho serão implementadas três maneiras de representar a malha de
-regiões, com a intenção de poder analisar diferentes maneiras de representar
-a malha do terreno.
-\subsection{Malhas de quadrado}
+regiões, malha de quadrados, malha triangular e diagrma de Voronoi.
 
-\subsection{Malha triangular}
-Na figura a seguir tararara \ref{fig:triangle_strips}
+Um bioma vai pertencer a um conjunto de regiões, na imagem \ref{fig:squadStripBiomes}
+que usa uma malha de quadrados, onde semi-retas vermelhas são fronteiras entre
+biomas.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figuras/triangle_strips.png}
-    \caption{Mapa de altura com uma malha de triângulos \cite{trainglestripheightmap}}
-    \label{fig:triangle_strips}
+    \includegraphics[width=0.7\textwidth]{figuras/squadStripBiomes.png}
+    \caption{Malha de quadrados com divisão de biomas}
+    \label{fig:squadStripBiomes}
 \end{figure}
-Figura \ref{fig:vbo} xala head xala
+\subsection{Malhas de quadrado}
+Este modelo já apresentado na figura \ref{fig:squadStripBiomes}, nele cada
+quadrado é uma região, os vértices armazenados se encontram nos quatro cantos
+do quadrado, então um vértice é comum a quatro quadrados, cada um deles
+compartilhando o vértice com os quadrados adjacentes, as arestas entre vértices
+vizinhos são uma fronteira entre regiões, e tem a possibilidade desta aresta ser
+também uma fronteira entre biomas.
+
+Devido ao padrão podemos perceber que não temos a necessidadede armazenar arestas
+em memória, já que a mesma só vai existir entre vértices vizinhos, o vértice
+$v_{i j}$ tem como vizinhos o conjunto $\{v_{i+1 j}, v_{i-1 j}, v_{i j+1}, v_{i j-1}\}$.
+\subsection{Malha triangular}
+Usando a mesma base de vértice da malha de quadrados, agora temos uma aresta
+adicional, uma diagonal em cada quadrado do modelo anterior, dividindo a região
+em duas, cada traingulo sendo uma região, como podemos ver na figura \ref{fig:vbo}.
+Agora além do conjunto de arestas do modelo anterior, o vértice $v_{i j}$ tamém tem
+aresta para os vértices $\{v_{i+1 j+1}, v_{i-1 j-1}\}$
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figuras/vbo.png}
-    \caption{Modelo de malhas de triângulos a ser utilizada \cite{androidtrianglestrip}}
+    \includegraphics[width=0.5\textwidth]{figuras/vbo.png}
+    \caption{Malhas de triângulos, retirado de \cite{androidtrianglestrip}}
     \label{fig:vbo}
 \end{figure}
 
 
-\subsection{Diagrama de voronoi}
+\subsection{Diagrama de Voronoi}
+Um diagrama de Voronoi é uma partição no plano para separar regiões, recebendo
+como entrada um conjunto de pontos chamados de \textit{sites}, o algoritmo
+separa as regiões de cada \textit{site} deixando a fronteira equidistante entre eles
+\cite{fortune1987sweepline}.
+
+Como está implementação vai ser não assistida estes sites precisam ser colocados
+aleatoriamente e proceduralmente, para não ocorrer aglomerações de site, já
+que existe a possibilidade de acontecer na geração de \textit{sites} aleatórios,
+será usado o algoritmo de Lloyd's para relaxar os sites, o conjunto dessas
+técnicas já foi usado por \cite{patel2010polygonal}, para gerar malha de regiões,
+segue uma imagem de seu diagrama na figura \ref{fig:voronoi-2-lloyd}, este diagrama
+foi usado para alcançar o resultado já mostrado na ilustração \ref{fig:voronoi-map-goal-distorted}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figuras/voronoi-2-lloyd.png}
+    \caption{Diagrama de Voronoi com algoritmo de Lloyd's aplicado, por \cite{patel2010polygonal}}
+    \label{fig:voronoi-2-lloyd}
+\end{figure}
 
 \section{Ruído de Perlin}
 
@@ -58,4 +91,3 @@ Figura \ref{fig:vbo} xala head xala
 %Ainda não sei ao certo quais são os trabalhos relacionados que vou apresentar
 \subsection{Trabalho de Carli}
 
-\subsection{Bevilaqua}
