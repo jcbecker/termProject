@@ -198,35 +198,21 @@
 %%=============================================================================
 \begin{abstract}
     Os jogos digitais estão cada vez melhores e exigindo mais complexidade para
-    os mesmos, trazendo mais conteúdo agregado. Tempo para produzir este conteúdo
+    os mesmos, trazendo mais conteúdo agregado. O tempo para produzir este conteúdo
     demanda muito esforço de trabalho. Com a intenção de auxilar nestas
     dificuldades, a geração procedural de conteúdo consegue gerar gráficos com pouca
     ou nenhum esforço do usuário. Neste trabalho será avaliado algumas características
-    de relevo, como planícies e cordilheiras, e implementado um algoritmo não 
-    assistido que forme proceduralmente o relevo destas características, na ocorrência
+    de relevo, como planícies e cordilheiras, e implementar um algoritmo não 
+    assistido que forme proceduralmente o relevo dessas características, na ocorrência
     de fronteiras de biomas com relevo distintos, a mesma será contínua.
     No final será feito um julgamento visual sobre os resultados, comparando com 
     características encontradas na natureza e outros jogos. O tamanho do mapa
     deve ser pseudo infinito e carregar apenas regiões próximas da câmera.
     \keyword{Geração procedural de conteúdo}
     \keyword{Mapas de altura}
-    \keyword{jogos 3d}
+    \keyword{jogos 3D}
 \end{abstract}
 
-%A indústria de jogos digitais 3D vem crescendo e melhorando seus conteúdos nos últi-
-%mos anos, tornando-os cada vez mais realistas. Essas indústrias também enfrentam o problema
-%de tempo de desenvolvimento e alto custo para produzir esses conteúdos. A fim de solucio-
-%nar essas dificuldades, a geração procedural de conteúdos gráficos permite que, sem ou com
-%mínima intervenção do usuário, sejam produzidas quaisquer tipos de objetos, terrenos, mapas,
-%entre outros. Nesse trabalho é apresentada uma proposta de algoritmo procedural que gera câ-
-%nions baseado em ruído de Perlin, que contribui, para o estudo de geração procedural específica
-%para terrenos naturais. O algoritmo é limitado em quatro características analisadas como mais
-%recorrentes em cânions reais: topo plano, níveis penhasco, sopé suavizado e penhasco íngreme.
-%Além disso é sugerida uma solução para a aparência de quinas na lateral dos cânions gerados
-%pelo algoritmo de Carli (CARLI, 2012) e para a suavização do sopé, que no algoritmo de Carli
-%é necessária um tratamento especial para a criação desse efeito. É feito um julgamento visual
-%subjetivo das imagens geradas pelo algoritmo proposto e avalia a presença das características
-%selecionadas, assim como as limitações do algoritmo.
 
 
 
@@ -244,12 +230,23 @@
 % as palavras-chave na outra língua, separadas por vírgulas, o mês em inglês
 %o a sigla do dia em inglês: st, nd, th ...
 \begin{englishabstract}
-{Title}
+{Biome procedural generation}
 {Bachelor of Computer Science}
-{Keywords1. Keyword2}
+{Procedural Content Generation, Height maps, 3D games}
 {July}
-{st}
-Abstract... 
+{fr}
+Digital games are getting better and demanding more complexity, bringing more
+aggregated content. The time spended to produce this content requires a lot of
+work effort. With the intention of assisting in this difficulties,
+the procedural generation of content can generate graphics with less or no user
+effort. In this paper we will evaluate some characteristics such as plains and
+mountain ranges, and implement an algorithm not assisted, that procedurally
+forms the terrain with this characteristics, in the occurrence of biomes borders
+with distinct terrain, it will be continuous. At the end, a visual judgment on
+the results will be made comparing characteristics found in nature and other games.
+The size of the map must be pseudo infinite and only load regions close to the
+camera.
+
 \end{englishabstract}
 
 %% Lista de Ilustrações (opc)
@@ -264,7 +261,7 @@ Abstract...
 %%=============================================================================
 %% Lista de tabelas (comentar se não houver)
 %%=============================================================================
-\listoftables
+%\listoftables
 
 %%=============================================================================
 %% Lista de Apêndices (comentar se não houver)
@@ -314,7 +311,7 @@ Abstract...
 
 %Adiciona cada capitulo
 \input{capitulos/introducao}
-\input{capitulos/objetivos}
+%\input{capitulos/objetivos}
 \input{capitulos/revisaobibliografica}
 \input{capitulos/metodologia}
 

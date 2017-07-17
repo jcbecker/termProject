@@ -28,6 +28,13 @@ entre outros. A força de trabalho dos mesmos costuma ser a parte mais cara da
 criação do jogo.
 
 \section{Apresentação}
+O trabalho em questão tem a finalidade de avaliar algumas características
+de relevo, como planícies e cordilheiras, implementar um algoritmo sem 
+interferência do usuário, que forme proceduralmente o relevo destas características.
+O relevo precisa ser contínuo quando houver fronteira ou transição de uma para 
+a outra. O tamanho do mapa deve ser pseudo-infinito e carregar apenas regiões
+próximas da câmera.
+
 Uma maneira de conseguir diminuir os gastos no desenvolvimento de conteúdo, é 
 gerando os mesmos proceduralmente, as chamadas técnicas de \textit{PCG}. 
 \textit{PCG} é usar algoritmos para gerar o conteúdo \cite{shaker2016procedural}.
@@ -54,7 +61,7 @@ cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
 \end{figure}
 
 Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada uma podendo ter
-múltiplos biomas. Para começar é criado um diagrama de voronoi, onde cada \textit{site}
+múltiplos biomas. Para começar é criado um diagrama de Voronoi, onde cada \textit{site}
 vai representar uma região do mapa, os \textit{sites} são gerados em posições
 aleatórias, seguido por Lloyd's algorithm no diagrama para
 deixar as regiões mais relaxadas.
@@ -95,6 +102,26 @@ ilustrar fronteiras entre biomas, cada cor no mapa é um bioma \ref{fig:chunkbas
     \caption{Perspectiva de um jogador no \textit{minecraft}, com visão para fronteira entre três biomas}
     \label{fig:biomesminecraftgameplay}
 \end{figure}
+
+\section{Objetivo Geral}
+Este projeto tem como objetivo gerar mapas de tamanho pseudo-infinitos, com 
+relevo gerado proceduralmente usando ruído 
+de Perlin, de maneira não assistida, os mapas de altura devem representar o 
+relevo de pelo menos dois biomas arbitrários com fronteiras contínuas.
+
+%Criar um método procedural para múltiplos biomas ter fronteiras contínuas
+
+\section{Objetivo Específico}
+
+\begin{itemize}
+    \item Implementar malhas da superfície com tamanho pseudo-infinito;
+    \item Selecionar biomas, e as características dos mesmos a ser representadas;
+    \item Construir algoritmo para manipular ruído de Perlin e gerar características
+        selecionadas do bioma;
+    \item Gerar divisões entre biomas sobre a malha de regiões;
+    \item Implementar fronteiras contínuas entre biomas;
+    \item Comparar resultado com cenários de jogos;
+\end{itemize}
 %\subsubsection{Exemplo de ilustração}
 
 %\begin{figure}[h]
