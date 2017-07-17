@@ -11,22 +11,19 @@ mais buscas de artigos e trabalhos.
 
 %correção tem muita informação não fundamentada neste paragrafo
 %Selecionar maneira de separar regiões;
-A primeira etapa da implementação é escolher a maneira em que regiões serão
-separadas, um bioma vai pertencer a um conjunto de regiões, as opções
+A primeira etapa da implementação é a malha de regiões, um
+bioma vai pertencer a um conjunto de regiões, as opções
 pré-selecionadas são: \textit{Triangle strip}, malha de quadrados e diagrama de
-voronoi. Cada uma delas tem sua vantagem, diagrama de voronoi constrói fronteiras
-mais naturais, as outras técnicas tem implementação mais fácil, menor custo
-computacional e geram a possibilidade de trabalhar com mapas pseudo infinitos.
-Então serão implementadas as três e feitas comparações sobre elas para decidir
-qual a melhor opção. A decisão será tomada...
-NÃO FAÇO A MENOR IDEIA DE COMO ESSA DECISÃO VAI SER FEITA.
+Voronoi. Cada uma delas tem suas vantagens, diagrama de Voronoi constrói fronteiras
+mais naturais, as outras técnicas são mais tem implementações mais fáceis 
+para mapas pseudo infinitos, as três maneiras separar regiões serão implementadas.
+A malha da superfície deve ser pseudo-infinita, e gerada conforme algum agente 
+se aproxima da mesma.
 
 %correção: isso já vai ser feito agora
 %Selecionar biomas, e as características dos mesmos a ser representadas;
-Próxima etapa é a escolha de biomas e suas características a serem geradas pelo %estou repetindo de mais a palavra caracteristica, preciso dar um jeito nisso
-algoritmo, a principio a escolha será feita por características fáceis de
-implementar, biomas com características mais distintas, para ser visualmente
-mais fácil de distinguir regiões de um e outro. %Construir algoritmo para manipular ruído de Perlin e gerar características selecionadas do bioma;
+Implementar geração do mapa de altura para cordilheiras e planícies, biomas com características mais distintas, para ser visualmente
+mais fácil de distinguir regiões e suas fronteiras. %Construir algoritmo para manipular ruído de Perlin e gerar características selecionadas do bioma;
 E como já visto no trabalho de \cite{carli2012canion}, podemos manipular o ruído
 de Perlin para imitar as características de alguns padrões da natureza, então, 
 o mesmo será feito para os biomas selecionados.
@@ -41,4 +38,4 @@ possibilidades para correção da descontinuidade e implementar a mesma.
 O resultado final será um mapa de altura para múltiplos biomas, para verificar
 a qualidade do resultado será feita comparações com cenários de jogos, e uma
 analise de possibilidades de agentes percorrer o cenário. Para finalizar fazer
-um estudo do resultado com terrenos da natureza.(NÃO SEI QUAL MÉTRICA USAR)
+um julgamento visual do resultado com terrenos da natureza.

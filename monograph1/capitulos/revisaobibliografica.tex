@@ -1,9 +1,9 @@
 \chapter{Revisão Bibliográfica}
-Neste capitulo serão abordados alguns conceitos e técnicas necessárias para
+Neste Capítulo serão abordados alguns conceitos e técnicas necessárias para
 gerar o mapa de altura proceduralmente, além de apresentar alguns trabalhos
 relacionados.
 
-\section{Biomas} %Preciso de mais fontes nesta seção, urgente
+\section{Biomas}
 Existem mais que um conceito de bioma, um bastante adotado considera bioma como
 uma área do espaço geográfico, representada por um tipo uniforme de ambiente, o
 mesmo pode ser classificado de acordo com o macroclima, fitofisionomia (formação),
@@ -21,6 +21,10 @@ se referir a alguma característica de altitude do bioma.
 Para fins de restringir o escopo do projeto vamos agrupar os biomas por padrões
 de relevo e não por fauna e flora como feito no conceito apresentado acima,
 estes biomas serão: cordilheiras (cadeias de montanha), planícies.
+
+Este trabalho é voltado para a área de jogos, dentro da comunidade de jogadores
+é bem aceito usar o termo bioma de forma mais genérica, o jogo Minecraft usa o
+termo e entre seus biomas se encontra \textit{Extreme Hills} e \textit{Plains}.
 
 \section{Representação das Regiões}
 Neste trabalho serão implementadas três maneiras de representar a malha de
@@ -140,14 +144,28 @@ dimensões respectivamente.
 
 \section{Mapas de Altura}
 Mapas de altura é uma maneira de representar altitudes de uma plano, e essa
-será uma das saídas desta implementação proposta, mapas de altura costuma ser uma imagem
+será uma das saídas desta implementação proposta, mapas de altura costumam ser, imagens
 onde os pontos mais claros representam pontos mais elevados e os escuros regiões mais baixas.
 A imagem \ref{fig:perlin2d} já traz exemplos de mapas de altura.
 
+Um mapa de altura pode ser usado para ser renderizado em diferentes perspectivas,
+ou usar processos que geram imagens de luz e sombra, ilustrados na figura \ref{fig:hmap} de \cite{dachsbacher2006interactive}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figuras/hmap.png}
+    \caption{Diferentes maneiras de usar um mapa de altura por }
+    \label{fig:hmap}
+\end{figure}
+
+
 \section{Trabalhos Relacionados}
 
-%correção: preciso colocar trabalhos fora deste vínculo e quem sabe adicionar uma seção
-%sobre
-%Ainda não sei ao certo quais são os trabalhos relacionados que vou apresentar
 \subsection{Trabalho de Carli}
-
+O trabalho do \cite{carli2012canion}, não só gera o mapa de altura, mas também
+faz busca de percursos de rio e agentes no mapa. As maiores semelhanças deste 
+trabalho com o proposto, é que faz uso da manipulação dos resultados do ruído de
+de Perlin para recriar alguns padrões de relevo e também é uma técnica não assistida,
+entretanto no projeto que 
+estou propondo se faz necessário ter pelo menos duas manipulações de ruído distintas
+e criar fronteiras contínuas quando as mesmas se encontram. O resultado final de
+\cite{carli2012canion} já foi apresentado na introdução.
