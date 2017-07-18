@@ -1,0 +1,127 @@
+\ProvidesPackage{beamerthemeUFFS}[2015/05/20]
+
+%%%%%%%%%%%%%% THEME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\RequirePackage{pgf}
+\RequirePackage{graphicx}
+\RequirePackage{url,color,ae}
+\RequirePackage{listings,color,upquote}
+\RequirePackage{array}
+\urlstyle{sf}
+
+%\pgfdeclareimage[width=1cm]{footer}{logo_curso.png}
+
+\definecolor{kugreen}{RGB}{50,93,61}
+\definecolor{kugreenlys}{RGB}{132,158,139}
+\definecolor{kugreenlyslys}{RGB}{173,190,177}
+\definecolor{kugreenlyslyslys}{RGB}{214,223,216}
+
+\definecolor{AlTitle}{RGB}{255, 190, 190}
+\definecolor{AlBody}{RGB}{213,24,0}
+
+\definecolor{ExTitle}{RGB}{201, 217, 217}
+
+\usecolortheme[named=kugreen]{structure}
+\setbeamercolor{block title}{fg = white, bg = kugreen}
+\setbeamercolor{block body}{bg = kugreen!15!white}
+\setbeamercolor{block title alerted}{bg = AlTitle}
+\setbeamercolor{block body alerted}{bg = AlBody!5!white}
+\setbeamercolor{block title example}{bg = ExTitle}
+\setbeamercolor{block body example}{bg = ExTitle!15!white}
+\setbeamertemplate{blocks}[rounded]
+
+\setbeamersize{text margin left=10pt,text margin right=5pt}
+
+\setbeamertemplate{navigation symbols}{}
+\addtobeamertemplate{frametitle}{}{\color{kugreen}
+\pgfline{\pgfpoint{0mm}{-2mm}}{\pgfpoint{10.8cm}{-2mm}}}
+%\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{title}{series=\bfseries}
+\useinnertheme{rectangles}
+\setbeamertemplate{headline}[text line]{}
+
+\setbeamerfont{footline}{series=\bfseries }
+
+\setbeamertemplate{footline}{
+    \color{black}
+    \hfill \insertframenumber\,/\,\inserttotalframenumber~
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%--------- Insercao de codigo fonte nos slides --------------------%
+\definecolor{hellgelb}{rgb}{1,1,0.9}
+\definecolor{colBack}{rgb}{1,1,.98}
+\definecolor{colKeys}{rgb}{0,0,0}
+\definecolor{colIdentifier}{rgb}{0,0,0.9}
+\definecolor{colComments}{rgb}{.4,.4,.4}
+\definecolor{colString}{rgb}{0,0,0.6}
+
+\lstset{ %
+  backgroundcolor=\color{colBack},   % choose the background color; you must add \usepackage{color} or 
+  basicstyle=\ttfamily\footnotesize,
+  tabsize=2,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{colComments},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  firstnumber=last,
+  linewidth=0.98\linewidth,
+  xleftmargin=10pt,
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+%   identifierstyle=\color{colIdentifier},
+  keywordstyle=\color{colKeys},       % keyword style
+  otherkeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny,
+%   numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+%   stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{colString},     % string literal style
+  tabsize=2	                   % sets default tabsize to 2 spaces
+}
+
+\lstset{literate=
+  {á}{<!---->{\'a}<!---->}1 {é}{<!---->{\'e}<!---->}1 {í}{<!---->{\'i}<!---->}1 {ó}{<!---->{\'o}<!---->}1 {ú}{<!---->{\'u}<!---->}1
+  {Á}{<!---->{\'A}<!---->}1 {É}{<!---->{\'E}<!---->}1 {Í}{<!---->{\'I}<!---->}1 {Ó}{<!---->{\'O}<!---->}1 {Ú}{<!---->{\'U}<!---->}1
+  {à}{<!---->{\`a}<!---->}1 {è}{<!---->{\`e}<!---->}1 {ì}{<!---->{\`i}<!---->}1 {ò}{<!---->{\`o}<!---->}1 {ù}{<!---->{\`u}<!---->}1
+  {À}{<!---->{\`A}<!---->}1 {È}{<!---->{\'E}<!---->}1 {Ì}{<!---->{\`I}<!---->}1 {Ò}{<!---->{\`O}<!---->}1 {Ù}{<!---->{\`U}<!---->}1
+  {ä}{<!---->{\"a}<!---->}1 {ë}{<!---->{\"e}<!---->}1 {ï}{<!---->{\"i}<!---->}1 {ö}{<!---->{\"o}<!---->}1 {ü}{<!---->{\"u}<!---->}1
+  {Ä}{<!---->{\"A}<!---->}1 {Ë}{<!---->{\"E}<!---->}1 {Ï}{<!---->{\"I}<!---->}1 {Ö}{<!---->{\"O}<!---->}1 {Ü}{<!---->{\"U}<!---->}1
+  {â}{<!---->{\^a}<!---->}1 {ê}{<!---->{\^e}<!---->}1 {î}{<!---->{\^i}<!---->}1 {ô}{<!---->{\^o}<!---->}1 {û}{<!---->{\^u}<!---->}1
+  {Â}{<!---->{\^A}<!---->}1 {Ê}{<!---->{\^E}<!---->}1 {Î}{<!---->{\^I}<!---->}1 {Ô}{<!---->{\^O}<!---->}1 {Û}{<!---->{\^U}<!---->}1
+  {œ}{<!---->{\oe}<!---->}1 {Œ}{<!---->{\OE}<!---->}1 {æ}{<!---->{\ae}<!---->}1 {Æ}{<!---->{\AE}<!---->}1 {ß}{<!---->{\ss}<!---->}1
+  {ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+  {ç}{<!---->{\c c}<!---->}1 {Ç}{<!---->{\c C}<!---->}1 {ø}{<!---->{\o}<!---->}1 {å}{<!---->{\r a}<!---->}1 {Å}{<!---->{\r A}<!---->}1
+  {€}{<!---->{\EUR}<!---->}1 {£}{<!---->{\pounds}<!---->}1
+}
+
+
+\lstdefinestyle{shell}{language=csh}
+\lstdefinestyle{php}{language=php}
+\lstdefinestyle{ansic}{language=c}
+\lstdefinestyle{java}{language=java}
+\lstdefinestyle{matlab}{language=matlab}
+\lstdefinestyle{python}{language=python}
+\newcommand{\includecode}[2][c]{\lstinputlisting[escapechar=,style=#1,caption=]{#2}}
+\newcommand{\java}{\lstset{language=java}}
+\newcommand{\ansic}{\lstset{language=c}}
+\newcommand{\php}{\lstset{language=php}}
+\newcommand{\shell}{\lstset{language=csh}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
