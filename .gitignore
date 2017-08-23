@@ -20,28 +20,3 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-#Files generete from latex compiler and makefile of monograph1
-
-wProject1/monograph1/main-tcc.aux
-wProject1/monograph1/main-tcc.blg
-wProject1/monograph1/main-tcc.d
-wProject1/monograph1/main-tcc.lof
-wProject1/monograph1/main-tcc.lot
-wProject1/monograph1/main-tcc.out
-wProject1/monograph1/main-tcc.pdf
-wProject1/monograph1/main-tcc.toc
-wProject1/monograph1/main-tcc.bbl
-
-#arquivo de backup criado pelo aspell
-*.bak
-
-#Files generate by latex in apresentacao1/
-wProject1/apresentacao1/apresentacao.aux
-wProject1/apresentacao1/apresentacao.bbl
-wProject1/apresentacao1/apresentacao.nav
-wProject1/apresentacao1/apresentacao.out
-wProject1/apresentacao1/apresentacao.snm
-wProject1/apresentacao1/apresentacao.toc
-wProject1/apresentacao1/apresentacao.pdf
-wProject1/apresentacao1/apresentacao.blg
