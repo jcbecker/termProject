@@ -6,6 +6,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+
+//Global settings
+//initial screen size
+const unsigned int ISCR_W = 80 * 16;//WIDTH
+const unsigned int ISCR_H = 80 * 9;//HEIGHT
+
 static void errorCallback(int error, const char* description){
     fprintf(stderr, "Error: %s\n", description);
 }
@@ -39,7 +45,7 @@ int main(){
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     
     printf("Creating window...\n");
-    GLFWwindow* window = glfwCreateWindow(800, 600, "ptg", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(ISCR_W, ISCR_H, "ptg", NULL, NULL);
     if (! window ){
         printf("Failed to create window\n");
         glfwTerminate();
@@ -56,7 +62,7 @@ int main(){
         exit(EXIT_FAILURE);
     }
     
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, ISCR_W, ISCR_H);
     
     //mainLoop
     printf("Entering in the main loop\n");
