@@ -22,8 +22,8 @@ set(TINYCTHREAD "${GLFW_SOURCE_DIR}/deps/tinycthread.h"
                 "${GLFW_SOURCE_DIR}/deps/tinycthread.c")
 
 #My sources files
-set(SOURCE_FILES src/main.c)
+set(SOURCE_FILES src/main.cpp)
 
-add_executable(ptg ${SOURCE_FILES} ${TINYCTHREAD} ${GETOPT} ${GLAD})
+add_executable(ptg ${SOURCE_FILES} ${GLAD})
 
 target_link_libraries(ptg glfw ${GLFW_LIBRARIES})
