@@ -1,7 +1,8 @@
 //Author: João C. Becker
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -18,14 +19,15 @@ const char *vertexShaderSource =
     "layout (location = 0) in vec3 aPos;\n"
     "void main()\n"
     "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "   gl_Position = vec4(aPos, 1.0);\n"
     "}\0";
 const char *fragmentShaderSource =
     "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "uniform vec4 ourColor; // we set this variable in the OpenGL code.\n"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   FragColor = ourColor;\n"
     "}\n\0";
 
 static void errorCallback(int error, const char* description){
@@ -75,6 +77,7 @@ int main(){
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         printf("Failed to initialize GLAD");
+        glfwTerminate();
         exit(EXIT_FAILURE);
     }
     
@@ -91,6 +94,8 @@ int main(){
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 //        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
         printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n %s\n", infoLog);
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
     
     // fragment shader
@@ -103,6 +108,8 @@ int main(){
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 //        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
         printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n %s\n", infoLog);
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
     
     // link shaders
@@ -116,6 +123,8 @@ int main(){
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 //        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
         printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n %s\n", infoLog);
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -126,7 +135,7 @@ int main(){
         0.5f,  0.5f, 0.0f,  // top right
         0.5f, -0.5f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left
+        0.0f,  0.5f, 0.0f   // top left
     };
     unsigned int indices[] = {  // note that we start from 0!
         0, 1, 3,  // first Triangle
@@ -167,11 +176,18 @@ int main(){
     while (!glfwWindowShouldClose(window)){
         
         //render
+        //clear the collor buffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        // draw our first triangle
+        
+        //active the shader
         glUseProgram(shaderProgram);
+        
+        //// update the uniform
+        float greenValue = (sin(glfwGetTime()) / 2.0f) + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");//retorna -1 qundo não acha a posição
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);//essa linha precisa estar após glUseProgram
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 3);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
