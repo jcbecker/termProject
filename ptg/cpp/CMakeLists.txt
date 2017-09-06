@@ -21,8 +21,17 @@ set(GETOPT "${GLFW_SOURCE_DIR}/deps/getopt.h"
 set(TINYCTHREAD "${GLFW_SOURCE_DIR}/deps/tinycthread.h"
                 "${GLFW_SOURCE_DIR}/deps/tinycthread.c")
 
+
+#My shader loader
+include_directories(lib/myshader)
+
 #My sources files
 set(SOURCE_FILES src/main.cpp)
+
+#Input files to copy
+configure_file(src/shader33Vertex.vs shader33Vertex.vs COPYONLY)
+configure_file(src/shader33Fragment.fs shader33Fragment.fs COPYONLY)
+
 
 add_executable(ptg ${SOURCE_FILES} ${GLAD})
 
