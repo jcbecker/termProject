@@ -131,6 +131,19 @@ int main(){
         0+(4*5), 3+(4*5), 2+(4*5),  // first Triangle
         1+(4*5), 2+(4*5), 0+(4*5)   // second Triangle
     };
+    // world space positions of our cubes
+    glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -180,21 +193,21 @@ int main(){
         ourShader.use();
         
         // create transformations
-        glm::mat4 model;
+//        glm::mat4 model;
         glm::mat4 view;
         glm::mat4 projection;
-        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+//        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         int jbcw, jbch;
         glfwGetWindowSize(window, &jbcw, &jbch);//essa função é threadsafe
 //        printf("(%d, %d)   (%d, %d)\n",jbcw, jbch, ISCR_W, ISCR_H);
         projection = glm::perspective(glm::radians(45.0f), (float)jbcw / (float)jbch, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
-        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+//        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
         unsigned int viewLoc  = glGetUniformLocation(ourShader.ID, "view");
         unsigned int projecLoc  = glGetUniformLocation(ourShader.ID, "projection");
         // pass them to the shaders (3 different ways)
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+//        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
         glUniformMatrix4fv(projecLoc, 1, GL_FALSE, &projection[0][0]);
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
@@ -204,8 +217,20 @@ int main(){
         
         //render container
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        for(unsigned int i = 0; i < 10; i++){
+            
+            glm::mat4 model;
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 30.0f * i; 
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            
+            glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
+        }
+        
         //glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
         
         glfwSwapBuffers(window);
