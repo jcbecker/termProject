@@ -21,7 +21,10 @@ set(GETOPT "${GLFW_SOURCE_DIR}/deps/getopt.h"
 set(TINYCTHREAD "${GLFW_SOURCE_DIR}/deps/tinycthread.h"
                 "${GLFW_SOURCE_DIR}/deps/tinycthread.c")
 
-
+#Link GLM library
+#add_subdirectory(lib/glm)
+include_directories(lib/glm)
+                
 #My shader loader
 include_directories(lib/myshader)
 
