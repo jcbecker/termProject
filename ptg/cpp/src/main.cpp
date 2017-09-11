@@ -31,6 +31,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+    printf("Screen:(%d, %d)\n",width, height);
 }
 
 int main(){
@@ -75,13 +76,14 @@ int main(){
     // ------------------------------------------------------------------
     float vertices[] = {
         // positions         // colors
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+        0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,// top right
+        0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,// bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,// bottom left
+        -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f// top left
     };
     unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 2//,  // first Triangle
-        //1, 2, 3   // second Triangle
+        0, 3, 2,  // first Triangle
+        1, 2, 0   // second Triangle
     };
 
     unsigned int VBO, VAO, EBO;
@@ -128,20 +130,33 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT);
         
         
-        //transformations
-        glm::mat4 transform;
-        transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        
         //active the shader and bind uniforms
         ourShader.use();
-        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        
+        // create transformations
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 projection;
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        projection = glm::perspective(glm::radians(45.0f), (float)ISCR_W / (float)ISCR_H, 0.1f, 100.0f);
+        // retrieve the matrix uniform locations
+        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+        unsigned int viewLoc  = glGetUniformLocation(ourShader.ID, "view");
+        unsigned int projecLoc  = glGetUniformLocation(ourShader.ID, "projection");
+        // pass them to the shaders (3 different ways)
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+        glUniformMatrix4fv(projecLoc, 1, GL_FALSE, &projection[0][0]);
+        // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+        //ourShader.setMat4("projection", projection);                          to-do-------------------------------------------------------------------------------------------------------------------------
+        //glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
         
         
+        //render container
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
         
         glfwSwapBuffers(window);
