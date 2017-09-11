@@ -3,4 +3,6 @@ TO-DO List
 * Ler "More 3D" em https://learnopengl.com/#!Getting-started/Coordinate-Systems
 * Passar esse arquivo para markdown ou outro
 * Implementar setMat4 e outros no arquivo shader.h
+* Colocar GLM no gitmodules
+* Dfinir release fixa nos gitmodules
 * Começar a escrever monografia
