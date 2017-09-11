@@ -70,20 +70,50 @@ int main(){
         exit(EXIT_FAILURE);
     }
     
+    // configure global opengl state to use z-buffer
+    // -----------------------------
+    glEnable(GL_DEPTH_TEST);
+    
     Shader ourShader("shader33Vertex.vs", "shader33Fragment.fs"); // you can name your shader files however you like
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
         // positions         // colors
-        0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,// top right
-        0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,// bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,// bottom left
-        -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f// top left
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,// top right
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,// bottom right
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,// bottom left
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,// top left
+        
+        0.5f,  0.5f, 0.5f,  0.0f, 0.0f, 0.0f,// top right
+        0.5f, -0.5f, 0.5f,  0.0f, 0.0f, 0.0f,// bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f,// bottom left
+        -0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 0.0f,// top left
+        
+        -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f,// top left
+        -0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        0.5f,  0.5f, 0.5f,  0.0f, 0.0f, 1.0f,// top right
+        0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,// top right
+        
+        -0.5f,  -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// bottom left
+        -0.5f,  -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// bottom left
+        0.5f,  -0.5f, 0.5f,  1.0f, 0.0f, 0.0f,// bottom right
+        0.5f,  -0.5f, -0.5f,  1.0f, 0.0f, 0.0f// bottom right
+        
+        
     };
     unsigned int indices[] = {  // note that we start from 0!
         0, 3, 2,  // first Triangle
-        1, 2, 0   // second Triangle
+        1, 2, 0,   // second Triangle
+        
+        0+4, 3+4, 2+4,  // first Triangle
+        1+4, 2+4, 0+4,   // second Triangle
+        
+        0+8, 3+8, 2+8,  // first Triangle
+        1+8, 2+8, 0+8,   // second Triangle
+        
+        0+(4*3), 3+(4*3), 2+(4*3),  // first Triangle
+        1+(4*3), 2+(4*3), 0+(4*3)   // second Triangle
     };
 
     unsigned int VBO, VAO, EBO;
@@ -127,7 +157,7 @@ int main(){
         //render
         //clear the collor buffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
         
         
         //active the shader and bind uniforms
@@ -137,7 +167,7 @@ int main(){
         glm::mat4 model;
         glm::mat4 view;
         glm::mat4 projection;
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         projection = glm::perspective(glm::radians(45.0f), (float)ISCR_W / (float)ISCR_H, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
@@ -156,7 +186,7 @@ int main(){
         //render container
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6*4, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
         
         glfwSwapBuffers(window);
