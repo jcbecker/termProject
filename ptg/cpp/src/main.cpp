@@ -98,7 +98,17 @@ int main(){
         -0.5f,  -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// bottom left
         -0.5f,  -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// bottom left
         0.5f,  -0.5f, 0.5f,  1.0f, 0.0f, 0.0f,// bottom right
-        0.5f,  -0.5f, -0.5f,  1.0f, 0.0f, 0.0f// bottom right
+        0.5f,  -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,// bottom right
+        
+        0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,// top right
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,// bottom right
+        0.5f, -0.5f, 0.5f,  0.0f, 1.0f, 0.0f,// bottom right
+        0.5f, 0.5f, 0.5f,  0.0f, 1.0f, 0.0f,// bottom right
+        
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,// top right
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,// bottom right
+        -0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 0.0f,// bottom right
+        -0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 0.0f// bottom right
         
         
     };
@@ -113,7 +123,13 @@ int main(){
         1+8, 2+8, 0+8,   // second Triangle
         
         0+(4*3), 3+(4*3), 2+(4*3),  // first Triangle
-        1+(4*3), 2+(4*3), 0+(4*3)   // second Triangle
+        1+(4*3), 2+(4*3), 0+(4*3),   // second Triangle
+        
+        0+(4*4), 3+(4*4), 2+(4*4),  // first Triangle
+        1+(4*4), 2+(4*4), 0+(4*4),   // second Triangle
+        
+        0+(4*5), 3+(4*5), 2+(4*5),  // first Triangle
+        1+(4*5), 2+(4*5), 0+(4*5)   // second Triangle
     };
 
     unsigned int VBO, VAO, EBO;
@@ -169,7 +185,10 @@ int main(){
         glm::mat4 projection;
         model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        projection = glm::perspective(glm::radians(45.0f), (float)ISCR_W / (float)ISCR_H, 0.1f, 100.0f);
+        int jbcw, jbch;
+        glfwGetWindowSize(window, &jbcw, &jbch);//essa função é threadsafe
+//        printf("(%d, %d)   (%d, %d)\n",jbcw, jbch, ISCR_W, ISCR_H);
+        projection = glm::perspective(glm::radians(45.0f), (float)jbcw / (float)jbch, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
         unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
         unsigned int viewLoc  = glGetUniformLocation(ourShader.ID, "view");
@@ -186,7 +205,7 @@ int main(){
         //render container
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6*4, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
         
         glfwSwapBuffers(window);
