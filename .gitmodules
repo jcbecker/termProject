@@ -1,3 +1,6 @@
 [submodule "ptg/cpp/lib/glfw"]
 	path = ptg/cpp/lib/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "ptg/cpp/lib/glm"]
+	path = ptg/cpp/lib/glm
+	url = https://github.com/g-truc/glm.git
