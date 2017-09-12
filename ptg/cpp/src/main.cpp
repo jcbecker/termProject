@@ -180,9 +180,11 @@ int main(){
     glViewport(0, 0, ISCR_W, ISCR_H);
     
     //mainLoop
+    int myi=0;
     printf("Entering in the main loop...\n");
     while (!glfwWindowShouldClose(window)){
-        
+        printf("\r%d",myi++ );
+        fflush(stdout);
         //render
         //clear the collor buffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
