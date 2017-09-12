@@ -5,4 +5,6 @@ TO-DO List
 * Implementar setMat4 e outros no arquivo shader.h
 * Colocar GLM no gitmodules
 * Dfinir release fixa nos gitmodules
+    $ git tag -l
+    $ git checkout tags/<tag_name>
 * Começar a escrever monografia
