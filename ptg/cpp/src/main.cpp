@@ -18,22 +18,22 @@ const unsigned int ISCR_W = 80 * 16;//WIDTH
 const unsigned int ISCR_H = 80 * 9;//HEIGHT
 
 
-static void errorCallback(int error, const char* description){
-    fprintf(stderr, "Error: %s\n", description);
-}
+static void errorCallback(int error, const char* description);//to show some glfw errors
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){//input callBack
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);//input callBack
 
-void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize screen
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-    printf("Screen:(%d, %d)\n",width, height);
+void framebufferSizeCallback(GLFWwindow* window, int width, int height);//resize screen
+/*
+void processInH(GLFWwindow *window, deltaTime,){
+    float cameraSpeed = 2.5 * deltaTime; 
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    
+    
 }
-
+*/
 int main(){
     printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
     
@@ -179,12 +179,37 @@ int main(){
 
     glViewport(0, 0, ISCR_W, ISCR_H);
     
-    //mainLoop
+    //creating variables
+    
+    int cscr_w=ISCR_W, cscr_h=ISCR_H;
+    
+    
+    glm::mat4 view;
+    glm::mat4 projection;
+    glm::mat4 model;
+    
+    glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
+    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+    
     int myi=0;
+    //mainLoop
     printf("Entering in the main loop...\n");
     while (!glfwWindowShouldClose(window)){
-        printf("\r%d",myi++ );
+        printf("\r%d  %lf (%lf, %lf, %lf)",myi++, glfwGetTime(), cameraPos.x, cameraPos.y, cameraPos.z);
         fflush(stdout);
+        
+        //process holding keys
+        //processInH(window);
+        float cameraSpeed = 0.05f; // adjust accordingly
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            cameraPos += cameraSpeed * cameraFront;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            cameraPos -= cameraSpeed * cameraFront;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
         //render
         //clear the collor buffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -195,15 +220,9 @@ int main(){
         ourShader.use();
         
         // create transformations
-//        glm::mat4 model;
-        glm::mat4 view;
-        glm::mat4 projection;
-//        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-        view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        int jbcw, jbch;
-        glfwGetWindowSize(window, &jbcw, &jbch);//essa função é threadsafe
-//        printf("(%d, %d)   (%d, %d)\n",jbcw, jbch, ISCR_W, ISCR_H);
-        projection = glm::perspective(glm::radians(45.0f), (float)jbcw / (float)jbch, 0.1f, 100.0f);
+        view  = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        glfwGetWindowSize(window, &cscr_w, &cscr_h);//essa função é threadsafe
+        projection = glm::perspective(glm::radians(45.0f), (float)cscr_w / (float)cscr_h, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         ourShader.setMat4("projection", projection);
@@ -214,10 +233,16 @@ int main(){
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         for(unsigned int i = 0; i < 10; i++){
             
-            glm::mat4 model;
+            
+            model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
-            float angle = 30.0f * i; 
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            float angle = 30.0f * i;
+            if (i%2){
+                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(1.0f, 1.0f, 0.0f));
+            }else{
+                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(1.0f, 0.0f, 1.0f));
+            }
+            
             ourShader.setMat4("model", model);
             
             glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
@@ -239,4 +264,20 @@ int main(){
     
     glfwTerminate();
     exit(EXIT_SUCCESS);
+}
+
+static void errorCallback(int error, const char* description){
+    fprintf(stderr, "Error: %s\n", description);
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){//input callBack
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize screen
+    // make sure the viewport matches the new window dimensions; note that width and 
+    // height will be significantly larger than specified on retina displays.
+    glViewport(0, 0, width, height);
+    printf("Screen:(%d, %d)\n",width, height);
 }

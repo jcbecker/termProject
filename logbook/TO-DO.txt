@@ -3,6 +3,7 @@ TO-DO List
 * Ler "More 3D" em https://learnopengl.com/#!Getting-started/Coordinate-Systems
 * Passar esse arquivo para markdown ou outro
 * Começar a escrever monografia
+* Escrever logbook
 
 DONE:
 
