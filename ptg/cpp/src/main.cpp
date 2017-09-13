@@ -205,16 +205,9 @@ int main(){
 //        printf("(%d, %d)   (%d, %d)\n",jbcw, jbch, ISCR_W, ISCR_H);
         projection = glm::perspective(glm::radians(45.0f), (float)jbcw / (float)jbch, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
-//        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-        unsigned int viewLoc  = glGetUniformLocation(ourShader.ID, "view");
-        unsigned int projecLoc  = glGetUniformLocation(ourShader.ID, "projection");
-        // pass them to the shaders (3 different ways)
-//        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-        glUniformMatrix4fv(projecLoc, 1, GL_FALSE, &projection[0][0]);
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-        //ourShader.setMat4("projection", projection);                          to-do-------------------------------------------------------------------------------------------------------------------------
-        //glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+        ourShader.setMat4("projection", projection);
+        ourShader.setMat4("view", view);
         
         
         //render container
@@ -225,8 +218,7 @@ int main(){
             model = glm::translate(model, cubePositions[i]);
             float angle = 30.0f * i; 
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            ourShader.setMat4("model", model);
             
             glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
         }
