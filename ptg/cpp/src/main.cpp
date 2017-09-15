@@ -182,7 +182,8 @@ int main(){
     //creating variables
     
     int cscr_w=ISCR_W, cscr_h=ISCR_H;
-    
+    float deltaTime = 0.0f;	// Time between current frame and last frame
+    float lastFrame = 0.0f; // Time of last frame
     
     glm::mat4 view;
     glm::mat4 projection;
@@ -198,10 +199,13 @@ int main(){
     while (!glfwWindowShouldClose(window)){
         printf("\r%d  %lf (%lf, %lf, %lf)",myi++, glfwGetTime(), cameraPos.x, cameraPos.y, cameraPos.z);
         fflush(stdout);
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
         
         //process holding keys
         //processInH(window);
-        float cameraSpeed = 0.05f; // adjust accordingly
+        float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
             cameraPos += cameraSpeed * cameraFront;
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -238,9 +242,9 @@ int main(){
             model = glm::translate(model, cubePositions[i]);
             float angle = 30.0f * i;
             if (i%2){
-                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(1.0f, 1.0f, 0.0f));
+                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(1.0f, 0.0f, 0.0f));
             }else{
-                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(1.0f, 0.0f, 1.0f));
+                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(-1.0f, 0.0f, 0.0f));
             }
             
             ourShader.setMat4("model", model);
