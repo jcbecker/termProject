@@ -16,9 +16,10 @@ public:
     float pitch;
     
     double lastMposx, lastMposy;
-    double xpost, ypost;
     
     bool mouseActive;
+    
+    float zoomC;
     
     Camera(glm::vec3 iPos, glm::vec3 iFront, glm::vec3 iUp, float iMovSpeed, float iYaw, float iPitch){
         pos = iPos;
@@ -27,7 +28,8 @@ public:
         movSpeed = iMovSpeed;
         yaw = iYaw;
         pitch = iPitch;
-        mouseActive=false;
+        mouseActive = false;
+        zoomC = 45.0f;
     }
     
     Camera(){
@@ -37,10 +39,8 @@ public:
         movSpeed = 2.5;
         yaw = -90.0f;//0.0 let the direction front to the right
         pitch =  0.0f;
-        
-        xpost=-1;
-        ypost=-1;
-        mouseActive=false;
+        mouseActive = false;
+        zoomC = 45.0f;
     }
     
     glm::mat4 getViewMatrix(){
@@ -97,7 +97,14 @@ public:
             front = glm::normalize(front);
         }
     }
-    
+    //Scroll event to change zoom in projection
+    void zoomSub(double iYoffset){
+        zoomC -= iYoffset;
+        if(zoomC > 45)
+            zoomC = 45;
+        else if(zoomC < 1)
+            zoomC = 1;
+    }
 };
 
 #endif

@@ -29,6 +29,8 @@ void processInputHoldingKey(GLFWwindow *window, float deltaTime);//to manage key
 
 static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);//send mouse position to the camera
 
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+
 int main(){
     printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
     
@@ -57,6 +59,7 @@ int main(){
     glfwSetKeyCallback(window, keyCallback);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetCursorPosCallback(window, cursorPosCallback);
+    glfwSetScrollCallback(window, scrollCallback);
     
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);//this put de cursor in camera mode
     glfwMakeContextCurrent(window);
@@ -198,7 +201,7 @@ int main(){
         lastFrame = cFrameTime;
         
         
-        printf("\r%d  %lf (%lf, %lf, %lf)",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z);
+        printf("\r%d  %lf (%lf, %lf, %lf)  (%lf)",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z, cam.zoomC);
         fflush(stdout);
         
         //process holding keys
@@ -216,7 +219,7 @@ int main(){
         // create transformations
         view  = cam.getViewMatrix();
         glfwGetWindowSize(window, &cscr_w, &cscr_h);//essa função é threadsafe
-        projection = glm::perspective(glm::radians(45.0f), (float)cscr_w / (float)cscr_h, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         ourShader.setMat4("projection", projection);
@@ -296,4 +299,9 @@ static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos){
     Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
     cam->interpretMouseMovement(xpos, ypos);
     
+}
+
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset){
+    Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
+    cam->zoomSub(yoffset);
 }
