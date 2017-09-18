@@ -12,6 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <shader.h>
+#include <camera.h>
 //Global settings
 //initial screen size
 const unsigned int ISCR_W = 80 * 16;//WIDTH
@@ -23,17 +24,11 @@ static void errorCallback(int error, const char* description);//to show some glf
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);//input callBack
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);//resize screen
-/*
-void processInH(GLFWwindow *window, deltaTime,){
-    float cameraSpeed = 2.5 * deltaTime; 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
-    
-    
-}
-*/
+
+void processInputHoldingKey(GLFWwindow *window, float deltaTime);//to manage keys holding down
+
+static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);//send mouse position to the camera
+
 int main(){
     printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
     
@@ -58,10 +53,12 @@ int main(){
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
-    //GLFW callbacks
+    //set GLFW callbacks
     glfwSetKeyCallback(window, keyCallback);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    glfwSetCursorPosCallback(window, cursorPosCallback);
     
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);//this put de cursor in camera mode
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
@@ -189,31 +186,24 @@ int main(){
     glm::mat4 projection;
     glm::mat4 model;
     
-    glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+    Camera cam;
+    glfwSetWindowUserPointer(window, &cam);
     
     int myi=0;
     //mainLoop
     printf("Entering in the main loop...\n");
     while (!glfwWindowShouldClose(window)){
-        printf("\r%d  %lf (%lf, %lf, %lf)",myi++, glfwGetTime(), cameraPos.x, cameraPos.y, cameraPos.z);
+        float cFrameTime = glfwGetTime();
+        deltaTime = cFrameTime - lastFrame;
+        lastFrame = cFrameTime;
+        
+        
+        printf("\r%d  %lf (%lf, %lf, %lf)",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z);
         fflush(stdout);
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
         
         //process holding keys
-        //processInH(window);
-        float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            cameraPos += cameraSpeed * cameraFront;
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            cameraPos -= cameraSpeed * cameraFront;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        processInputHoldingKey(window, deltaTime);
+        
         //render
         //clear the collor buffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -224,7 +214,7 @@ int main(){
         ourShader.use();
         
         // create transformations
-        view  = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        view  = cam.getViewMatrix();
         glfwGetWindowSize(window, &cscr_w, &cscr_h);//essa função é threadsafe
         projection = glm::perspective(glm::radians(45.0f), (float)cscr_w / (float)cscr_h, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
@@ -284,4 +274,26 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
     printf("Screen:(%d, %d)\n",width, height);
+}
+
+void processInputHoldingKey(GLFWwindow *window, float deltaTime){
+    Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cam->moveForwarRel(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cam->moveBackwardRel(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cam->moveLeftRel(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cam->moveRightRel(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        cam->moveUpAbs(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        cam->moveDownAbs(deltaTime);
+}
+
+static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos){
+    Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
+    cam->interpretMouseMovement(xpos, ypos);
+    
 }
