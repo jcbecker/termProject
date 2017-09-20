@@ -235,7 +235,7 @@ int main(){
             model = glm::translate(model, cubePositions[i]);
             float angle = 30.0f * i;
             if (i%2){
-                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(1.0f, 0.0f, 0.0f));
+                model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(0.0f, 0.0f, 1.0f));
             }else{
                 model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(-1.0f, 0.0f, 0.0f));
             }
@@ -243,6 +243,7 @@ int main(){
             ourShader.setMat4("model", model);
             
             glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
+            //glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
         }
         
         //glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -252,6 +253,7 @@ int main(){
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    printf("\n");
     
     printf("Free memory space...\n");
     //de-allocate all resources once they've outlived their purpose
