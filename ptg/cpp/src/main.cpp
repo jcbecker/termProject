@@ -108,8 +108,29 @@ int main(){
         -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,// top right
         -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,// bottom right
         -0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 0.0f,// bottom right
-        -0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 0.0f// bottom right
+        -0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 0.0f,// bottom right
         
+        
+        //axes
+        -1000.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+        1000.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+        
+        0.0f,  -1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
+        0.0f,  1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
+        
+        0.0f,  0.0f, -1000.5f,  0.0f, 0.0f, 1.0f,
+        0.0f,  0.0f, 1000.5f,  0.0f, 0.0f, 1.0f, 
+        
+        //grid test
+        
+        0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+        1000.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+        
+        0.0f,  -1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
+        0.0f,  1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
+        
+        0.0f,  0.0f, -1000.5f,  0.0f, 0.0f, 1.0f,
+        0.0f,  0.0f, 1000.5f,  0.0f, 0.0f, 1.0f
         
     };
     unsigned int indices[] = {  // note that we start from 0!
@@ -129,7 +150,7 @@ int main(){
         1+(4*4), 2+(4*4), 0+(4*4),   // second Triangle
         
         0+(4*5), 3+(4*5), 2+(4*5),  // first Triangle
-        1+(4*5), 2+(4*5), 0+(4*5)   // second Triangle
+        1+(4*5), 2+(4*5), 0+(4*5)  // second Triangle
     };
     // world space positions of our cubes
     glm::vec3 cubePositions[] = {
@@ -246,7 +267,12 @@ int main(){
             //glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
         }
         
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        model = glm::mat4(1.0f);
+        ourShader.setMat4("model", model);
+        //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        
+        
+        glDrawArrays(GL_LINES, 24, 6);
         //glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
         
