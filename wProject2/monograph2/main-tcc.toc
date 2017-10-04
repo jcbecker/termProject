@@ -1,0 +1,6 @@
+\select@language {brazilian}
+\select@language {english}
+\select@language {brazilian}
+\contentsline {chapter}{\numberline {1}Introdu\IeC {\c c}\IeC {\~a}o}{9}{chapter.1}
+\contentsline {section}{\numberline {1.1}Problem\IeC {\'a}tica}{9}{section.1.1}
+\contentsline {chapter}{Refer{\^e}ncias}{10}{chapter*.6}

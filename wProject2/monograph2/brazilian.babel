@@ -1,0 +1,80 @@
+%
+% definições para textos em português
+%
+\@namedef{captionsbrazilian}{%
+\def\bibname{Refer{\^e}ncias}%
+\def\abstractname{Resumo}%
+\def\appendixname{Ap{\^e}ndice}%
+\def\appendixsname{Ap{\^e}ndices}%
+\def\contentsname{Sum{\'a}rio}%
+\def\listfigurename{Lista de Figuras}%
+\def\listtablename{Lista de Tabelas}%
+\def\listdefname{Lista de Defini\c{c}\~{o}es}%
+\def\listtheoremsname{Lista de Teoremas}%
+\def\listappendixname{Lista de Ap{\^e}ndices}
+\def\listannexname{Lista de Anexos}
+\def\corollaryname{Corol\'{a}rio}%
+\def\propositionname{Proposi\c{c}\~{a}o}%
+\def\definitionname{Defini\c{c}\~{a}o}%
+\def\conjecturename{Conjectura}%
+\def\examplename{Exemplo}%
+\def\exercisename{Exerc\'{\i}cio}%
+\def\propertyname{Property}%
+\def\remarknamek{Observa\c{c}\~{a}o}%
+\def\lemmaname{Lema}%
+\def\theoremname{Teorema}%
+%\def\proofname{Prova}%
+\def\figurename{Figura}%
+\def\tablename{Tabela}%
+\def\authorname{Autor}%
+\def\authornamef{Autora}%
+\def\advisorname{Orientador}%
+\def\advisornamef{Orientadora}%
+\def\coadvisorname{Co-orientador}%
+\def\coadvisornamef{Co-orientadora}%
+\def\listabbrvname{Lista de Abreviaturas e Siglas}%
+\def\listsymbolname{Lista de S{\'\i}mbolos}%
+\def\annexname{Anexo}%
+\def\annexsname{Anexos}%
+\def\keywordsname{Palavras-chave}%
+\def\cipcaption{CIP -- CATALOGA{\c{C}}{\~A}O NA PUBLICA{\c{C}}{\~A}O}%
+\def\byname{por}%
+\def\dissname{Disserta{\c{c}}{\~a}o de Mestrado}%
+\def\dissspecificinfo{%
+Disserta{\c{c}}{\~a}o apresentada como requisito parcial\\
+para a obten{\c{c}}{\~a}o do grau de\\
+Mestre em Ci{\^e}ncia da Computa{\c{c}}{\~a}o
+}%
+\def\tesename{Tese de Doutorado)}%
+\def\tesespecificinfo{%
+Tese apresentada como requisito parcial\\
+para a obten{\c{c}}{\~a}o do grau de\\
+Doutor em Ci{\^e}ncia da Computa{\c{c}}{\~a}o
+}%
+\def\planodoutoradospecificinfo{Plano de Curso para Doutorado}%
+\def\proptesespecificinfo{Proposta de Tese de Doutorado}%
+\def\tgname{Trabalho de Graduação}%
+\def\tgspecificinfo{%
+Trabalho de Graduaç{\~a}o apresentado como\\
+requisito parcial para a obten{\c{c}}{\~a}o do grau de\\
+Mestre em Inform{\'a}tica
+}%
+\def\rpname{Relat{\'o}rio de Pesquisa}%
+\def\financname{{\'O}rg{\~a}os Financiadores}%
+\def\especname{Monografia de Especialização)}%
+\def\especspecificinfo{%
+Monografia de Conclusão de Curso apresentada como
+requisito parcial para a obtenção do grau de Especialista
+}%
+\def\coordname{Coordenador do Curso}%
+}
+\@namedef{datebrazilian}{%
+\def\monthname{%
+\ifcase\month\or%
+janeiro\or fevereiro\or mar{\c{c}}o\or abril\or%
+maio\or junho\or julho\or agosto\or setembro\or%
+outubro\or novembro\or dezembro%
+\fi%
+}%
+\def\@date{\@publday\ de~\@publmonth\ de~\@publyear}%
+}
