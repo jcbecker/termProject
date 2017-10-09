@@ -108,29 +108,7 @@ int main(){
         -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,// top right
         -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,// bottom right
         -0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 0.0f,// bottom right
-        -0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 0.0f,// bottom right
-        
-        
-        //axes
-        -1000.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-        1000.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-        
-        0.0f,  -1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
-        0.0f,  1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
-        
-        0.0f,  0.0f, -1000.5f,  0.0f, 0.0f, 1.0f,
-        0.0f,  0.0f, 1000.5f,  0.0f, 0.0f, 1.0f, 
-        
-        //grid test
-        
-        0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-        1000.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-        
-        0.0f,  -1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
-        0.0f,  1000.5f, 0.0f,  0.0f, 1.0f, 0.0f,
-        
-        0.0f,  0.0f, -1000.5f,  0.0f, 0.0f, 1.0f,
-        0.0f,  0.0f, 1000.5f,  0.0f, 0.0f, 1.0f
+        -0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 0.0f// bottom right
         
     };
     unsigned int indices[] = {  // note that we start from 0!
@@ -193,7 +171,36 @@ int main(){
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0);
-
+    
+    
+    float myAxes[] = {
+        1000.0f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+        -1000.0f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+        0.0f,  1000.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+        0.0f,  -1000.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+        0.0f,  0.0f, 1000.0f,  0.0f, 0.0f, 1.0f,
+        0.0f,  0.0f, -1000.0f,  0.0f, 0.0f, 1.0f
+    };
+    unsigned int aVBO, aVAO;
+    glGenVertexArrays(1, &aVAO);
+    glGenBuffers(1, &aVBO);
+    glBindVertexArray(aVAO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, aVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(myAxes), myAxes, GL_STATIC_DRAW);
+    
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    
+    printf("VBO: %u   VAO: %u   EBO: %u   aVBO: %u   aVAO: %u\n", VBO, VAO, EBO, aVBO, aVAO);
+    
 
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -267,14 +274,13 @@ int main(){
             //glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
         }
         
+        glBindVertexArray(aVAO);
         model = glm::mat4(1.0f);
         ourShader.setMat4("model", model);
-        //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         
-        
-        glDrawArrays(GL_LINES, 24, 6);
+        glDrawArrays(GL_LINES, 0, 6);
         //glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
-        // glBindVertexArray(0); // no need to unbind it every time
+        glBindVertexArray(0); // no need to unbind it every time
         
         glfwSwapBuffers(window);
         glfwPollEvents();
