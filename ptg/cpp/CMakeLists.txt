@@ -26,10 +26,10 @@ set(TINYCTHREAD "${GLFW_SOURCE_DIR}/deps/tinycthread.h"
 include_directories(lib/glm)
                 
 #My shader loader
-include_directories(lib/myshader)
+include_directories(lib/mylib)
 
 #My sources files
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES src/main.cpp  src/camera.cpp)
 
 #Input files to copy
 configure_file(src/shader33Vertex.vs shader33Vertex.vs COPYONLY)

@@ -11,8 +11,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <shader.h>
-#include <camera.h>
+#include <shader.cpp>
+#include <camera.hpp>
 //Global settings
 //initial screen size
 const unsigned int ISCR_W = 80 * 16;//WIDTH
