@@ -200,6 +200,10 @@ int main(){
     glBindVertexArray(0);
     
     printf("VBO: %u   VAO: %u   EBO: %u   aVBO: %u   aVAO: %u\n", VBO, VAO, EBO, aVBO, aVAO);
+    printf("vertices: %d   indices: %d    myAxes: %d\n", sizeof(vertices), 12*3*sizeof(unsigned int), 6*6*sizeof(float));
+    
+
+    
     
 
     // uncomment this call to draw in wireframe polygons.

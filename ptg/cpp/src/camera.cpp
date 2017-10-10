@@ -1,18 +1,5 @@
 #include "camera.hpp"
 
-glm::vec3 pos;
-glm::vec3 front;
-glm::vec3 up;
-
-float movSpeed;
-float yaw;
-float pitch;
-
-double lastMposx, lastMposy;
-
-bool mouseActive;
-
-float zoomC;
 
 Camera::Camera(glm::vec3 iPos, glm::vec3 iFront, glm::vec3 iUp, float iMovSpeed, float iYaw, float iPitch){
     pos = iPos;
@@ -42,23 +29,23 @@ glm::mat4 Camera::getViewMatrix(){
 
 //Movements relative to the front-------------------------------------------
 void Camera::moveForwarRel(float deltaT){
-    pos += front * (movSpeed * deltaT);
+    this->pos += front * (movSpeed * deltaT);
 }
 void Camera::moveBackwardRel(float deltaT){
-    pos -= front * (movSpeed * deltaT);
+    this->pos -= front * (movSpeed * deltaT);
 }
 void Camera::moveLeftRel(float deltaT){//Right vecor is equal to glm::normalize(glm::cross(cameraFront, cameraUp))
-    pos -= glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
+    this->pos -= glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
 }
 void Camera::moveRightRel(float deltaT){
-    pos += glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
+    this->pos += glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
 }
 //Absolute movements-------------------------------------------------------
 void Camera::moveUpAbs(float deltaT){
-    pos += glm::vec3( 0.0f, (movSpeed * deltaT),  0.0f);
+    this->pos += glm::vec3( 0.0f, (movSpeed * deltaT),  0.0f);
 }
 void Camera::moveDownAbs(float deltaT){
-    pos -= glm::vec3( 0.0f, (movSpeed * deltaT),  0.0f);
+    this->pos -= glm::vec3( 0.0f, (movSpeed * deltaT),  0.0f);
 }
 //Mouse event to change front
 void Camera::interpretMouseMovement(double x, double y){
