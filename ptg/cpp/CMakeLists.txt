@@ -29,7 +29,7 @@ include_directories(lib/glm)
 include_directories(lib/mylib)
 
 #My sources files
-set(SOURCE_FILES src/main.cpp  src/camera.cpp)
+set(SOURCE_FILES src/main.cpp  src/camera.cpp src/shader.cpp)
 
 #Input files to copy
 configure_file(src/shader33Vertex.vs shader33Vertex.vs COPYONLY)
