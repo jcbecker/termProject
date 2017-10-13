@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <shader.cpp>
+#include <shader.hpp>
 #include <camera.hpp>
 //Global settings
 //initial screen size
