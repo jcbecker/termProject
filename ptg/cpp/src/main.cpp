@@ -1,35 +1,5 @@
 //Author: João C. Becker
-
-#include <cstdio>
-#include <cstdlib>
-#include <cmath>
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <shader.hpp>
-#include <camera.hpp>
-//Global settings
-//initial screen size
-const unsigned int ISCR_W = 80 * 16;//WIDTH
-const unsigned int ISCR_H = 80 * 9;//HEIGHT
-
-
-static void errorCallback(int error, const char* description);//to show some glfw errors
-
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);//input callBack
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);//resize screen
-
-void processInputHoldingKey(GLFWwindow *window, float deltaTime);//to manage keys holding down
-
-static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);//send mouse position to the camera
-
-void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+#include<ptg.hpp>
 
 int main(){
     printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
@@ -202,7 +172,69 @@ int main(){
     printf("VBO: %u   VAO: %u   EBO: %u   aVBO: %u   aVAO: %u\n", VBO, VAO, EBO, aVBO, aVAO);
     printf("vertices: %d   indices: %d    myAxes: %d\n", sizeof(vertices), 12*3*sizeof(unsigned int), 6*6*sizeof(float));
     
-
+    std::vector<float> gridstf;
+    gridstf.reserve(1024*4*6);
+    
+    float xStart = -50;
+    float xDelta = 0.18;
+    
+    for (int i=0; i<1024; i++){//vertex i
+        gridstf.push_back(xStart + xDelta*i);//x
+        gridstf.push_back(0.0f);//y
+        gridstf.push_back(-50);//z
+        
+        gridstf.push_back(0.6);//r
+        gridstf.push_back(0.6);//g
+        gridstf.push_back(0.6);//b
+        //vertex i+1
+        gridstf.push_back(xStart + xDelta*i);//x
+        gridstf.push_back(0.0f);//y
+        gridstf.push_back(50);//z
+        
+        gridstf.push_back(0.6);//r
+        gridstf.push_back(0.6);//g
+        gridstf.push_back(0.6);//b
+        
+        //vertex i+2
+        gridstf.push_back(-50);//x
+        gridstf.push_back(0.0f);//y
+        gridstf.push_back(xStart + xDelta*i);//z
+        
+        gridstf.push_back(0.6);//r
+        gridstf.push_back(0.6);//g
+        gridstf.push_back(0.6);//b
+        //vertex i+3
+        gridstf.push_back(50);//z
+        gridstf.push_back(0.0f);//y
+        gridstf.push_back(xStart + xDelta*i);//z
+        
+        gridstf.push_back(0.6);//r
+        gridstf.push_back(0.6);//g
+        gridstf.push_back(0.6);//b
+        
+    }
+    
+    unsigned int grVBO, grVAO;
+    glGenVertexArrays(1, &grVAO);
+    glGenBuffers(1, &grVBO);
+    glBindVertexArray(grVAO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, grVBO);
+    glBufferData(GL_ARRAY_BUFFER, gridstf.size() * sizeof(float), &gridstf[0], GL_STATIC_DRAW);
+    
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    
+    
+    
+    printf("%u\n", gridstf.size());
     
     
 
@@ -283,6 +315,15 @@ int main(){
         ourShader.setMat4("model", model);
         
         glDrawArrays(GL_LINES, 0, 6);
+        
+        
+        glBindVertexArray(grVAO);
+        model = glm::mat4(1.0f);
+        ourShader.setMat4("model", model);
+        
+        glDrawArrays(GL_LINES, 0, 1024*2);
+        
+        
         //glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0); // no need to unbind it every time
         
