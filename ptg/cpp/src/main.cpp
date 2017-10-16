@@ -173,54 +173,50 @@ int main(){
     printf("vertices: %d   indices: %d    myAxes: %d\n", sizeof(vertices), 12*3*sizeof(unsigned int), 6*6*sizeof(float));
     
     std::vector<float> gridstf;
-    gridstf.reserve(1024*4*6);
+    gridstf.reserve(1024*1024*6);
     
     float xStart = -50;
-    float xDelta = 0.18;
+    float xDelta = 0.1;
     
     for (int i=0; i<1024; i++){//vertex i
-        gridstf.push_back(xStart + xDelta*i);//x
-        gridstf.push_back(0.0f);//y
-        gridstf.push_back(-50);//z
-        
-        gridstf.push_back(0.6);//r
-        gridstf.push_back(0.6);//g
-        gridstf.push_back(0.6);//b
-        //vertex i+1
-        gridstf.push_back(xStart + xDelta*i);//x
-        gridstf.push_back(0.0f);//y
-        gridstf.push_back(50);//z
-        
-        gridstf.push_back(0.6);//r
-        gridstf.push_back(0.6);//g
-        gridstf.push_back(0.6);//b
-        
-        //vertex i+2
-        gridstf.push_back(-50);//x
-        gridstf.push_back(0.0f);//y
-        gridstf.push_back(xStart + xDelta*i);//z
-        
-        gridstf.push_back(0.6);//r
-        gridstf.push_back(0.6);//g
-        gridstf.push_back(0.6);//b
-        //vertex i+3
-        gridstf.push_back(50);//z
-        gridstf.push_back(0.0f);//y
-        gridstf.push_back(xStart + xDelta*i);//z
-        
-        gridstf.push_back(0.6);//r
-        gridstf.push_back(0.6);//g
-        gridstf.push_back(0.6);//b
-        
+        for(int j=0; j<1024; j++){
+            gridstf.push_back(xStart + xDelta*i);//x
+            gridstf.push_back(sin(xDelta*i) + sin(xDelta*j));//y
+            gridstf.push_back(xStart + xDelta*j);//z
+            
+            gridstf.push_back(1.0);//r
+            gridstf.push_back(1.0);//g
+            gridstf.push_back(0.4);//b
+        }
     }
     
-    unsigned int grVBO, grVAO;
+    std::vector<unsigned int> gridindexs;
+    
+    for (unsigned int i=0; i<1023; i++){//vertex i
+        for(unsigned int j=0; j<1023; j++){
+            gridindexs.push_back(i*1024 + j);//first triangle
+            gridindexs.push_back(i*1024 + j+1);
+            gridindexs.push_back((i+1)*1024 + j);
+            
+            gridindexs.push_back((i+1) * 1024 + j+1);//first triangle
+            gridindexs.push_back(i * 1024 + j+1);
+            gridindexs.push_back((i+1) * 1024 + j);
+            
+        }
+    }
+    
+    
+    unsigned int grVBO, grEBO, grVAO;
     glGenVertexArrays(1, &grVAO);
     glGenBuffers(1, &grVBO);
+    glGenBuffers(1, &grEBO);
     glBindVertexArray(grVAO);
     
     glBindBuffer(GL_ARRAY_BUFFER, grVBO);
     glBufferData(GL_ARRAY_BUFFER, gridstf.size() * sizeof(float), &gridstf[0], GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, grEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, gridindexs.size() * sizeof(unsigned int), &gridindexs[0], GL_STATIC_DRAW);
     
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -321,7 +317,10 @@ int main(){
         model = glm::mat4(1.0f);
         ourShader.setMat4("model", model);
         
-        glDrawArrays(GL_LINES, 0, 1024*2);
+        //glDrawArrays(GL_POINTS, 0, 1024*1024);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         
         
         //glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
@@ -337,6 +336,11 @@ int main(){
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &grVAO);
+    glDeleteBuffers(1, &grVBO);
+    glDeleteBuffers(1, &grEBO);
+    glDeleteVertexArrays(1, &aVAO);
+    glDeleteBuffers(1, &aVBO);
     
     glfwTerminate();
     exit(EXIT_SUCCESS);
