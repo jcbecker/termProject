@@ -178,10 +178,21 @@ int main(){
     float xStart = -50;
     float xDelta = 0.1;
     
+    
+    const siv::PerlinNoise perlin(2234);
+    //freq=8
+    //fxy = 1024/8
+    //octaves 4
+    const double fxy = 1024.0f/8.0f;
+    printf("fxy:%lf\n", fxy);
+    float mtest;
+    
     for (int i=0; i<1024; i++){//vertex i
         for(int j=0; j<1024; j++){
+            mtest = (float) perlin.octaveNoise((double)i /fxy, (double)j /fxy, 8);
+            //printf("mt: %f\n", mtest);
             gridstf.push_back(xStart + xDelta*i);//x
-            gridstf.push_back(sin(xDelta*i) + sin(xDelta*j));//y
+            gridstf.push_back(mtest * 5.7);//y
             gridstf.push_back(xStart + xDelta*j);//z
             
             gridstf.push_back(1.0);//r
@@ -318,7 +329,7 @@ int main(){
         ourShader.setMat4("model", model);
         
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         

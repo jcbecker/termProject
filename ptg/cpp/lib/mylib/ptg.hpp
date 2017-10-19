@@ -16,6 +16,7 @@
 
 #include <shader.hpp>
 #include <camera.hpp>
+#include <PerlinNoise.hpp>
 
 #include <vector>
 //Global settings
