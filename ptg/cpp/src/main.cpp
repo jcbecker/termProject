@@ -185,19 +185,26 @@ int main(){
     //octaves 4
     const double fxy = 1024.0f/8.0f;
     printf("fxy:%lf\n", fxy);
-    float mtest;
+    float mtest, colortest;
     
     for (int i=0; i<1024; i++){//vertex i
         for(int j=0; j<1024; j++){
             mtest = (float) perlin.octaveNoise((double)i /fxy, (double)j /fxy, 8);
+            colortest = (mtest + 1)/4;
             //printf("mt: %f\n", mtest);
             gridstf.push_back(xStart + xDelta*i);//x
-            gridstf.push_back(mtest * 5.7);//y
+            if (xStart + xDelta*i > 0){
+                gridstf.push_back(mtest * 5.7);//y
+                
+            }else{
+                gridstf.push_back(mtest );//y
+                
+            }
             gridstf.push_back(xStart + xDelta*j);//z
             
-            gridstf.push_back(1.0);//r
-            gridstf.push_back(1.0);//g
-            gridstf.push_back(0.4);//b
+            gridstf.push_back(colortest);//r
+            gridstf.push_back(colortest);//g
+            gridstf.push_back(colortest);//b
         }
     }
     
@@ -209,7 +216,7 @@ int main(){
             gridindexs.push_back(i*1024 + j+1);
             gridindexs.push_back((i+1)*1024 + j);
             
-            gridindexs.push_back((i+1) * 1024 + j+1);//first triangle
+            gridindexs.push_back((i+1) * 1024 + j+1);//second triangle
             gridindexs.push_back(i * 1024 + j+1);
             gridindexs.push_back((i+1) * 1024 + j);
             
@@ -329,7 +336,7 @@ int main(){
         ourShader.setMat4("model", model);
         
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         
