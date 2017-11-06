@@ -44,7 +44,7 @@ int main(){
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
     
-    Shader ourShader("shader33Vertex.vs", "shader33Fragment.fs"); // you can name your shader files however you like
+    Shader ourShader("shader/shader33Vertex.vs", "shader/shader33Fragment.fs"); // you can name your shader files however you like
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
