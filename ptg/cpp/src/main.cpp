@@ -40,11 +40,10 @@ int main(){
         exit(EXIT_FAILURE);
     }
     
-    // configure global opengl state to use z-buffer
-    // -----------------------------
+    //Configure global opengl state to use z-buffer
     glEnable(GL_DEPTH_TEST);
     
-    Shader ourShader("shader/shader33Vertex.vs", "shader/shader33Fragment.fs"); // you can name your shader files however you like
+    Shader terrainProgram("shader/shader33Vertex.vs", "shader/shader33Fragment.fs"); // you can name your shader files however you like
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -184,7 +183,6 @@ int main(){
     //fxy = 1024/8
     //octaves 4
     const double fxy = 1024.0f/8.0f;
-    printf("fxy:%lf\n", fxy);
     float mtest, colortest;
     
     for (int i=0; i<1024; i++){//vertex i
@@ -194,11 +192,9 @@ int main(){
             //printf("mt: %f\n", mtest);
             gridstf.push_back(xStart + xDelta*i);//x
             if (xStart + xDelta*i > 0){
-                gridstf.push_back(mtest * 5.7);//y
-                
+                gridstf.push_back(pow(1.5, mtest * 5.7));//y
             }else{
                 gridstf.push_back(mtest );//y
-                
             }
             gridstf.push_back(xStart + xDelta*j);//z
             
@@ -250,8 +246,6 @@ int main(){
     
     printf("%u\n", gridstf.size());
     
-    
-
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -292,7 +286,7 @@ int main(){
         
         
         //active the shader and bind uniforms
-        ourShader.use();
+        terrainProgram.use();
         
         // create transformations
         view  = cam.getViewMatrix();
@@ -300,8 +294,8 @@ int main(){
         projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 100.0f);
         // retrieve the matrix uniform locations
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-        ourShader.setMat4("projection", projection);
-        ourShader.setMat4("view", view);
+        terrainProgram.setMat4("projection", projection);
+        terrainProgram.setMat4("view", view);
         
         
         //render container
@@ -318,7 +312,7 @@ int main(){
                 model = glm::rotate(model, glm::radians((float)glfwGetTime()*100), glm::vec3(-1.0f, 0.0f, 0.0f));
             }
             
-            ourShader.setMat4("model", model);
+            terrainProgram.setMat4("model", model);
             
             glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
             //glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
@@ -326,14 +320,14 @@ int main(){
         
         glBindVertexArray(aVAO);
         model = glm::mat4(1.0f);
-        ourShader.setMat4("model", model);
+        terrainProgram.setMat4("model", model);
         
         glDrawArrays(GL_LINES, 0, 6);
         
         
         glBindVertexArray(grVAO);
         model = glm::mat4(1.0f);
-        ourShader.setMat4("model", model);
+        terrainProgram.setMat4("model", model);
         
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
