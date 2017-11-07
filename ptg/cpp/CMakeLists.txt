@@ -32,8 +32,8 @@ include_directories(lib/mylib)
 set(SOURCE_FILES src/main.cpp  src/camera.cpp src/shader.cpp)
 
 #Input files to copy
-configure_file(src/shader/shader33Vertex.vs shader/shader33Vertex.vs COPYONLY)
-configure_file(src/shader/shader33Fragment.fs shader/shader33Fragment.fs COPYONLY)
+configure_file(src/shader/terrain.vs shader/terrain.vs COPYONLY)
+configure_file(src/shader/terrain.fs shader/terrain.fs COPYONLY)
 
 
 add_executable(ptg ${SOURCE_FILES} ${GLAD})

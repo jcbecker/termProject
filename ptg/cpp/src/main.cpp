@@ -31,7 +31,7 @@ int main(){
     glfwSetCursorPosCallback(window, cursorPosCallback);
     glfwSetScrollCallback(window, scrollCallback);
     
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);//this put de cursor in camera mode
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);//No cursor, is for camera mode
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
@@ -43,7 +43,7 @@ int main(){
     //Configure global opengl state to use z-buffer
     glEnable(GL_DEPTH_TEST);
     
-    Shader terrainProgram("shader/shader33Vertex.vs", "shader/shader33Fragment.fs"); // you can name your shader files however you like
+    Shader terrainProgram("shader/terrain.vs", "shader/terrain.fs"); // you can name your shader files however you like
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
