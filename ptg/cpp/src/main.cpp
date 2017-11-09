@@ -1,6 +1,13 @@
 //Author: João C. Becker
 #include<ptg.hpp>
 
+
+float myabs(float a){
+    if(a < 0) return a*-1;
+    return a;
+}
+
+
 int main(){
     printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
     
@@ -191,10 +198,16 @@ int main(){
             colortest = (mtest + 1)/4;
             //printf("mt: %f\n", mtest);
             gridstf.push_back(xStart + xDelta*i);//x
-            if (xStart + xDelta*i > 0){
+            if(myabs(xStart + xDelta*i) < 10){
+                //max dist 20
+                //((((xStart + xDelta*i)+10)/20) * pow(1.5, mtest * 5.7)) + (mtest * (1-(((xStart + xDelta*i)+10)/20)));
+                
+                gridstf.push_back(((((xStart + xDelta*i)+10.0)/20.0) * pow(1.5, mtest * 5.7)) + (mtest * (1.0-(((xStart + xDelta*i)+10.0)/20.0))));//y
+            }
+            else if (xStart + xDelta*i > 0){
                 gridstf.push_back(pow(1.5, mtest * 5.7));//y
             }else{
-                gridstf.push_back(mtest );//y
+                gridstf.push_back(mtest);//y
             }
             gridstf.push_back(xStart + xDelta*j);//z
             
@@ -256,6 +269,9 @@ int main(){
     int cscr_w=ISCR_W, cscr_h=ISCR_H;
     float deltaTime = 0.0f;	// Time between current frame and last frame
     float lastFrame = 0.0f; // Time of last frame
+    double lastTime = glfwGetTime();
+    unsigned frameCounter = 0, fps = 0.0;
+    
     
     glm::mat4 view;
     glm::mat4 projection;
@@ -264,16 +280,21 @@ int main(){
     Camera cam;
     glfwSetWindowUserPointer(window, &cam);
     
-    int myi=0;
+    unsigned myi=0;
     //mainLoop
     printf("Entering in the main loop...\n");
     while (!glfwWindowShouldClose(window)){
         float cFrameTime = glfwGetTime();
         deltaTime = cFrameTime - lastFrame;
         lastFrame = cFrameTime;
+        frameCounter++;
+        if(cFrameTime - lastTime >= 1.0){
+            fps = frameCounter;
+            frameCounter = 0;
+            lastTime = cFrameTime;
+        }
         
-        
-        printf("\r%d  %lf (%lf, %lf, %lf)  (%lf)",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z, cam.zoomC);
+        printf("\r%u  %lf (%lf, %lf, %lf)  (%lf)      %u",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z, cam.zoomC, fps);
         fflush(stdout);
         
         //process holding keys
