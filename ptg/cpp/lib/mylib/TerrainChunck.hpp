@@ -11,20 +11,27 @@
 
 class TerrainChunck{
 private:
-    unsigned int gridSize;
+    unsigned int gridSize, seed;
     float vertexInterval;
     float xi, zi;//xf = xi + gridSize * vertexInterval, zf = zi + gridSize * vertexInterval;
     unsigned int VBO, EBO;
+    siv::PerlinNoise pNoise;
+    int auxOctaves;
+    double auxFreq;
 public:
     unsigned int VAO;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     
-    TerrainChunck(float pvertexInterval, unsigned int pgridSize, float pxi, float pzi){
+    TerrainChunck(unsigned int pseed, float pvertexInterval, unsigned int pgridSize, float pxi, float pzi){
+        this->seed = pseed;
         this->vertexInterval = pvertexInterval;
         this->gridSize = pgridSize;
         this->xi = pxi;
         this->zi = pzi;
+        this->pNoise.reseed(seed);
+        this->auxOctaves = 8;
+        this->auxFreq = 32;
         this->vertices.reserve(this->gridSize * this->gridSize);
         this->genVectors();
         this->setUpGLBuffers();
@@ -35,7 +42,8 @@ private:
         for(unsigned int i=0; i<this->gridSize; i++){
             for(unsigned int j=0; j<this->gridSize; j++){
                 Vertex avaux;
-                float heightaux = 0.0f;//DEBUG: preciso calcular a altura antes disso
+                float heightaux = getHeightValue(this->xi + this->vertexInterval * i, this->zi + this->vertexInterval * j);
+                heightaux *= 10.0f;
                 avaux.Position = glm::vec3(this->xi + this->vertexInterval * i, heightaux, this->zi + this->vertexInterval * j);
                 avaux.Color = glm::vec3(0.2f, 0.2f, 0.35f);//DEBUG: preciso colocar uma cor descente
                 this->vertices.push_back(avaux);
@@ -79,6 +87,11 @@ private:
         glBindVertexArray(0);
     }
     
+    float getHeightValue(float x, float z){
+        double auxfxz = (double) this->gridSize/this->auxFreq;
+        return (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
+        
+    }
     
 public:
     void DrawChunck(){

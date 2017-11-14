@@ -83,8 +83,8 @@ int main(){
     std::vector<float> gridstf;
     gridstf.reserve(1024*1024*6);
     
-    float xStart = -50;
-    float xDelta = 0.1;
+    float xDelta = 0.3;
+    float xStart = (1024.0f*xDelta)/2.0f * -1.0f;
     
     
     const siv::PerlinNoise perlin(2234);
@@ -231,7 +231,7 @@ int main(){
         terrainProgram.setMat4("model", model);
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
         
         tManager.drawTerrain();
         glBindVertexArray(0);
