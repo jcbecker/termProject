@@ -35,6 +35,14 @@ public:
     void moveLeftRel(float deltaT);
     
     void moveRightRel(float deltaT);
+    
+    void moveForwarRelXZ(float deltaT);
+    
+    void moveBackwardRelXZ(float deltaT);
+    
+    void moveLeftRelXZ(float deltaT);
+    
+    void moveRightRelXZ(float deltaT);
     //Absolute movements-------------------------------------------------------
     void moveUpAbs(float deltaT);
     

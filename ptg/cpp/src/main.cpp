@@ -157,13 +157,12 @@ int main(){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     
-    
-    
     printf("%u\n", gridstf.size());
     
-    // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+    
+    TerrainGen tManager(159);
+    
+    
     glViewport(0, 0, ISCR_W, ISCR_H);
     
     //creating variables
@@ -224,21 +223,18 @@ int main(){
         glBindVertexArray(aVAO);
         model = glm::mat4(1.0f);
         terrainProgram.setMat4("model", model);
-        
         glDrawArrays(GL_LINES, 0, 6);
         
         
         glBindVertexArray(grVAO);
         model = glm::mat4(1.0f);
         terrainProgram.setMat4("model", model);
-        
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
         
-        
-        //glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0); // no need to unbind it every time
+        tManager.drawTerrain();
+        glBindVertexArray(0);
         
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -275,13 +271,13 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize
 void processInputHoldingKey(GLFWwindow *window, float deltaTime){
     Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cam->moveForwarRel(deltaTime);
+        cam->moveForwarRelXZ(deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cam->moveBackwardRel(deltaTime);
+        cam->moveBackwardRelXZ(deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cam->moveLeftRel(deltaTime);
+        cam->moveLeftRelXZ(deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cam->moveRightRel(deltaTime);
+        cam->moveRightRelXZ(deltaTime);
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         cam->moveUpAbs(deltaTime);
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)

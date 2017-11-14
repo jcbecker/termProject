@@ -40,6 +40,28 @@ void Camera::moveLeftRel(float deltaT){//Right vecor is equal to glm::normalize(
 void Camera::moveRightRel(float deltaT){
     this->pos += glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
 }
+void Camera::moveForwarRelXZ(float deltaT){
+    float auxy = this->pos.y;
+    this->pos += front * (movSpeed * deltaT);
+    this->pos.y = auxy;
+}
+void Camera::moveBackwardRelXZ(float deltaT){
+    float auxy = this->pos.y;
+    this->pos -= front * (movSpeed * deltaT);
+    this->pos.y = auxy;
+}
+void Camera::moveLeftRelXZ(float deltaT){//Right vecor is equal to glm::normalize(glm::cross(cameraFront, cameraUp))
+    float auxy = this->pos.y;
+    this->pos -= glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
+    this->pos.y = auxy;
+}
+void Camera::moveRightRelXZ(float deltaT){
+    float auxy = this->pos.y;
+    this->pos += glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
+    this->pos.y = auxy;
+}
+
+
 //Absolute movements-------------------------------------------------------
 void Camera::moveUpAbs(float deltaT){
     this->pos += glm::vec3( 0.0f, (movSpeed * deltaT),  0.0f);
