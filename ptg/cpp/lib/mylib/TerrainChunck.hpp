@@ -31,7 +31,7 @@ public:
         this->zi = pzi;
         this->pNoise.reseed(seed);
         this->auxOctaves = 8;
-        this->auxFreq = 32;
+        this->auxFreq = 16;
         this->vertices.reserve(this->gridSize * this->gridSize);
         this->genVectors();
         this->setUpGLBuffers();
@@ -43,9 +43,8 @@ private:
             for(unsigned int j=0; j<this->gridSize; j++){
                 Vertex avaux;
                 float heightaux = getHeightValue(this->xi + this->vertexInterval * i, this->zi + this->vertexInterval * j);
-                heightaux *= 10.0f;
-                avaux.Position = glm::vec3(this->xi + this->vertexInterval * i, heightaux, this->zi + this->vertexInterval * j);
-                avaux.Color = glm::vec3(0.2f, 0.2f, 0.35f);//DEBUG: preciso colocar uma cor descente
+                avaux.Position = glm::vec3(this->xi + this->vertexInterval * i, heightaux * 10.0f, this->zi + this->vertexInterval * j);
+                avaux.Color = glm::vec3(heightaux/2.0f+0.5f, heightaux/2.0f+0.5f, heightaux/2.0f+0.5f);//DEBUG: preciso colocar uma cor descente
                 this->vertices.push_back(avaux);
             }
         }

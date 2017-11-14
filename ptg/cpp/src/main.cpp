@@ -160,7 +160,7 @@ int main(){
     printf("%u\n", gridstf.size());
     
     
-    TerrainGen tManager(159);
+    TerrainGen tManager(3);
     
     
     glViewport(0, 0, ISCR_W, ISCR_H);
@@ -194,7 +194,7 @@ int main(){
             lastTime = cFrameTime;
         }
         
-        printf("\r%u  %lf (%lf, %lf, %lf)  (%lf)      %u",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z, cam.zoomC, fps);
+        printf("\r%u  %lf (%lf, %lf, %lf)  (%lf)      %u      ",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z, cam.zoomC, fps);
         fflush(stdout);
         
         //process holding keys
