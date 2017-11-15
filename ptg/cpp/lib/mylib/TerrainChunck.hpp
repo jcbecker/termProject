@@ -38,7 +38,7 @@ public:
         this->zi = pzi;
         this->pNoise.reseed(seed);
         this->auxOctaves = 8;
-        this->auxFreq = 16;
+        this->auxFreq = 32;
         this->vertices.reserve(this->gridSize * this->gridSize);
         this->indices.reserve(this->gridSize-1 * this->gridSize-1);
         this->genVectors();
@@ -48,14 +48,14 @@ public:
 private:
     void genVectors(){
         float maxHTest = -10.0f, minHTest= 100.0f, auxHColor;
+        Vertex ijvertex;
         for(unsigned int i=0; i<this->gridSize; i++){
             for(unsigned int j=0; j<this->gridSize; j++){
-                Vertex avaux;
                 HPair heightaux = getHeightValue(this->xi + this->vertexInterval * i, this->zi + this->vertexInterval * j);
-                avaux.Position = glm::vec3(this->xi + this->vertexInterval * i, heightaux.BaseH * 10.0f, this->zi + this->vertexInterval * j);
+                ijvertex.Position = glm::vec3(this->vertexInterval * i, heightaux.FinalH, this->vertexInterval * j);
                 auxHColor = glm::clamp(heightaux.BaseH/2.0f, 0.0f, 1.0f);
-                avaux.Color = glm::vec3(auxHColor, auxHColor, auxHColor);//DEBUG: preciso colocar uma cor descente
-                this->vertices.push_back(avaux);
+                ijvertex.Color = glm::vec3(auxHColor, auxHColor, auxHColor);//DEBUG: preciso colocar uma cor descente
+                this->vertices.push_back(ijvertex);
                 
                 if(heightaux.BaseH > maxHTest)
                     maxHTest = heightaux.BaseH;
@@ -108,6 +108,7 @@ private:
         double auxfxz = (double) this->gridSize/this->auxFreq;
         HPair r;
         r.BaseH = ((float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves)) + 1.0f;
+        r.FinalH = (r.BaseH-1.0f)*10;
         return r;
     }
     
@@ -122,6 +123,10 @@ public:
         glDeleteVertexArrays(1, &this->VAO);
         glDeleteBuffers(1, &this->VBO);
         glDeleteBuffers(1, &this->EBO);
+    }
+    
+    glm::vec3 getInitialXZ(){
+        return glm::vec3(this->xi, 0.0f, this->zi);
     }
     
 };

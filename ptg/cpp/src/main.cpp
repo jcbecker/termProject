@@ -160,7 +160,7 @@ int main(){
     printf("%u\n", gridstf.size());
     
     
-    TerrainGen tManager(9);
+    TerrainGen tManager(9, terrainProgram.ID);
     
     
     glViewport(0, 0, ISCR_W, ISCR_H);
