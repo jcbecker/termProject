@@ -1,6 +1,8 @@
 #ifndef TERRAICHUNCK_HPP
 #define TERRAICHUNCK_HPP
 
+#include <cstdio>
+
 #include <glad/glad.h>
 
 #include <glm/glm.hpp>
@@ -8,6 +10,11 @@
 #include <VertexDescription.hpp>
 #include <vector>
 #include <PerlinNoise.hpp>
+
+struct HPair{
+    float BaseH;
+    float FinalH;
+};
 
 class TerrainChunck{
 private:
@@ -33,21 +40,32 @@ public:
         this->auxOctaves = 8;
         this->auxFreq = 16;
         this->vertices.reserve(this->gridSize * this->gridSize);
+        this->indices.reserve(this->gridSize-1 * this->gridSize-1);
         this->genVectors();
         this->setUpGLBuffers();
     }
     
 private:
     void genVectors(){
+        float maxHTest = -10.0f, minHTest= 100.0f, auxHColor;
         for(unsigned int i=0; i<this->gridSize; i++){
             for(unsigned int j=0; j<this->gridSize; j++){
                 Vertex avaux;
-                float heightaux = getHeightValue(this->xi + this->vertexInterval * i, this->zi + this->vertexInterval * j);
-                avaux.Position = glm::vec3(this->xi + this->vertexInterval * i, heightaux * 10.0f, this->zi + this->vertexInterval * j);
-                avaux.Color = glm::vec3(heightaux/2.0f+0.5f, heightaux/2.0f+0.5f, heightaux/2.0f+0.5f);//DEBUG: preciso colocar uma cor descente
+                HPair heightaux = getHeightValue(this->xi + this->vertexInterval * i, this->zi + this->vertexInterval * j);
+                avaux.Position = glm::vec3(this->xi + this->vertexInterval * i, heightaux.BaseH * 10.0f, this->zi + this->vertexInterval * j);
+                auxHColor = glm::clamp(heightaux.BaseH/2.0f, 0.0f, 1.0f);
+                avaux.Color = glm::vec3(auxHColor, auxHColor, auxHColor);//DEBUG: preciso colocar uma cor descente
                 this->vertices.push_back(avaux);
+                
+                if(heightaux.BaseH > maxHTest)
+                    maxHTest = heightaux.BaseH;
+                if(heightaux.BaseH < minHTest)
+                    minHTest = heightaux.BaseH;
+                
             }
         }
+        
+        printf("Maior valor Base: %f    Menor: %f\n", maxHTest, minHTest);
         
         for (unsigned int i=0; i < this->gridSize-1; i++){//vertex i
             for(unsigned int j=0; j < this->gridSize-1; j++){
@@ -86,10 +104,11 @@ private:
         glBindVertexArray(0);
     }
     
-    float getHeightValue(float x, float z){
+    HPair getHeightValue(float x, float z){
         double auxfxz = (double) this->gridSize/this->auxFreq;
-        return (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
-        
+        HPair r;
+        r.BaseH = ((float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves)) + 1.0f;
+        return r;
     }
     
 public:
@@ -99,7 +118,11 @@ public:
         glBindVertexArray(0);
     }
     
-    
+    void shutDown(){
+        glDeleteVertexArrays(1, &this->VAO);
+        glDeleteBuffers(1, &this->VBO);
+        glDeleteBuffers(1, &this->EBO);
+    }
     
 };
 

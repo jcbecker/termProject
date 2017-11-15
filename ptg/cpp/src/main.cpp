@@ -160,7 +160,7 @@ int main(){
     printf("%u\n", gridstf.size());
     
     
-    TerrainGen tManager(3);
+    TerrainGen tManager(9);
     
     
     glViewport(0, 0, ISCR_W, ISCR_H);
@@ -248,6 +248,7 @@ int main(){
     glDeleteBuffers(1, &grEBO);
     glDeleteVertexArrays(1, &aVAO);
     glDeleteBuffers(1, &aVBO);
+    tManager.shutDown();
     
     glfwTerminate();
     exit(EXIT_SUCCESS);
