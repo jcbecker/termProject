@@ -11,9 +11,10 @@
 #include <vector>
 #include <PerlinNoise.hpp>
 
-struct HPair{
+struct HVertexStatus{
     float BaseH;
     float FinalH;
+    glm::vec3 ColorH;
 };
 
 class TerrainChunck{
@@ -25,20 +26,23 @@ private:
     siv::PerlinNoise pNoise;
     int auxOctaves;
     double auxFreq;
+    double biomeSize, biomeBorderLen;
 public:
     unsigned int VAO;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     
-    TerrainChunck(unsigned int pseed, float pvertexInterval, unsigned int pgridSize, float pxi, float pzi){
+    TerrainChunck(unsigned int pseed, float pvertexInterval, unsigned int pgridSize, float pxi, float pzi, unsigned int pBiosz, unsigned int pBioborderlen){
         this->seed = pseed;
         this->vertexInterval = pvertexInterval;
         this->gridSize = pgridSize;
         this->xi = pxi;
         this->zi = pzi;
         this->pNoise.reseed(seed);
+        this->biomeSize = (double)pBiosz/2.0f;
+        this->biomeBorderLen = (double)pBioborderlen/2.0f;
         this->auxOctaves = 8;
-        this->auxFreq = 32;
+        this->auxFreq = 16;
         this->vertices.reserve(this->gridSize * this->gridSize);
         this->indices.reserve(this->gridSize-1 * this->gridSize-1);
         this->genVectors();
@@ -47,14 +51,16 @@ public:
     
 private:
     void genVectors(){
-        float maxHTest = -10.0f, minHTest= 100.0f, auxHColor;
+        float maxHTest = -10.0f, minHTest= 100.0f;
+        float maxXTest = -1000000.0f, minXTest= 100000.0f;
+        
         Vertex ijvertex;
+        HVertexStatus heightaux;
         for(unsigned int i=0; i<this->gridSize; i++){
             for(unsigned int j=0; j<this->gridSize; j++){
-                HPair heightaux = getHeightValue(this->xi + this->vertexInterval * i, this->zi + this->vertexInterval * j);
+                heightaux = getHeightValue(this->xi + (float)i, this->zi + (float)j);
                 ijvertex.Position = glm::vec3(this->vertexInterval * i, heightaux.FinalH, this->vertexInterval * j);
-                auxHColor = glm::clamp(heightaux.BaseH/2.0f, 0.0f, 1.0f);
-                ijvertex.Color = glm::vec3(auxHColor, auxHColor, auxHColor);//DEBUG: preciso colocar uma cor descente
+                ijvertex.Color = heightaux.ColorH;//DEBUG: preciso colocar uma cor descente
                 this->vertices.push_back(ijvertex);
                 
                 if(heightaux.BaseH > maxHTest)
@@ -62,10 +68,18 @@ private:
                 if(heightaux.BaseH < minHTest)
                     minHTest = heightaux.BaseH;
                 
+                
+                if(this->xi + (float)i > maxXTest)
+                    maxXTest = this->xi + (float)i;
+                if(this->xi + (float)i < minXTest)
+                    minXTest = this->xi + (float)i;
+                
             }
         }
         
         printf("Maior valor Base: %f    Menor: %f\n", maxHTest, minHTest);
+        printf("Maior valor Base: %f    Menor: %f\n", maxXTest, minXTest);
+        
         
         for (unsigned int i=0; i < this->gridSize-1; i++){//vertex i
             for(unsigned int j=0; j < this->gridSize-1; j++){
@@ -104,11 +118,37 @@ private:
         glBindVertexArray(0);
     }
     
-    HPair getHeightValue(float x, float z){
+    HVertexStatus getHeightValue(float x, float z){
         double auxfxz = (double) this->gridSize/this->auxFreq;
-        HPair r;
-        r.BaseH = ((float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves)) + 1.0f;
-        r.FinalH = (r.BaseH-1.0f)*10;
+        HVertexStatus r;
+        float auxHColor;
+        
+        
+        unsigned int xstatus, zstatus;
+        xstatus = (unsigned int)(x/this->biomeSize);
+        zstatus = (unsigned int)(z/this->biomeSize);
+        r.BaseH = (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
+        
+        if(xstatus == 0 && zstatus == 0){
+            r.ColorH = glm::vec3(0.7, 0.5, 0.5);
+        }
+        else if(xstatus == 1 && zstatus ==0){
+            r.ColorH = glm::vec3(0.75, 0.5, 0.5);
+            
+        }else if(xstatus == -1 && zstatus ==0){
+            r.ColorH = glm::vec3(0.65, 0.5, 0.5);
+            
+        }else if(xstatus == -1 && zstatus == -1){
+            r.ColorH = glm::vec3(0.65, 0.5, 0.65);
+        }
+        else{
+            auxHColor = glm::clamp((r.BaseH+1.0f)/2.0f, 0.0f, 1.0f);
+            r.ColorH = glm::vec3(auxHColor, auxHColor, auxHColor);
+        }
+        
+        
+        
+        r.FinalH = (r.BaseH)*10;
         return r;
     }
     
@@ -126,7 +166,7 @@ public:
     }
     
     glm::vec3 getInitialXZ(){
-        return glm::vec3(this->xi, 0.0f, this->zi);
+        return glm::vec3(this->xi * this->vertexInterval, 0.0f, this->zi * this->vertexInterval);
     }
     
 };
