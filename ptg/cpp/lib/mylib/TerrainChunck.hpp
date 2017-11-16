@@ -10,11 +10,13 @@
 #include <VertexDescription.hpp>
 #include <vector>
 #include <PerlinNoise.hpp>
+#include <BiomeDescription.hpp>
 
 struct HVertexStatus{
     float BaseH;
     float FinalH;
     glm::vec3 ColorH;
+    BiomeType BioTp;
 };
 
 class TerrainChunck{
@@ -122,39 +124,43 @@ private:
         double auxfxz = (double) this->gridSize/this->auxFreq;
         HVertexStatus r;
         float auxHColor;
-        
-        
-        int xstatus, zstatus;
         double dxs, dzs;
+        double bioOutPut;
+        
+        
         dxs = (x/this->biomeSize);
         dzs = (z/this->biomeSize);
         if(dxs < 0) dxs -=1.0;
         if(dzs < 0) dzs -=1.0;
         
-        xstatus = (int) dxs;
-        zstatus = (int) dzs;
+        dxs = glm::trunc(dxs);
+        dzs = glm::trunc(dzs);
+        bioOutPut = pNoise.octaveNoise(dxs + 0.3, dzs+ 0.3, this->auxOctaves);//Debug: o valor não pode ser inteiro
+        //printf("%lf          %lf, %lf\n", bioOutPut, dxs, dzs);
+        if (bioOutPut > 0){
+            r.BioTp = PLAINS;
+        }else{
+            r.BioTp = MONTAINS;
+        }
+        
+        
         r.BaseH = (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
         
-        if(xstatus == 0 && zstatus == 0){
-            r.ColorH = glm::vec3(0.7, 0.5, 0.5);
-        }
-        else if(xstatus == 1 && zstatus ==0){
-            r.ColorH = glm::vec3(0.75, 0.5, 0.5);
+        
+        auxHColor = glm::clamp((r.BaseH+1.0f)/2.0f, 0.0f, 1.0f);
+        r.ColorH = glm::vec3(auxHColor, auxHColor, auxHColor);
+        
+        
+        
+        if(r.BioTp == PLAINS){
+            r.FinalH = (r.BaseH)*10;
+            r.ColorH.r = 1;
+        }else if(r.BioTp == MONTAINS){
+            r.FinalH = (r.BaseH)*35;
+            r.ColorH.b = 1;
             
-        }else if(xstatus == -1 && zstatus ==0){
-            r.ColorH = glm::vec3(0.65, 0.5, 0.5);
-            
-        }else if(xstatus == -1 && zstatus == -1){
-            r.ColorH = glm::vec3(0.65, 0.5, 0.65);
-        }
-        else{
-            auxHColor = glm::clamp((r.BaseH+1.0f)/2.0f, 0.0f, 1.0f);
-            r.ColorH = glm::vec3(auxHColor, auxHColor, auxHColor);
         }
         
-        
-        
-        r.FinalH = (r.BaseH)*10;
         return r;
     }
     
