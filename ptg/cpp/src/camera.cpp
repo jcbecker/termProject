@@ -16,7 +16,7 @@ Camera::Camera(){
     pos = glm::vec3(0.0f, 40.0f,  0.0f);
     front = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f,  0.0f);
-    movSpeed = 2.5;
+    movSpeed = 8.0;
     yaw = -90.0f;//0.0 let the direction front to the right
     pitch =  0.0f;
     mouseActive = false;

@@ -39,7 +39,7 @@ public:
         this->xi = pxi;
         this->zi = pzi;
         this->pNoise.reseed(seed);
-        this->biomeSize = (double)pBiosz/2.0f;
+        this->biomeSize = (double)pBiosz;
         this->biomeBorderLen = (double)pBioborderlen/2.0f;
         this->auxOctaves = 8;
         this->auxFreq = 16;
@@ -124,9 +124,15 @@ private:
         float auxHColor;
         
         
-        unsigned int xstatus, zstatus;
-        xstatus = (unsigned int)(x/this->biomeSize);
-        zstatus = (unsigned int)(z/this->biomeSize);
+        int xstatus, zstatus;
+        double dxs, dzs;
+        dxs = (x/this->biomeSize);
+        dzs = (z/this->biomeSize);
+        if(dxs < 0) dxs -=1.0;
+        if(dzs < 0) dzs -=1.0;
+        
+        xstatus = (int) dxs;
+        zstatus = (int) dzs;
         r.BaseH = (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
         
         if(xstatus == 0 && zstatus == 0){
