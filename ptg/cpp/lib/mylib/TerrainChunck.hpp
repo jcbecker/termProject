@@ -13,8 +13,8 @@
 #include <BiomeDescription.hpp>
 
 struct HVertexStatus{
-    float BaseH;
-    float FinalH;
+    double BaseH;
+    double FinalH;
     glm::vec3 ColorH;
     BiomeType BioTp;
 };
@@ -32,9 +32,10 @@ private:
     float xi, zi;//xf = xi + gridSize * vertexInterval, zf = zi + gridSize * vertexInterval;
     unsigned int VBO, EBO;
     siv::PerlinNoise pNoise;
-    int auxOctaves;
-    double auxFreq;
     unsigned int biomeSize, biomeBorderLen;
+    BiomeValues bvbuild[BIOMESN];
+    
+    double auxDebugmin, auxDebugmax;
 public:
     unsigned int VAO;
     std::vector<Vertex> vertices;
@@ -49,8 +50,9 @@ public:
         this->pNoise.reseed(seed);
         this->biomeSize = pBiosz;
         this->biomeBorderLen = pBioborderlen;
-        this->auxOctaves = 8;
-        this->auxFreq = 16;
+        this->auxDebugmax = -15.0;
+        this->auxDebugmin  =15.0;
+        this->describeTheBiomes();
         this->vertices.reserve(this->gridSize * this->gridSize);
         this->indices.reserve(this->gridSize-1 * this->gridSize-1);
         this->genVectors();
@@ -58,6 +60,18 @@ public:
     }
     
 private:
+    
+    void describeTheBiomes(){
+        bvbuild[0] = getTheBiomeDescription(PLAINS);
+        bvbuild[1] = getTheBiomeDescription(MONTAINS);
+        bvbuild[2] = getTheBiomeDescription(VALLEY);
+        
+        
+        
+        
+        
+    }
+    
     void genVectors(){
         float maxHTest = -10.0f, minHTest= 100.0f;
         float maxXTest = -1000000.0f, minXTest= 100000.0f;
@@ -87,6 +101,8 @@ private:
         
         printf("Maior valor Base: %f    Menor: %f\n", maxHTest, minHTest);
         printf("Maior valor Base: %f    Menor: %f\n", maxXTest, minXTest);
+        printf("Maior Debug     : %lf    Menor: %lf\n", this->auxDebugmax, this->auxDebugmin);
+        
         
         
         for (unsigned int i=0; i < this->gridSize-1; i++){//vertex i
@@ -127,50 +143,104 @@ private:
     }
     
     HVertexStatus vertexValuation(float x, float z){
-        double auxfxz = (double) this->gridSize/this->auxFreq;
         HVertexStatus r;
-        float auxHColor;
-        
+        double actualH;
         
         r.BioTp = getBiomeXZ(x, z);
+        double auxfxz = (double) this->gridSize/bvbuild[r.BioTp].bFrequence;//bvbuild[r.BioTp]
         
-        r.BaseH = (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
+        r.BaseH = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[r.BioTp].bOctaves);
+        
+        r.ColorH = biomeColorValuation(r.BioTp, r.BaseH);
+        
+        actualH = biomeHeightValuation(r.BioTp, r.BaseH);
         
         
-        auxHColor = glm::clamp((r.BaseH+1.0f)/2.0f, 0.0f, 1.0f);
-        r.ColorH = glm::vec3(auxHColor, auxHColor, auxHColor);
         
-        
-        
-        if(r.BioTp == PLAINS){
-            r.FinalH = (r.BaseH)*10;
-            r.ColorH.r = 1;
-        }else if(r.BioTp == MONTAINS){
-            r.FinalH = (r.BaseH)*35;
-            r.ColorH.b = 1;
-            
-        }else if(r.BioTp == VALLEY){
-            r.FinalH = glm::pow(1.5, (r.BaseH +0.4)*8);
-            r.ColorH.g = 1;
-        }
         
         BorderHelper someAuxforX = borderTest(x), someAuxforZ = borderTest(z);
         
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){
-                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH,  someAuxforX.pDistToBorder);
+                //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH,  someAuxforX.pDistToBorder);
             }else{
-                r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH,  someAuxforX.pDistToBorder);
+                //r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH,  someAuxforX.pDistToBorder);
             }
         }
         
         if(someAuxforZ.isBorder){
             if(someAuxforZ.borderAbove){
-                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH, someAuxforZ.pDistToBorder);
+                //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH, someAuxforZ.pDistToBorder);
             }else{
-                r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH, someAuxforZ.pDistToBorder);
+                //r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH, someAuxforZ.pDistToBorder);
             }
         }
+        
+        BiomeType otherSide_x, otherSide_z;
+        double beyondTheWallBase_x, beyondTheWallFinal_x;
+        double beyondTheWallBase_z, beyondTheWallFinal_z;
+        
+        r.FinalH = actualH;
+        
+        if(someAuxforX.isBorder){
+            if(someAuxforX.borderAbove){//black
+                otherSide_x = getBiomeXZ(x + this->biomeBorderLen + 1, z);
+                auxfxz = (double) this->gridSize/bvbuild[otherSide_x].bFrequence;
+                beyondTheWallBase_x = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_x].bOctaves);
+                beyondTheWallFinal_x = biomeHeightValuation(otherSide_x, beyondTheWallBase_x);
+                r.FinalH = glm::mix(beyondTheWallFinal_x, actualH,   someAuxforX.pDistToBorder);
+                
+                r.ColorH = glm::mix(biomeColorValuation(otherSide_x, beyondTheWallBase_x), r.ColorH,  someAuxforX.pDistToBorder);
+                
+                if(auxDebugmax < someAuxforX.pDistToBorder){
+                    auxDebugmax = someAuxforX.pDistToBorder;
+                }
+                if(auxDebugmin > someAuxforX.pDistToBorder){
+                    auxDebugmin = someAuxforX.pDistToBorder;
+                    
+                }
+                
+                
+            }else{
+                r.FinalH = actualH;
+            }
+            
+        }
+        if(someAuxforZ.isBorder){
+            if(someAuxforZ.borderAbove){//black
+                otherSide_z = getBiomeXZ(x, z + this->biomeBorderLen + 1);
+                auxfxz = (double) this->gridSize/bvbuild[otherSide_z].bFrequence;
+                beyondTheWallBase_z = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_z].bOctaves);
+                beyondTheWallFinal_z = biomeHeightValuation(otherSide_z, beyondTheWallBase_z);
+                r.FinalH = glm::mix(beyondTheWallFinal_z, actualH,   someAuxforZ.pDistToBorder);
+                
+                r.ColorH = glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), r.ColorH,  someAuxforZ.pDistToBorder);
+                
+                if(auxDebugmax < someAuxforZ.pDistToBorder){
+                    auxDebugmax = someAuxforZ.pDistToBorder;
+                }
+                if(auxDebugmin > someAuxforZ.pDistToBorder){
+                    auxDebugmin = someAuxforZ.pDistToBorder;
+                    
+                }
+                
+                
+            }else{
+                r.FinalH = actualH;
+            }
+            
+        }
+        
+        if(someAuxforX.isBorder && someAuxforZ.isBorder){
+            if( someAuxforX.borderAbove && someAuxforZ.borderAbove){
+                
+                
+                
+            }
+        }
+            
+        
+        
         
         return r;
     }
@@ -223,6 +293,20 @@ private:
         return (BiomeType) (areaValue * BIOMESN);
     }
     
+    glm::vec3 biomeColorValuation(BiomeType pbtval, double bNoise){
+        double yaauxColor = glm::clamp(bNoise, -1.0, 1.0);
+        if(bNoise < 0){
+            return glm::mix(bvbuild[pbtval].midColor, bvbuild[pbtval].minColor, yaauxColor*-1);
+            
+        }else{
+            return glm::mix(bvbuild[pbtval].midColor, bvbuild[pbtval].maxColor, yaauxColor);
+        }    
+    }
+    
+    double biomeHeightValuation(BiomeType pbtval, double bNoise){
+        return bNoise * bvbuild[pbtval].amplitudeH;//DEBUG: aqui chamar função extra
+        
+    }
     
 public:
     void DrawChunck(){
