@@ -212,7 +212,7 @@ int main(){
         // create transformations
         view  = cam.getViewMatrix();
         glfwGetWindowSize(window, &cscr_w, &cscr_h);//essa função é threadsafe
-        projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 1000.0f);
+        projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 1200.0f);
         // retrieve the matrix uniform locations
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         terrainProgram.setMat4("projection", projection);

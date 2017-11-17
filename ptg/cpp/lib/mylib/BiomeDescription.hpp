@@ -1,8 +1,10 @@
 #ifndef BIOMEDESCRIPTION_HPP
 #define BIOMEDESCRIPTION_HPP
 
+#define BIOMESN 3
+
 enum BiomeType{
-PLAINS, MONTAINS    
+PLAINS, MONTAINS, VALLEY    
     
 };
 

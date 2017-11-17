@@ -19,6 +19,12 @@ struct HVertexStatus{
     BiomeType BioTp;
 };
 
+struct BorderHelper{
+    bool isBorder;
+    bool borderAbove;
+    double pDistToBorder;
+};
+
 class TerrainChunck{
 private:
     unsigned int gridSize, seed;
@@ -28,7 +34,7 @@ private:
     siv::PerlinNoise pNoise;
     int auxOctaves;
     double auxFreq;
-    double biomeSize, biomeBorderLen;
+    unsigned int biomeSize, biomeBorderLen;
 public:
     unsigned int VAO;
     std::vector<Vertex> vertices;
@@ -41,8 +47,8 @@ public:
         this->xi = pxi;
         this->zi = pzi;
         this->pNoise.reseed(seed);
-        this->biomeSize = (double)pBiosz;
-        this->biomeBorderLen = (double)pBioborderlen/2.0f;
+        this->biomeSize = pBiosz;
+        this->biomeBorderLen = pBioborderlen;
         this->auxOctaves = 8;
         this->auxFreq = 16;
         this->vertices.reserve(this->gridSize * this->gridSize);
@@ -60,7 +66,7 @@ private:
         HVertexStatus heightaux;
         for(unsigned int i=0; i<this->gridSize; i++){
             for(unsigned int j=0; j<this->gridSize; j++){
-                heightaux = getHeightValue(this->xi + (float)i, this->zi + (float)j);
+                heightaux = vertexValuation(this->xi + (float)i, this->zi + (float)j);
                 ijvertex.Position = glm::vec3(this->vertexInterval * i, heightaux.FinalH, this->vertexInterval * j);
                 ijvertex.Color = heightaux.ColorH;//DEBUG: preciso colocar uma cor descente
                 this->vertices.push_back(ijvertex);
@@ -120,29 +126,13 @@ private:
         glBindVertexArray(0);
     }
     
-    HVertexStatus getHeightValue(float x, float z){
+    HVertexStatus vertexValuation(float x, float z){
         double auxfxz = (double) this->gridSize/this->auxFreq;
         HVertexStatus r;
         float auxHColor;
-        double dxs, dzs;
-        double bioOutPut;
         
         
-        dxs = (x/this->biomeSize);
-        dzs = (z/this->biomeSize);
-        if(dxs < 0) dxs -=1.0;
-        if(dzs < 0) dzs -=1.0;
-        
-        dxs = glm::trunc(dxs);
-        dzs = glm::trunc(dzs);
-        bioOutPut = pNoise.octaveNoise(dxs + 0.3, dzs+ 0.3, this->auxOctaves);//Debug: o valor não pode ser inteiro
-        //printf("%lf          %lf, %lf\n", bioOutPut, dxs, dzs);
-        if (bioOutPut > 0){
-            r.BioTp = PLAINS;
-        }else{
-            r.BioTp = MONTAINS;
-        }
-        
+        r.BioTp = getBiomeXZ(x, z);
         
         r.BaseH = (float) pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, this->auxOctaves);
         
@@ -159,10 +149,80 @@ private:
             r.FinalH = (r.BaseH)*35;
             r.ColorH.b = 1;
             
+        }else if(r.BioTp == VALLEY){
+            r.FinalH = glm::pow(1.5, (r.BaseH +0.4)*8);
+            r.ColorH.g = 1;
+        }
+        
+        BorderHelper someAuxforX = borderTest(x), someAuxforZ = borderTest(z);
+        
+        if(someAuxforX.isBorder){
+            if(someAuxforX.borderAbove){
+                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH,  someAuxforX.pDistToBorder);
+            }else{
+                r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH,  someAuxforX.pDistToBorder);
+            }
+        }
+        
+        if(someAuxforZ.isBorder){
+            if(someAuxforZ.borderAbove){
+                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH, someAuxforZ.pDistToBorder);
+            }else{
+                r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH, someAuxforZ.pDistToBorder);
+            }
         }
         
         return r;
     }
+    
+    
+    BorderHelper borderTest(float k){
+        bool negativeFlag;
+        long int kaux;
+        negativeFlag = k < 0.0 ? true : false;
+        kaux = negativeFlag? k*-1: k;
+        long int nearborder = ((kaux / this->biomeSize) + 1) * this->biomeSize;
+        long int nearborder2 = ((kaux / this->biomeSize)) * this->biomeSize;
+        
+        if(negativeFlag){
+            nearborder *= -1;
+            nearborder2 *= -1;
+        }
+        
+        BorderHelper borderRes;
+        if(glm::abs(nearborder - k) < this->biomeBorderLen){
+            borderRes.isBorder = true;
+            borderRes.borderAbove = true;
+            borderRes.pDistToBorder = glm::abs(nearborder - k) / this->biomeBorderLen;
+        }else if(glm::abs(nearborder2 - k) < this->biomeBorderLen){
+            borderRes.isBorder = true;
+            borderRes.borderAbove = false;
+            borderRes.pDistToBorder = glm::abs(nearborder2 - k) / this->biomeBorderLen;
+        }else{
+            borderRes.isBorder = false;
+        }
+        
+        if(negativeFlag){
+            borderRes.borderAbove = !borderRes.borderAbove;
+        }
+        return borderRes;
+    }
+    
+    BiomeType getBiomeXZ(double px, double pz){
+        double dxs = (px/(double)this->biomeSize);
+        double dzs = (pz/(double)this->biomeSize);
+        if(dxs < 0) dxs -=1.0;
+        if(dzs < 0) dzs -=1.0;
+        
+        dxs = glm::trunc(dxs);
+        dzs = glm::trunc(dzs);
+        
+        
+        double areaValue = pNoise.octaveNoise0_1(dxs + 0.3, dzs+ 0.3, 1);
+        areaValue = glm::clamp(areaValue, 0.0, 1.0);
+        return (BiomeType) (areaValue * BIOMESN);
+    }
+    
     
 public:
     void DrawChunck(){
