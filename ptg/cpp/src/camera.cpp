@@ -13,7 +13,7 @@ Camera::Camera(glm::vec3 iPos, glm::vec3 iFront, glm::vec3 iUp, float iMovSpeed,
 }
 
 Camera::Camera(){
-    pos = glm::vec3(0.0f, 40.0f,  0.0f);
+    pos = glm::vec3(212.0f, 40.0f,  195.0f);
     front = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f,  0.0f);
     movSpeed = 8.0;

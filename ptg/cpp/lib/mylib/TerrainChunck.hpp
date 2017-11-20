@@ -65,6 +65,8 @@ private:
         bvbuild[0] = getTheBiomeDescription(PLAINS);
         bvbuild[1] = getTheBiomeDescription(MONTAINS);
         bvbuild[2] = getTheBiomeDescription(VALLEY);
+        bvbuild[3] = getTheBiomeDescription(DESERT);
+        
         
         
         
@@ -145,13 +147,19 @@ private:
     HVertexStatus vertexValuation(float x, float z){
         HVertexStatus r;
         double actualH;
+        glm::vec3 actualC;
+        
+        double oauxHX, oauxHZ;
+        glm::vec3 oauxCX, oauxCZ;
+        
+        
         
         r.BioTp = getBiomeXZ(x, z);
         double auxfxz = (double) this->gridSize/bvbuild[r.BioTp].bFrequence;//bvbuild[r.BioTp]
         
         r.BaseH = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[r.BioTp].bOctaves);
         
-        r.ColorH = biomeColorValuation(r.BioTp, r.BaseH);
+        actualC = biomeColorValuation(r.BioTp, r.BaseH);
         
         actualH = biomeHeightValuation(r.BioTp, r.BaseH);
         
@@ -176,69 +184,147 @@ private:
             }
         }
         
-        BiomeType otherSide_x, otherSide_z;
+        BiomeType otherSide_x, otherSide_z, otherSide_xz;
         double beyondTheWallBase_x, beyondTheWallFinal_x;
         double beyondTheWallBase_z, beyondTheWallFinal_z;
+        double beyondTheWallBase_xz, beyondTheWallFinal_xz;
+        
         
         r.FinalH = actualH;
+        r.ColorH = actualC;
         
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){//black
-                otherSide_x = getBiomeXZ(x + this->biomeBorderLen + 1, z);
+                otherSide_x = getBiomeXZ(x + this->biomeBorderLen + 0.5, z);
                 auxfxz = (double) this->gridSize/bvbuild[otherSide_x].bFrequence;
                 beyondTheWallBase_x = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_x].bOctaves);
                 beyondTheWallFinal_x = biomeHeightValuation(otherSide_x, beyondTheWallBase_x);
-                r.FinalH = glm::mix(beyondTheWallFinal_x, actualH,   someAuxforX.pDistToBorder);
+                oauxHX = glm::mix(beyondTheWallFinal_x, actualH,   someAuxforX.pDistToBorder);
+                r.FinalH = oauxHX;
+                oauxCX = glm::mix(biomeColorValuation(otherSide_x, beyondTheWallBase_x), actualC,  someAuxforX.pDistToBorder);
+                r.ColorH = oauxCX;
                 
-                r.ColorH = glm::mix(biomeColorValuation(otherSide_x, beyondTheWallBase_x), r.ColorH,  someAuxforX.pDistToBorder);
-                
-                if(auxDebugmax < someAuxforX.pDistToBorder){
-                    auxDebugmax = someAuxforX.pDistToBorder;
-                }
-                if(auxDebugmin > someAuxforX.pDistToBorder){
-                    auxDebugmin = someAuxforX.pDistToBorder;
-                    
-                }
+                //r.ColorH = glm::mix(glm::vec3(1.0, 0.0, 0.0), r.ColorH, someAuxforX.pDistToBorder);
+
                 
                 
             }else{
-                r.FinalH = actualH;
+                //r.FinalH = actualH;
             }
             
         }
         if(someAuxforZ.isBorder){
             if(someAuxforZ.borderAbove){//black
-                otherSide_z = getBiomeXZ(x, z + this->biomeBorderLen + 1);
+                otherSide_z = getBiomeXZ(x, z + this->biomeBorderLen + 0.5);
                 auxfxz = (double) this->gridSize/bvbuild[otherSide_z].bFrequence;
                 beyondTheWallBase_z = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_z].bOctaves);
                 beyondTheWallFinal_z = biomeHeightValuation(otherSide_z, beyondTheWallBase_z);
-                r.FinalH = glm::mix(beyondTheWallFinal_z, actualH,   someAuxforZ.pDistToBorder);
+                oauxHZ = glm::mix(beyondTheWallFinal_z, actualH,   someAuxforZ.pDistToBorder);
+                r.FinalH = oauxHZ;
+                oauxCZ = glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), actualC,  someAuxforZ.pDistToBorder);
+                r.ColorH = oauxCZ;
                 
-                r.ColorH = glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), r.ColorH,  someAuxforZ.pDistToBorder);
                 
-                if(auxDebugmax < someAuxforZ.pDistToBorder){
-                    auxDebugmax = someAuxforZ.pDistToBorder;
-                }
-                if(auxDebugmin > someAuxforZ.pDistToBorder){
-                    auxDebugmin = someAuxforZ.pDistToBorder;
-                    
-                }
+                //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 1.0), r.ColorH, someAuxforZ.pDistToBorder);
+
                 
                 
             }else{
-                r.FinalH = actualH;
+                //r.FinalH = actualH;
             }
             
         }
         
         if(someAuxforX.isBorder && someAuxforZ.isBorder){
             if( someAuxforX.borderAbove && someAuxforZ.borderAbove){
+                //r.FinalH = (glm::mix(beyondTheWallFinal_z, actualH,   someAuxforZ.pDistToBorder) + glm::mix(beyondTheWallFinal_x, actualH,   someAuxforX.pDistToBorder)) * 0.5;
+                //r.ColorH = glm::mix(glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), r.ColorH,  someAuxforZ.pDistToBorder), glm::mix(biomeColorValuation(otherSide_x, beyondTheWallBase_x), r.ColorH,  someAuxforX.pDistToBorder), 0.5);
+                //r.FinalH = glm::mix(r.FinalH, actualH, 1 - ((someAuxforZ.pDistToBorder + someAuxforX.pDistToBorder) * 0.5));
+                //r.FinalH = actualH;
+                //r.ColorH = glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), r.ColorH,  someAuxforZ.pDistToBorder);
+                //r.ColorH = glm::mix(r.ColorH, glm::vec3(0.0, 0.0, 0.0), (someAuxforZ.pDistToBorder + someAuxforX.pDistToBorder) * 0.5);
+                //r.ColorH = biomeColorValuation(r.BioTp, r.BaseH);
+                
+                otherSide_xz = getBiomeXZ(x + this->biomeBorderLen + 0.5, z + this->biomeBorderLen + 0.5);
+                auxfxz = (double) this->gridSize/bvbuild[otherSide_xz].bFrequence;
+                beyondTheWallBase_xz = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_xz].bOctaves);
+                beyondTheWallFinal_xz = biomeHeightValuation(otherSide_xz, beyondTheWallBase_xz);
+                
+                
+                
+                if(someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder  < 1){
+                    r.FinalH = beyondTheWallFinal_xz;
+                    
+                    r.ColorH = biomeColorValuation(otherSide_xz, beyondTheWallBase_xz);
+                    //r.ColorH = glm::mix(r.ColorH , biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), glm::clamp(((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) +  (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)), 0.0, 1.0));
+                    
+                }else{
+                    r.FinalH = actualH;
+                    
+                    r.ColorH = actualC;
+                    //r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz) , actualC, glm::clamp((someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder +  someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
+                    
+                    
+                }
+                
+                
+                
+                
+                //(+x, +z)
+                //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), actualC, glm::clamp(glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
+                
+                
+                
+                if(glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)) < 1){
+                    //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), actualC, glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)));
+                    r.ColorH = glm::mix(biomeColorValuation(otherSide_x, beyondTheWallBase_x), r.ColorH, glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)));
+                    r.FinalH = glm::mix(beyondTheWallFinal_x, r.FinalH, glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)));
+                    
+                }
+                
+                if(glm::sqrt((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder) < 1){
+                    r.ColorH = glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), r.ColorH, glm::sqrt((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder));
+                    r.FinalH = glm::mix(beyondTheWallFinal_z, r.FinalH, glm::sqrt((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder));
+                    
+                }
+                
+                /*
+                if(glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder) < 1){
+                    r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), r.ColorH, glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder));
+                    r.FinalH = glm::mix(beyondTheWallFinal_xz, r.FinalH, glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder));
+                    
+                }
+                */
+                
+                
+                //Color debug
+                //r.ColorH = glm::mix(r.ColorH , glm::vec3(0.0, 0.0, 0.0), glm::clamp((someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder +  someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
+                //r.ColorH = glm::mix(r.ColorH , glm::vec3(1.0, 1.0, 1.0), glm::clamp(((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) +  (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)), 0.0, 1.0));
+                //r.ColorH = glm::mix(r.ColorH , glm::vec3(0.0, 0.0, 0.0), glm::clamp((someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder), 0.0, 1.0));
+                
+                
+                
+                
+                //r.FinalH = (glm::mix(beyondTheWallFinal_xz, actualH, glm::clamp(glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0))
+                //+ glm::mix(beyondTheWallFinal_z, actualH,   someAuxforZ.pDistToBorder)
+                //+ glm::mix(beyondTheWallFinal_x, actualH,   someAuxforX.pDistToBorder))/3.0;
+                
+                //r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), r.ColorH,  glm::clamp(glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
+                //+ glm::mix(biomeColorValuation(otherSide_z, beyondTheWallBase_z), r.ColorH,  someAuxforZ.pDistToBorder)
+                //+ glm::mix(biomeColorValuation(otherSide_x, beyondTheWallBase_x), r.ColorH,  someAuxforX.pDistToBorder);
+                
+                //r.ColorH.r /= 2.0;
+                //r.ColorH.g /= 2.0;
+                //r.ColorH.b /= 2.0;
+                
+                //r.ColorH = glm::mix(r.ColorH, glm::vec3(0.0, 0.0, 0.0), 0.5);
+                
                 
                 
                 
             }
         }
-            
+        
         
         
         
@@ -288,9 +374,44 @@ private:
         dzs = glm::trunc(dzs);
         
         
-        double areaValue = pNoise.octaveNoise0_1(dxs + 0.3, dzs+ 0.3, 1);
+        if(dxs == 0 && dzs == 0){
+            return PLAINS;
+        }else if(dxs == 0 && dzs == 1){
+            return DESERT;
+        }else if(dxs == 1 && dzs == 0){
+            return VALLEY;
+        }else if(dxs == 1 && dzs == 1){
+            return MONTAINS;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        double areaValue = pNoise.noise0_1((dxs + 7.3) * 2.0, (dzs+ 7.3) * 2.0);
         areaValue = glm::clamp(areaValue, 0.0, 1.0);
-        return (BiomeType) (areaValue * BIOMESN);
+        
+        /*
+        if(this->auxDebugmax < areaValue){
+            this->auxDebugmax = areaValue;
+        }
+        if(this->auxDebugmin > areaValue){
+            this->auxDebugmin = areaValue;
+        }
+        */
+        
+        BiomeType toTest =(BiomeType) (areaValue * BIOMESN);
+        if(this->auxDebugmax < toTest){
+            this->auxDebugmax = toTest;
+        }
+        if(this->auxDebugmin > toTest){
+            this->auxDebugmin = toTest;
+        }
+        
+        return toTest;
     }
     
     glm::vec3 biomeColorValuation(BiomeType pbtval, double bNoise){

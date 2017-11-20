@@ -1,11 +1,11 @@
 #ifndef BIOMEDESCRIPTION_HPP
 #define BIOMEDESCRIPTION_HPP
 
-#define BIOMESN 3
+#define BIOMESN 4
 
 
 enum BiomeType : int{
-PLAINS = 0, MONTAINS, VALLEY    
+PLAINS = 0, MONTAINS = 1, VALLEY = 2, DESERT = 3
     
 };
 
@@ -47,9 +47,9 @@ BiomeValues getTheBiomeDescription(BiomeType pbt){
     }else if(pbt == MONTAINS){//------------------------------------------------MONTAINS
         descrip.bFrequence = 18.0;
         descrip.bOctaves   = 8;
-        descrip.amplitudeH = 36.0;
-        descrip.minColor   = rgbTransform(glm::vec3(0.0,128.0,0.0));
-        descrip.midColor   = rgbTransform(glm::vec3(112.0,128.0,144.0));
+        descrip.amplitudeH = 10.0;
+        descrip.minColor   = rgbTransform(glm::vec3(255.0,128.0,0.0));
+        descrip.midColor   = rgbTransform(glm::vec3(255.0,128.0,144.0));
         descrip.maxColor   = rgbTransform(glm::vec3(255.0, 255.0, 255.0));
         
         
@@ -62,8 +62,15 @@ BiomeValues getTheBiomeDescription(BiomeType pbt){
         descrip.maxColor   = rgbTransform(glm::vec3(255.0, 255.0, 255.0));
         
         
+    }else if(pbt == DESERT){//--------------------------------------------------DESERT
+        descrip.bFrequence = 6.0;
+        descrip.bOctaves   = 2;
+        descrip.amplitudeH = 25.0;
+        descrip.minColor   = rgbTransform(glm::vec3(205.0, 133.0, 63.0));
+        descrip.midColor   = rgbTransform(glm::vec3(244.0, 164.0, 96.0));
+        descrip.maxColor   = rgbTransform(glm::vec3(205.0, 133.0, 63.0));
+        
     }
-    
     
     return descrip;
 }
