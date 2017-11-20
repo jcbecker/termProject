@@ -256,14 +256,17 @@ private:
                     r.FinalH = beyondTheWallFinal_xz;
                     
                     r.ColorH = biomeColorValuation(otherSide_xz, beyondTheWallBase_xz);
-                    //r.ColorH = glm::mix(r.ColorH , biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), glm::clamp(((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) +  (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)), 0.0, 1.0));
+                    //r.ColorH = glm::mix(actualC , biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), glm::clamp(((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) +  (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)), 0.0, 1.0));
                     
                 }else{
                     r.FinalH = actualH;
                     
                     r.ColorH = actualC;
-                    //r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz) , actualC, glm::clamp((someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder +  someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
                     
+                    
+                    
+                    r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz) , actualC, glm::clamp((someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder +  someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
+                    r.FinalH = glm::mix(beyondTheWallFinal_xz , actualH, glm::clamp((someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder +  someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
                     
                 }
                 
@@ -298,6 +301,14 @@ private:
                 
                 
                 //Color debug
+                /*
+                if(glm::sqrt(someAuxforX.pDistToBorder * someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder) < 1
+                &&
+                glm::sqrt((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) + (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)) < 1){
+                    r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH, 0.5);
+                                        
+                }
+                */
                 //r.ColorH = glm::mix(r.ColorH , glm::vec3(0.0, 0.0, 0.0), glm::clamp((someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder * someAuxforX.pDistToBorder +  someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder * someAuxforZ.pDistToBorder), 0.0, 1.0));
                 //r.ColorH = glm::mix(r.ColorH , glm::vec3(1.0, 1.0, 1.0), glm::clamp(((1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) * (1-someAuxforX.pDistToBorder) +  (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder) * (1-someAuxforZ.pDistToBorder)), 0.0, 1.0));
                 //r.ColorH = glm::mix(r.ColorH , glm::vec3(0.0, 0.0, 0.0), glm::clamp((someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder), 0.0, 1.0));
@@ -425,7 +436,26 @@ private:
     }
     
     double biomeHeightValuation(BiomeType pbtval, double bNoise){
-        return bNoise * bvbuild[pbtval].amplitudeH;//DEBUG: aqui chamar função extra
+        if(pbtval == PLAINS){
+            bNoise *=10;
+        }else if(pbtval == MONTAINS){
+            
+            
+            bNoise = glm::pow(1.5, bNoise*7.0)*5;
+        }else if (pbtval == VALLEY){
+            bNoise = glm::clamp(bNoise, -0.5, 1.0);
+            
+            
+            bNoise =glm::pow(bNoise * 5, 3);
+            
+        }else if(pbtval == DESERT){
+            bNoise *=30;
+            
+        }
+        
+        
+        
+        return bNoise;//DEBUG: aqui chamar função extra
         
     }
     
