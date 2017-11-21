@@ -83,84 +83,7 @@ int main(){
     glBindVertexArray(0);
     
     
-    std::vector<float> gridstf;
-    gridstf.reserve(1024*1024*6);
     
-    float xDelta = 0.3;
-    float xStart = (1024.0f*xDelta)/2.0f * -1.0f;
-    
-    
-    const siv::PerlinNoise perlin(2234);
-    //freq=8
-    //fxy = 1024/8
-    //octaves 4
-    const double fxy = 1024.0f/8.0f;
-    float mtest, colortest;
-    
-    for (int i=0; i<1024; i++){//vertex i
-        for(int j=0; j<1024; j++){
-            mtest = (float) perlin.octaveNoise((double)i /fxy, (double)j /fxy, 8);
-            colortest = (mtest + 1)/4;
-            //printf("mt: %f\n", mtest);
-            gridstf.push_back(xStart + xDelta*i);//x
-            if(myabs(xStart + xDelta*i) < 10){
-                //max dist 20
-                //((((xStart + xDelta*i)+10)/20) * pow(1.5, mtest * 5.7)) + (mtest * (1-(((xStart + xDelta*i)+10)/20)));
-                
-                gridstf.push_back(((((xStart + xDelta*i)+10.0)/20.0) * pow(1.5, mtest * 5.7)) + (mtest * (1.0-(((xStart + xDelta*i)+10.0)/20.0))));//y
-            }
-            else if (xStart + xDelta*i > 0){
-                gridstf.push_back(pow(1.5, mtest * 5.7));//y
-            }else{
-                gridstf.push_back(mtest);//y
-            }
-            gridstf.push_back(xStart + xDelta*j);//z
-            
-            gridstf.push_back(colortest);//r
-            gridstf.push_back(colortest);//g
-            gridstf.push_back(colortest);//b
-        }
-    }
-    
-    std::vector<unsigned int> gridindexs;
-    
-    for (unsigned int i=0; i<1023; i++){//vertex i
-        for(unsigned int j=0; j<1023; j++){
-            gridindexs.push_back(i*1024 + j);//first triangle
-            gridindexs.push_back(i*1024 + j+1);
-            gridindexs.push_back((i+1)*1024 + j);
-            
-            gridindexs.push_back((i+1) * 1024 + j+1);//second triangle
-            gridindexs.push_back(i * 1024 + j+1);
-            gridindexs.push_back((i+1) * 1024 + j);
-            
-        }
-    }
-    
-    
-    unsigned int grVBO, grEBO, grVAO;
-    glGenVertexArrays(1, &grVAO);
-    glGenBuffers(1, &grVBO);
-    glGenBuffers(1, &grEBO);
-    glBindVertexArray(grVAO);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, grVBO);
-    glBufferData(GL_ARRAY_BUFFER, gridstf.size() * sizeof(float), &gridstf[0], GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, grEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, gridindexs.size() * sizeof(unsigned int), &gridindexs[0], GL_STATIC_DRAW);
-    
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
-    glEnableVertexAttribArray(1);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    
-    printf("%u\n", gridstf.size());
     
     
     TerrainGen tManager(15, terrainProgram.ID);
@@ -234,9 +157,6 @@ int main(){
         }
         
         
-        glBindVertexArray(grVAO);
-        model = glm::mat4(1.0f);
-        terrainProgram.setMat4("model", model);
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         //glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
@@ -259,9 +179,7 @@ int main(){
     
     printf("Free memory space...\n");
     //de-allocate all resources once they've outlived their purpose
-    glDeleteVertexArrays(1, &grVAO);
-    glDeleteBuffers(1, &grVBO);
-    glDeleteBuffers(1, &grEBO);
+    
     glDeleteVertexArrays(1, &aVAO);
     glDeleteBuffers(1, &aVBO);
     tManager.shutDown();
