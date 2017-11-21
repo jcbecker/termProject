@@ -1,11 +1,11 @@
 #ifndef BIOMEDESCRIPTION_HPP
 #define BIOMEDESCRIPTION_HPP
 
-#define BIOMESN 4
+#define BIOMESN 5
 
 
 enum BiomeType : int{
-PLAINS = 0, MONTAINS = 1, VALLEY = 2, DESERT = 3
+PLAINS = 0, MONTAINS = 1, VALLEY = 2, DESERT = 3, CANYONS = 4
     
 };
 
@@ -63,6 +63,14 @@ BiomeValues getTheBiomeDescription(BiomeType pbt){
         descrip.minColor   = rgbTransform(glm::vec3(0, 0, 0));
         descrip.midColor   = rgbTransform(glm::vec3(244.0, 164.0, 96.0));
         descrip.maxColor   = rgbTransform(glm::vec3(255, 255, 255));
+        
+    }else if(pbt == CANYONS){//-------------------------------------------------CANYONS
+        descrip.bFrequence = 6.0;
+        descrip.bOctaves   = 4;
+        descrip.minColor   = rgbTransform(glm::vec3(0, 0, 0));
+        descrip.midColor   = rgbTransform(glm::vec3(244.0, 164.0, 96.0));
+        descrip.maxColor   = rgbTransform(glm::vec3(255, 255, 255));
+        
         
     }
     

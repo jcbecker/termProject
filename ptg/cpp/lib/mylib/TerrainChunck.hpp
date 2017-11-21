@@ -66,6 +66,7 @@ private:
         bvbuild[1] = getTheBiomeDescription(MONTAINS);
         bvbuild[2] = getTheBiomeDescription(VALLEY);
         bvbuild[3] = getTheBiomeDescription(DESERT);
+        bvbuild[4] = getTheBiomeDescription(CANYONS);
         
         
         
@@ -392,7 +393,7 @@ private:
         }else if(dxs == 1 && dzs == 0){
             return VALLEY;
         }else if(dxs == 1 && dzs == 1){
-            return MONTAINS;
+            return CANYONS;
         }
         
         
@@ -449,7 +450,12 @@ private:
             bNoise =glm::pow(bNoise * 5, 3);
             
         }else if(pbtval == DESERT){
-            bNoise *=30;
+            bNoise *=16;
+            
+        }else if(pbtval == CANYONS){
+            double auxnn = glm::clamp(bNoise, -0.3, 0.3);
+            
+            bNoise = (glm::pow(1.5, auxnn*14.0)*5) + (bNoise * 8.0);
             
         }
         
