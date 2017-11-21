@@ -121,7 +121,7 @@ int main(){
             lastTime = cFrameTime;
         }
         
-        printf("\r%u  %lf (%lf, %lf, %lf)  (%lf)      %u      ",myi++, glfwGetTime(), cam.pos.x, cam.pos.y, cam.pos.z, cam.zoomC, fps);
+        printf("\r%u (%lf, %lf, %lf),(%lf, %lf, %lf)(%lf)  %u   ",myi++, cam.pos.x, cam.pos.y, cam.pos.z, cam.front.x, cam.front.y, cam.front.z, cam.zoomC, fps);
         fflush(stdout);
         
         //process holding keys
@@ -139,7 +139,7 @@ int main(){
         // create transformations
         view  = cam.getViewMatrix();
         glfwGetWindowSize(window, &cscr_w, &cscr_h);//essa função é threadsafe
-        projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 1200.0f);
+        projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 2200.0f);
         // retrieve the matrix uniform locations
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         terrainProgram.setMat4("projection", projection);
@@ -199,6 +199,12 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         showMesh = !showMesh;
     if (key == GLFW_KEY_K && action == GLFW_PRESS)
         showAxes = !showAxes;
+    if (key == GLFW_KEY_P && action == GLFW_PRESS){
+        Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
+        cam->pos = glm::vec3(-236.999756, 120.048889, 322.961121);
+        cam->front = glm::vec3(0.809754, -0.368936, -0.456272);
+        
+    }
 }
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize screen

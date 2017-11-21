@@ -386,17 +386,6 @@ private:
         dzs = glm::trunc(dzs);
         
         
-        if(dxs == 0 && dzs == 0){
-            return PLAINS;
-        }else if(dxs == 0 && dzs == 1){
-            return DESERT;
-        }else if(dxs == 1 && dzs == 0){
-            return VALLEY;
-        }else if(dxs == 1 && dzs == 1){
-            return CANYONS;
-        }
-        
-        
         
         
         
