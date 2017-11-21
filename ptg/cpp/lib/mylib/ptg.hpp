@@ -22,8 +22,8 @@
 #include <vector>
 //Global settings
 //initial screen size
-const unsigned int ISCR_W = 80 * 16;//WIDTH
-const unsigned int ISCR_H = 80 * 9;//HEIGHT
+const unsigned int ISCR_W = 100 * 16;//WIDTH
+const unsigned int ISCR_H = 100 * 9;//HEIGHT
 
 
 static void errorCallback(int error, const char* description);//to show some glfw errors

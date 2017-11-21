@@ -7,6 +7,9 @@ float myabs(float a){
     return a;
 }
 
+bool showMesh;
+bool showAxes;
+
 
 int main(){
     printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
@@ -171,7 +174,8 @@ int main(){
     float lastFrame = 0.0f; // Time of last frame
     double lastTime = glfwGetTime();
     unsigned frameCounter = 0, fps = 0.0;
-    
+    showMesh = false;
+    showAxes = false;
     
     glm::mat4 view;
     glm::mat4 projection;
@@ -220,10 +224,14 @@ int main(){
         
         
         //render container
-        glBindVertexArray(aVAO);
-        model = glm::mat4(1.0f);
-        terrainProgram.setMat4("model", model);
-        glDrawArrays(GL_LINES, 0, 6);
+        if(showAxes){
+            glBindVertexArray(aVAO);
+            model = glm::mat4(1.0f);
+            terrainProgram.setMat4("model", model);
+            glDrawArrays(GL_LINES, 0, 6);
+            
+            
+        }
         
         
         glBindVertexArray(grVAO);
@@ -232,6 +240,14 @@ int main(){
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         //glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
+        
+        if(showMesh){
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            
+        }else{
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            
+        }
         
         tManager.drawTerrain();
         glBindVertexArray(0);
@@ -261,6 +277,10 @@ static void errorCallback(int error, const char* description){
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){//input callBack
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+    if (key == GLFW_KEY_M && action == GLFW_PRESS)
+        showMesh = !showMesh;
+    if (key == GLFW_KEY_K && action == GLFW_PRESS)
+        showAxes = !showAxes;
 }
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height){//resize screen
