@@ -9,6 +9,7 @@ float myabs(float a){
 
 bool showMesh;
 bool showAxes;
+bool rebuildflag;
 
 
 int main(){
@@ -85,7 +86,7 @@ int main(){
     
     
     
-    
+    rebuildflag = false;
     TerrainGen tManager(15, terrainProgram.ID);
     
     
@@ -156,6 +157,11 @@ int main(){
             
         }
         
+        if(rebuildflag){
+            
+            tManager.rebuild(cam.pos);
+            rebuildflag = false;
+        }
         
         //glDrawArrays(GL_POINTS, 0, 1024*1024);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -204,6 +210,10 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         cam->pos = glm::vec3(-236.999756, 120.048889, 322.961121);
         cam->front = glm::vec3(0.809754, -0.368936, -0.456272);
         
+    }
+    
+    if (key == GLFW_KEY_R && action == GLFW_PRESS){
+        rebuildflag = true;
     }
 }
 

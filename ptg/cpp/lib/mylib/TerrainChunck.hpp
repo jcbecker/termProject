@@ -76,8 +76,6 @@ private:
     }
     
     void genVectors(){
-        float maxHTest = -10.0f, minHTest= 100.0f;
-        float maxXTest = -1000000.0f, minXTest= 100000.0f;
         
         Vertex ijvertex;
         HVertexStatus heightaux;
@@ -88,22 +86,16 @@ private:
                 ijvertex.Color = heightaux.ColorH;//DEBUG: preciso colocar uma cor descente
                 this->vertices.push_back(ijvertex);
                 
-                if(heightaux.BaseH > maxHTest)
-                    maxHTest = heightaux.BaseH;
-                if(heightaux.BaseH < minHTest)
-                    minHTest = heightaux.BaseH;
                 
-                
-                if(this->xi + (float)i > maxXTest)
-                    maxXTest = this->xi + (float)i;
-                if(this->xi + (float)i < minXTest)
-                    minXTest = this->xi + (float)i;
-                
+                if(i == 0 && j == 0){
+                    printf("xs=%lf  zs=%lf\n",this->xi + (float)i, this->zi + (float)j);
+                }
+                if(i+1 == this->gridSize && j+1 == this->gridSize){
+                    printf("xs=%lf  zs=%lf\n",this->xi + (float)i, this->zi + (float)j);
+                }
             }
         }
         
-        printf("Maior valor Base: %f    Menor: %f\n", maxHTest, minHTest);
-        printf("Maior valor Base: %f    Menor: %f\n", maxXTest, minXTest);
         printf("Maior Debug     : %lf    Menor: %lf\n", this->auxDebugmax, this->auxDebugmin);
         
         
