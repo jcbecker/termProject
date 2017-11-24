@@ -4,7 +4,12 @@
 %   nessa etapa precisei
 %   nessa etapa foi necessário       usar essa
 
-
+%Conjunto de equações, recomendação do emílio
+%\begin{align}
+%    A \in Z^{2} \\
+%    mix(A, B, c) &= (1-c) * A + c*B \\
+%    mix(A, B, c) &= (1-c) * A + c*B \\
+%\end{align}
 
 \chapter{Implementação}
 
@@ -30,7 +35,7 @@ Representando um fragmento do terreno, o objeto \textit{Terrain chunk} é respon
 por gerar uma malha para o terreno com $k^2$ vértices, o construtor pode receber 
 a seguinte tupla para inicialização: 
 $terrainChunk(seed, \Delta{v}, k, x_{s}, z_{s}, b, l)$
-
+%referenciar as fatias do fernando
 \begin{itemize}
     \item $seed \in \mathbb{N}$ representa a semente para começar o motor de números
     pseudo-aleatórios;
@@ -54,7 +59,7 @@ $terrainChunk(seed, \Delta{v}, k, x_{c}/\Delta{v} - k/2, z_{c}/\Delta{v} - k/2, 
 estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
 Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
 $(x_{s} * \Delta{v}, 0.0, z_{s} * \Delta{v})$, já que internamente cada chunk vai 
-da posição $(0, 0)$ até $(\Delta{v}*(k-1), \Delta{v}*(k-1))$, mas representano a área 
+da posição $(0, 0)$ até $(\Delta{v}*(k-1), \Delta{v}*(k-1))$, mas representando a área 
 no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v}*(k-1), z_{s} + \Delta{v}*(k-1))$
 
 \section{Criando Malha de Triângulos}
@@ -69,14 +74,14 @@ ter um mesmo vetor normal para todo o plano.
 A malha segue pelo plano $X \times Z$, e cada vértice do plano vai ter uma altura
 $y$ definida mais tarde por ruído. Se quisermos que o conjunto de pontos pertença
 ao memos segmento de plano precisamos que os quatro pontos respeitem a mesma
-equação do plano.
+equação do plano.%colocar referêrencia da malha de triângulos
 
-Se usarmos como plano $4$ pontos em $R3$
+Se usarmos como plano $4$ pontos em $\mathbb{Q}^3$
 \begin{equation}\label{comp_sign_inter_sem_peso_aux}
-    V = \{v_{0}(0, y_{0}, 0), v_{1}(0, y_{1}, 1), v_{2}(1, y_{2}, 0), v_{3}(1, y_{3}, 1)\}
+    P = \{p_{0}(0, y_{0}, 0), p_{1}(0, y_{1}, 1), p_{2}(1, y_{2}, 0), p_{3}(1, y_{3}, 1)\}
 \end{equation}
 Para montar a equação do plano temos $\{y_{0}, y_{1}, y_{2}\}$ como valores livres e $y_{3}$
-vai depender dos valores de $\{v_{0}, v_{1}, v_{2}\}$
+vai depender dos valores de $\{p_{0}, p_{1}, p_{2}\}, x_{3} e z_{3}$
 
 %Aqui vai o cálculo da equação do plano ou do vetor normal para mostrar o que
 %acabei de afirmar acima
@@ -84,52 +89,78 @@ vai depender dos valores de $\{v_{0}, v_{1}, v_{2}\}$
 %$v0v1 = (0, y1-y0, 1)$
 %$v0v2 = (1, y2-y0, 0)$
 
-mas não é isso que queremos, queremos que todos os pontos tenha valores de $y$
+mas não é isso o objetivo, já que o ruído pode retornar valores para $y_{3}$
+que não respeitem a equação do plano queremos que todos os pontos tenha valores de $y$
 livres, portanto, será uma malha de triângulos. Então pro conjunto de vértices
 acima temos dois triângulos associados:
-$T_{1} = \{v_{0}, v_{1}, v_{2}\}, T_{2} = \{v_{3}, v_{1}, v_{2}\}$
+$T_{1} = \{p_{0}, p_{1}, p_{2}\}, T_{2} = \{p_{3}, p_{1}, p_{2}\}$, que podem ser
+vizualizados na figura \ref{fig:t1t2}. 
+Desta maneira temos todos os pontos com $y$ livre.
 
-\begin{algorithm}[H]\label{comp_vertice_site}
-  $delta_{y} = v_{y} - p_{y}$ \\
-  \uSe{$delta_{y} < 0$}{
-    é verdade que $v < p$.
-  }  
-  \uSenaoSe{$delta^{2}_{y} < v_{d}$}{
-    é verdade que $v < p$.
-  }
-  \uSenaoSe{$delta^{2}_{y} = v_{d}$ e $v_{x} < p_{x}$}{
-    é verdade que $v < p$.
-  }
-  \uSenao{
-    não é verdade que $v < p$.
-  }  
-  \caption{Comparação entre vértice e \textit{site}.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figuras/t1t2.png}
+    \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
+    \label{fig:t1t2}
+\end{figure}
+
+
+Então para montar um grid renderizavel usamos o algoritmo \ref{alg:genVectors}
+$V$ é a estrutura que armazena os vértices, de $v_{0}$ até $v_{k^2-1}$ 
+$E$ é a estrutura que armazena os índices, já que o \textit{OpenGL} precisa
+saber a ordem de desenhar cada triângulo e quais vértices fazem parte dele, 
+cada elemento de $e_{i} \in \mathbb{N}$ e a estrutura vai de $e_{0}$ até $e_{(k-1)^2 * 6 - 1}$.
+
+A função \textit{hEvaluation}, vamos comentar mais adiante, ela retorna uma estrutura
+com a altura e cor para algum ponto $(x, z)$.
+ 
+\begin{algorithm}[H]\label{alg:genVectors}
+    $|V| = k^2$\;
+    \For{$i=0$ \KwTo $k-1$}{
+        \For{$j=0$ \KwTo $k-1$}{
+            $v_{i*k + j}.pos = (\Delta_{v} * i, hEvaluation(\Delta_{v} * i, \Delta_{v} * j).h, \Delta{v} * j)$\;
+            $v_{i*k + j}.cor = hEvaluation(\Delta_{v} * i, \Delta_{v} * j).c$
+        }
+    }
+    
+    \For{$i=0$ \KwTo $k-2$}{
+        \For{$j=0$ \KwTo $k-2$}{
+            //posições em $V$ do primeio triângulo\;
+            $E.$pushBack$(i*k +j)$\;
+            $E.$pushBack$(i*k +j+1)$\;
+            $E.$pushBack$((i+1)*k +j)$\;
+            //posições em $V$ do segundo triângulo\;
+            $E.$pushBack$((i+1)*k +j+1)$\;
+            $E.$pushBack$(i*k +j+1)$\;
+            $E.$pushBack$((i+1)*k +j)$\;
+        }
+    }
+    \caption{Construção da coleção de vértices e índices.}
 \end{algorithm}
 
-\begin{algorithm}[H] %or another one check
- \caption{How to write algorithms}
-     \SetAlgoLined
+\begin{figure}[H]
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\textwidth]{figuras/k4d5.png}
+        \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
+        \label{fig:k4d5}
+    \end{figure}
 
-     \While{not at end of this document}{
-      read current\;
-      \eIf{understand}{
-       go to next section\;
-       current section becomes this one\;
-       }{
-       go back to the beginning of current section\;
-      }
-     }
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\textwidth]{figuras/k8d5.png}
+        \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
+        \label{fig:k8d5}
+    \end{figure}
 
-\end{algorithm}
-
-%
-%\begin{align}
-%    A \in Z^{2} \\
-%    mix(A, B, c) &= (1-c) * A + c*B \\
-%    mix(A, B, c) &= (1-c) * A + c*B \\
-%\end{align}
-
-
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\textwidth]{figuras/k8d25.png}
+        \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
+        \label{fig:k8d25}
+    \end{figure}
+    
+\end{figure}
 
 
 
