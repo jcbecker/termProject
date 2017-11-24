@@ -15,9 +15,47 @@
 \subsection{Usando os Buffers do OpenGL e GLSL}
 
 \subsubsection{Descrição dos vértices}
+Um vértice $v$ é um conjunto de informações relacionadas a alguma unidade, %DEBUG: trocar o termo unidade
+a informação necessária para este projeto é posição no espaço, então cada vértice
+vai possuir uma posição notada por $v.pos$, e $v.pos$ é composto por 
+$\{x, y, z\} \in \mathbb{Q}^3$. Um segundo dado será usado, a cor, vai ser uma 
+informação auxiliar, usada para melhor vizialização dos resultados, 
+representada por $\{r, g, b \in \mathbb{Q}:0 \leq r, g, b \leq 1\}$ onde cada um desses
+vai referir a proporção de vermelho, verde e azul respectivamente.
 
 \subsubsection{Implementação do sistema de Navegação}
 
+\section{\textit{Terrain chunk}}
+Representando um fragmento do terreno, o objeto \textit{Terrain chunk} é responsavel
+por gerar uma malha para o terreno com $k^2$ vértices, o construtor pode receber 
+a seguinte tupla para inicialização: 
+$terrainChunk(seed, \Delta{v}, k, x_{s}, z_{s}, b, l)$
+
+\begin{itemize}
+    \item $seed \in \mathbb{N}$ representa a semente para começar o motor de números
+    pseudo-aleatórios;
+    \item $\Delta{v} \in \mathbb{Q}:0 < \Delta{v} < l/2$ é a distância entre vértices adjeacentes na
+    projeção do plano $X \times Z$;
+    \item $k \in \mathbb{N}>4$ é a quantidade de vértices em cada coluna ou 
+    linha, a malha tem $k^2$ vértices;
+    \item $x_{s} \in \mathbb{Q}:$ é o valor inicial no eixo $X$;
+    \item $z_{s} \in \mathbb{Q}:$ é o valor inicial no eixo $Z$;
+    \item $b \in \mathbb{N}>4:$ a área da região de cada bioma vai ser $b^2$;
+    \item $l \in \mathbb{N}:1 < l < b/2$ distância para fronteira entre biomas ser interpolada.
+\end{itemize}
+
+
+Em cada execução da iplementação os valores que podem mudar de uma chunk para 
+outra são apenas $x_{s}$ e $z_{s}$. Uma maneira de conseguir gerar terreno sobre demanda
+é usando a localização da camera $(x_{c}, y_{c}, z_{c})$, quando ela se
+aproxima de alguma borda da chunk atual
+uma \textit{thread} é acionada pedidndo para calcular uma nova chunk, com os parâmetros
+$terrainChunk(seed, \Delta{v}, k, x_{c}/\Delta{v} - k/2, z_{c}/\Delta{v} - k/2, b, l)$, assim que ela %debug: atualizar fórmula
+estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
+Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
+$(x_{s} * \Delta{v}, 0.0, z_{s} * \Delta{v})$, já que internamente cada chunk vai 
+da posição $(0, 0)$ até $(\Delta{v}*(k-1), \Delta{v}*(k-1))$, mas representano a área 
+no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v}*(k-1), z_{s} + \Delta{v}*(k-1))$
 
 \section{Criando Malha de Triângulos}
 A maneira que um jogo renderiza seu terreno no final das contas é sobre uma
@@ -28,7 +66,7 @@ Para representar um segmento de plano precisamos de pelo menos $3$ vértices,
 já que com dois podemos apenas representar segmentos de retas. Um plano precisar
 ter um mesmo vetor normal para todo o plano.
 
-A malha segue pelo plano $XZ$, e cada vértice do plano vai ter uma altura
+A malha segue pelo plano $X \times Z$, e cada vértice do plano vai ter uma altura
 $y$ definida mais tarde por ruído. Se quisermos que o conjunto de pontos pertença
 ao memos segmento de plano precisamos que os quatro pontos respeitem a mesma
 equação do plano.
@@ -84,12 +122,12 @@ $T_{1} = \{v_{0}, v_{1}, v_{2}\}, T_{2} = \{v_{3}, v_{1}, v_{2}\}$
 
 \end{algorithm}
 
-
-\begin{align}
-    A \in Z^{2} \\
-    mix(A, B, c) &= (1-c) * A + c*B \\
-    mix(A, B, c) &= (1-c) * A + c*B \\
-\end{align}
+%
+%\begin{align}
+%    A \in Z^{2} \\
+%    mix(A, B, c) &= (1-c) * A + c*B \\
+%    mix(A, B, c) &= (1-c) * A + c*B \\
+%\end{align}
 
 
 
