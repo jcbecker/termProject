@@ -138,31 +138,17 @@ com a altura e cor para algum ponto $(x, z)$.
     \caption{Construção da coleção de vértices e índices.}
 \end{algorithm}
 
+And other one, outro teste olhe com atenção \ref{fig:k8d5}
+
 \begin{figure}[H]
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.2\textwidth]{figuras/k4d5.png}
-        \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
-        \label{fig:k4d5}
-    \end{figure}
-
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.2\textwidth]{figuras/k8d5.png}
-        \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
-        \label{fig:k8d5}
-    \end{figure}
-
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.2\textwidth]{figuras/k8d25.png}
-        \caption{$T_{1}$ e $T_{2}$ projetados em $X \times Z$}
-        \label{fig:k8d25}
-    \end{figure}
-    
+     \centering
+     \subfloat[][$k = 4, \Delta_{v} = 0.5$]{\includegraphics[width=0.3\textwidth]{figuras/k4d5.png}\label{fig:k4d5}}\hspace{0.1cm}
+     \subfloat[][$k = 8, \Delta_{v} = 0.5$]{\includegraphics[width=0.3\textwidth]{figuras/k8d5.png}\label{fig:k8d5}}\hspace{0.1cm}
+     \subfloat[][$k = 8, \Delta_{v} = 0.25$]{\includegraphics[width=0.3\textwidth]{figuras/k8d25.png}\label{fig:k8d25}}
+     \caption{Comparando os parâmetros $k$ e $\Delta_{v}$}
+     \label{fig:parametrosGrid}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
-
-
 
 
 \section{Aplicando Ruído de Perlin nos Vértices}
