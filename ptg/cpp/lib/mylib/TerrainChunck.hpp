@@ -54,7 +54,7 @@ public:
         this->auxDebugmin  =15.0;
         this->describeTheBiomes();
         this->vertices.reserve(this->gridSize * this->gridSize);
-        this->indices.reserve(this->gridSize-1 * this->gridSize-1);
+        this->indices.reserve((this->gridSize-1) * (this->gridSize-1) * 6);
         this->genVectors();
         this->setUpGLBuffers();
     }
