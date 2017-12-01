@@ -164,6 +164,37 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
     \label{fig:sssins}
 \end{figure}
 
+Usando ruído de Perlin...
+
+$amp$ é a amplitude escalar do terreno.\\
+$f$ é a frequência;\\
+$fxz$ é a frequência relativa a malha;\\
+$fxz = k/f$\\
+$Altura = PerlinNoise(x/fxz, z/fxz, Octaves) * amp$\\
+
+Usando $f = 8$, $amp = 30$ e variando o número de oitavas.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$Octaves = 1$]{\includegraphics[width=0.3\textwidth]{figuras/octaves1.png}\label{fig:octaves1}}\hspace{0.1cm}
+     \subfloat[][$Octaves = 4$]{\includegraphics[width=0.3\textwidth]{figuras/octaves4.png}\label{fig:octaves4}}\hspace{0.1cm}
+     \subfloat[][$Octaves = 16$]{\includegraphics[width=0.3\textwidth]{figuras/octaves16.png}\label{fig:octaves16}}
+     \caption{Comparando influência das oitavas.}
+     \label{fig:parametrosOctaves}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Usando $amp = 30$ e $Octaves = 8$ e variando a frequência.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$f = 1$]{\includegraphics[width=0.3\textwidth]{figuras/freq1.png}\label{fig:freq1}}\hspace{0.1cm}
+     \subfloat[][$f = 4$]{\includegraphics[width=0.3\textwidth]{figuras/freq4.png}\label{fig:freq4}}\hspace{0.1cm}
+     \subfloat[][$f = 16$]{\includegraphics[width=0.3\textwidth]{figuras/freq16.png}\label{fig:freq16}}
+     \caption{Comparando influência da frequência.}
+     \label{fig:parametrosOctaves}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
 
 \subsection{Manipulando ruído para criar Biomas}
 \subsubsection{PLAINS}

@@ -207,8 +207,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         showAxes = !showAxes;
     if (key == GLFW_KEY_P && action == GLFW_PRESS){
         Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
-        cam->pos = glm::vec3(-236.999756, 120.048889, 322.961121);
-        cam->front = glm::vec3(0.809754, -0.368936, -0.456272);
+        cam->pos = glm::vec3(-89.697205, 53.212006, -73.306412);
+        cam->front = glm::vec3(-0.952503, -0.289032, -0.095911);
         
     }
     

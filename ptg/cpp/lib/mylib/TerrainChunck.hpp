@@ -145,7 +145,7 @@ private:
         double oauxHX, oauxHZ;
         glm::vec3 oauxCX, oauxCZ;
         //Testes
-        r.FinalH = (glm::sin(x/10) + glm::sin(z/10))*4;
+        r.FinalH = pNoise.octaveNoise((double)x/(this->gridSize/16), (double)z/(this->gridSize/16), 8) * 30;
         r.ColorH = glm::vec3(1.0, 1.0, 1.0);
         
         
