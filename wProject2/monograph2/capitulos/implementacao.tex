@@ -55,7 +55,7 @@ outra são apenas $x_{s}$ e $z_{s}$. Uma maneira de conseguir gerar terreno sobr
 é usando a localização da camera $(x_{c}, y_{c}, z_{c})$, quando ela se
 aproxima de alguma borda da chunk atual
 uma \textit{thread} é acionada pedidndo para calcular uma nova chunk, com os parâmetros
-$terrainChunk(seed, \Delta{v}, k, x_{c}/\Delta{v} - k/2, z_{c}/\Delta{v} - k/2, b, l)$, assim que ela %debug: atualizar fórmula
+$x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$, assim que ela
 estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
 Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
 $(x_{s} * \Delta{v}, 0.0, z_{s} * \Delta{v})$, já que internamente cada chunk vai 
@@ -111,7 +111,7 @@ $E$ é a estrutura que armazena os índices, já que o \textit{OpenGL} precisa
 saber a ordem de desenhar cada triângulo e quais vértices fazem parte dele, 
 cada elemento de $e_{i} \in \mathbb{N}$ e a estrutura vai de $e_{0}$ até $e_{(k-1)^2 * 6 - 1}$.
 
-A função \textit{hEvaluation}, vamos comentar mais adiante, ela retorna uma estrutura
+A função \textit{$hEvaluation(x, z)$}, será comentada mais adiante, ela retorna uma estrutura
 com a altura e cor para algum ponto $(x, z)$.
  
 \begin{algorithm}[H]\label{alg:genVectors}
@@ -138,7 +138,10 @@ com a altura e cor para algum ponto $(x, z)$.
     \caption{Construção da coleção de vértices e índices.}
 \end{algorithm}
 
-And other one, outro teste olhe com atenção \ref{fig:k8d5}
+Considerando que \textit{$hEvaluation(x, z)$} retorne sempre a cor branca
+e a altura $0.0$, por hora os parâmetros $seed, b, l$ não terão influência, os mesmos 
+só serão usados na função \textit{$hEvaluation$}, e fixando os parêmtros: $x_{s}, z_{s} = 0$, 
+podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:parametrosGrid}
 
 \begin{figure}[H]
      \centering
@@ -152,6 +155,15 @@ And other one, outro teste olhe com atenção \ref{fig:k8d5}
 
 
 \section{Aplicando Ruído de Perlin nos Vértices}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figuras/sssins.png}
+    \caption{Se a altura for $(sin(x/10) + sin(z/10)) * 4$}
+    \label{fig:sssins}
+\end{figure}
+
 
 \subsection{Manipulando ruído para criar Biomas}
 \subsubsection{PLAINS}

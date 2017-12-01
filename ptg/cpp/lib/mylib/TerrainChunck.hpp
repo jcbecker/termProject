@@ -144,7 +144,15 @@ private:
         
         double oauxHX, oauxHZ;
         glm::vec3 oauxCX, oauxCZ;
+        //Testes
+        r.FinalH = (glm::sin(x/10) + glm::sin(z/10))*4;
+        r.ColorH = glm::vec3(1.0, 1.0, 1.0);
         
+        
+        return r;
+        
+        
+        //Fim de testes
         
         
         r.BioTp = getBiomeXZ(x, z);
