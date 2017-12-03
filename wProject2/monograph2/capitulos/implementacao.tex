@@ -172,7 +172,7 @@ $fxz$ é a frequência relativa a malha;\\
 $fxz = k/f$\\
 $Altura = PerlinNoise(x/fxz, z/fxz, Octaves) * amp$\\
 
-Usando $f = 8$, $amp = 30$ e variando o número de oitavas.
+Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
 
 \begin{figure}[H]
      \centering
@@ -184,7 +184,7 @@ Usando $f = 8$, $amp = 30$ e variando o número de oitavas.
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando $amp = 30$ e $Octaves = 8$ e variando a frequência.
+Usando $amp = 30$ e $Octaves = 8, seed = 15$ e variando a frequência.
 
 \begin{figure}[H]
      \centering
@@ -193,6 +193,18 @@ Usando $amp = 30$ e $Octaves = 8$ e variando a frequência.
      \subfloat[][$f = 16$]{\includegraphics[width=0.3\textwidth]{figuras/freq16.png}\label{fig:freq16}}
      \caption{Comparando influência da frequência.}
      \label{fig:parametrosOctaves}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Usando $f = 8, amp = 30$ e $Octaves = 8, seed = 15$ e variando a seed.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$seed = 1$]{\includegraphics[width=0.3\textwidth]{figuras/seed1.png}\label{fig:seed1}}\hspace{0.1cm}
+     \subfloat[][$seed = 2$]{\includegraphics[width=0.3\textwidth]{figuras/seed2.png}\label{fig:seed2}}\hspace{0.1cm}
+     \subfloat[][$seed = 3$]{\includegraphics[width=0.3\textwidth]{figuras/seed3.png}\label{fig:seed3}}
+     \caption{Comparando influência da seed.}
+     \label{fig:parametrosSeed}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
@@ -249,5 +261,3 @@ Usando $amp = 30$ e $Octaves = 8$ e variando a frequência.
 \section{Separando Áreas de Biomas}
 
 \section{Detectando fronteira entre Biomas}
-
-\section{Resultados Alcançados}

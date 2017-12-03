@@ -87,7 +87,7 @@ int main(){
     
     
     rebuildflag = false;
-    TerrainGen tManager(15, terrainProgram.ID);
+    TerrainGen tManager(3, terrainProgram.ID);
     
     
     glViewport(0, 0, ISCR_W, ISCR_H);
