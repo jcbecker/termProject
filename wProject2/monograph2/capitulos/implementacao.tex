@@ -216,7 +216,6 @@ de vértices e arestas, vamos colorir o terreno apenas para facilitar um pouco a
 vizualização do mesmo. O valor $Baseh$ vai ficar com valores entre $-1$ e $1$, 
 quando passar desse intervalo temos certeza que $-2 < Baseh > 2$. Então podemos
 usar o seguinte algoritmo para definir a cor do vértice baseado na altura.
-Usando...\\
 $minColor = (1, 0, 0)$\\
 $midColor = (0, 1, 0)$\\
 $maxColor = (0, 0, 1)$\\
@@ -231,6 +230,9 @@ $maxColor = (0, 0, 1)$\\
     \caption{Coloração de vértices.}
 \end{algorithm}
 
+Se as cores de parâmetro forem $minColor = (1, 0, 0)$(vermelho), $midColor = (0, 1, 0)$(verde) e $maxColor = (0, 0, 1)$(azul)
+temos o resultado da figura \ref{fig:ssnhaha3}.
+
 \begin{figure}[H]
      \centering
      \subfloat[][malha branca]{\includegraphics[width=0.65\textwidth]{figuras/ssmeshblank.png}\label{fig:ssnhaha1}}\\
@@ -242,55 +244,63 @@ $maxColor = (0, 0, 1)$\\
 \end{figure}
 
 \subsection{Manipulando ruído para criar Biomas}
+Para criar múltiplos biomas vamos usar os seguintes parâmetros para cada um
 
+\begin{tabular}{| c | c c c c c|}
+    \hline
+    Tipo de Terreno (Bioma) & $f$ & $Octaves$ & minColor & midColor & maxColor\\
+    \hline
+    Plains   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
+    Montains & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
+    Valley   & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
+    Desert   & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+    Cânyons  & $6$  & $4$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+    
+    \hline
+\end{tabular}
 
-
-\subsubsection{PLAINS}
+aqui explica as funções
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figuras/bssPlains.png}
-    \caption{Consumo}
+    \caption{Plains}
     \label{fig:bssPlains}
 \end{figure}
 
-\subsubsection{MONTAINS}
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figuras/bssMontains.png}
-    \caption{Consumo}
+    \caption{Montains}
     \label{fig:bssMontains}
 \end{figure}
 
-\subsubsection{VALLEY}
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figuras/bssValley.png}
-    \caption{Consumo}
+    \caption{Valley}
     \label{fig:bssValley}
 \end{figure}
 
-\subsubsection{DESERT}
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figuras/bssDesert.png}
-    \caption{Consumo}
+    \caption{Desert}
     \label{fig:bssDesert}
 \end{figure}
 
-\subsubsection{CANYONS}
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figuras/bssCanyons.png}
-    \caption{Consumo}
+    \caption{Cânyons}
     \label{fig:bssCanyons}
 \end{figure}
 
