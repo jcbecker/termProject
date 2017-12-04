@@ -216,9 +216,7 @@ de vértices e arestas, vamos colorir o terreno apenas para facilitar um pouco a
 vizualização do mesmo. O valor $Baseh$ vai ficar com valores entre $-1$ e $1$, 
 quando passar desse intervalo temos certeza que $-2 < Baseh > 2$. Então podemos
 usar o seguinte algoritmo para definir a cor do vértice baseado na altura.
-$minColor = (1, 0, 0)$\\
-$midColor = (0, 1, 0)$\\
-$maxColor = (0, 0, 1)$\\
+
 \begin{algorithm}[H]\label{alg:colorValuation}
     $auxNoise = clamp(Baseh, -1, 1)$\;
     \If {$auxNoise < 0$}{
