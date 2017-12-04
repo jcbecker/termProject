@@ -118,21 +118,21 @@ com a altura e cor para algum ponto $(x, z)$.
     $|V| = k^2$\;
     \For{$i=0$ \KwTo $k-1$}{
         \For{$j=0$ \KwTo $k-1$}{
-            $v_{i*k + j}.pos = (\Delta_{v} * i, hEvaluation(\Delta_{v} * i, \Delta_{v} * j).h, \Delta{v} * j)$\;
-            $v_{i*k + j}.cor = hEvaluation(\Delta_{v} * i, \Delta_{v} * j).c$
+            $v_{i*k + j}.pos = (\Delta_{v} * i, hEvaluation(x_{s} + i, z_{s} + j).h, \Delta{v} * j)$\;
+            $v_{i*k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).c$
         }
     }
-    
+    $|E| = (k-1)^2*6$\;
     \For{$i=0$ \KwTo $k-2$}{
         \For{$j=0$ \KwTo $k-2$}{
             //posições em $V$ do primeio triângulo\;
-            $E.$pushBack$(i*k +j)$\;
-            $E.$pushBack$(i*k +j+1)$\;
-            $E.$pushBack$((i+1)*k +j)$\;
+            $e_{(i*(k-1)+j)*6} = (i*k +j)$\;
+            $e_{(i*(k-1)+j)*6+1} = (i*k +j+1)$\;
+            $e_{(i*(k-1)+j)*6+2} = ((i+1)*k +j)$\;
             //posições em $V$ do segundo triângulo\;
-            $E.$pushBack$((i+1)*k +j+1)$\;
-            $E.$pushBack$(i*k +j+1)$\;
-            $E.$pushBack$((i+1)*k +j)$\;
+            $e_{(i*(k-1)+j)*6+3} = ((i+1)*k +j+1)$\;
+            $e_{(i*(k-1)+j)*6+4} = (i*k +j+1)$\;
+            $e_{(i*(k-1)+j)*6+5} = ((i+1)*k +j)$\;
         }
     }
     \caption{Construção da coleção de vértices e índices.}

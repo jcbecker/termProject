@@ -112,6 +112,8 @@ private:
                 
             }
         }
+        
+        printf("VérticesSZ: %u\nIndícesSZ: %u\n",this->vertices.size(), this->indices.size());
     }
     
     void setUpGLBuffers(){
@@ -145,13 +147,15 @@ private:
         double oauxHX, oauxHZ;
         glm::vec3 oauxCX, oauxCZ;
         //Testes
+        /*
+        
         r.FinalH = pNoise.octaveNoise((double)x/(this->gridSize/8), (double)z/(this->gridSize/8), 8) * 30;
         r.ColorH = glm::vec3(1.0, 1.0, 1.0);
         
         
         return r;
         
-        
+        */
         //Fim de testes
         
         
