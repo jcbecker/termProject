@@ -170,7 +170,8 @@ $amp$ é a amplitude escalar do terreno.\\
 $f$ é a frequência;\\
 $fxz$ é a frequência relativa a malha;\\
 $fxz = k/f$\\
-$Altura = PerlinNoise(x/fxz, z/fxz, Octaves) * amp$\\
+$Baseh = PerlinNoise(x/fxz, z/fxz, Octaves) * amp$\\
+$Altura = Baseh * amp$
 
 Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
 
@@ -208,7 +209,42 @@ Usando $f = 8, amp = 30$ e $Octaves = 8, seed = 15$ e variando a seed.
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
+
+\subsection{Cores}
+Como em um jogo o terreno é representado por segmentos de planos e não um conjunto
+de vértices e arestas, vamos colorir o terreno apenas para facilitar um pouco a
+vizualização do mesmo. O valor $Baseh$ vai ficar com valores entre $-1$ e $1$, 
+quando passar desse intervalo temos certeza que $-2 < Baseh > 2$. Então podemos
+usar o seguinte algoritmo para definir a cor do vértice baseado na altura.
+Usando...\\
+$minColor = (1, 0, 0)$\\
+$midColor = (0, 1, 0)$\\
+$maxColor = (0, 0, 1)$\\
+\begin{algorithm}[H]\label{alg:colorValuation}
+    $auxNoise = clamp(Baseh, -1, 1)$\;
+    \If {$auxNoise < 0$}{
+        return $mix(midColor, minColor, auxNoise *-1)$\;
+    }\Else{
+        return $mix(midColor, maxColor, auxNoise)$\;
+    }
+    
+    \caption{Coloração de vértices.}
+\end{algorithm}
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][malha branca]{\includegraphics[width=0.65\textwidth]{figuras/ssmeshblank.png}\label{fig:ssnhaha1}}\\
+     \subfloat[][segmentos de plano branco]{\includegraphics[width=0.45\textwidth]{figuras/ssplainblank.png}\label{fig:ssnhaha2}}\hspace{0.1cm}
+     \subfloat[][segmentos de plano coloridos]{\includegraphics[width=0.45\textwidth]{figuras/ssplaincolor.png}\label{fig:ssnhaha3}}
+     \caption{Usando algoítmo de comparação de vértice.}
+     \label{fig:color}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
 \subsection{Manipulando ruído para criar Biomas}
+
+
+
 \subsubsection{PLAINS}
 
 \begin{figure}[H]

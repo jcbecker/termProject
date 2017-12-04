@@ -147,15 +147,39 @@ private:
         double oauxHX, oauxHZ;
         glm::vec3 oauxCX, oauxCZ;
         //Testes
-        /*
         
-        r.FinalH = pNoise.octaveNoise((double)x/(this->gridSize/8), (double)z/(this->gridSize/8), 8) * 30;
+        
+        r.BaseH = pNoise.octaveNoise((double)x/(this->gridSize/8), (double)z/(this->gridSize/8), 8);
+        r.FinalH = r.BaseH * 30;
+        double auxNoisef = glm::clamp(r.BaseH, -1.0, 1.0);
+        
+        glm::vec3 minColoraraux = glm::vec3(1.0, 0.0, 0.0);
+        glm::vec3 midColoraraux = glm::vec3(0.0, 1.0, 0.0);
+        glm::vec3 maxColoraraux = glm::vec3(0.0, 0.0, 1.0);
+        
         r.ColorH = glm::vec3(1.0, 1.0, 1.0);
-        
-        
+        if(auxNoisef < 0){
+            r.ColorH = glm::mix(midColoraraux, minColoraraux, auxNoisef * -1);
+            
+        }else{
+            r.ColorH = glm::mix(midColoraraux, maxColoraraux, auxNoisef);
+            
+            
+        }
+        //r.ColorH = glm::vec3(1.0, 1.0, 1.0);
         return r;
-        
+        /*
+        glm::vec3 biomeColorValuation(BiomeType pbtval, double bNoise){
+            double yaauxColor = glm::clamp(bNoise, -1.0, 1.0);
+            if(bNoise < 0){
+                return glm::mix(bvbuild[pbtval].midColor, bvbuild[pbtval].minColor, yaauxColor*-1);
+                
+            }else{
+                return glm::mix(bvbuild[pbtval].midColor, bvbuild[pbtval].maxColor, yaauxColor);
+            }    
+        }
         */
+        
         //Fim de testes
         
         
