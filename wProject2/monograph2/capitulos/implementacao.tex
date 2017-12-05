@@ -109,7 +109,7 @@ Então para montar um grid renderizavel usamos o algoritmo \ref{alg:genVectors}
 $V$ é a estrutura que armazena os vértices, de $v_{0}$ até $v_{k^2-1}$ 
 $E$ é a estrutura que armazena os índices, já que o \textit{OpenGL} precisa
 saber a ordem de desenhar cada triângulo e quais vértices fazem parte dele, 
-cada elemento de $e_{i} \in \mathbb{N}$ e a estrutura vai de $e_{0}$ até $e_{(k-1)^2 * 6 - 1}$.
+cada elemento de $e_{i} \in \mathbb{N}$ e a estrutura vai de $e_{0}$ até $e_{(k-1)^2 \cdot 6 - 1}$.
 
 A função \textit{$hEvaluation(x, z)$}, será comentada mais adiante, ela retorna uma estrutura
 com a altura e cor para algum ponto $(x, z)$.
@@ -165,7 +165,7 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
 \end{figure}
 
 Usando ruído de Perlin...\\
-trocar $Octaves$ por $8^{va}$ ou $o$, $O$, $\phi$\\
+trocar $Octaves$ por $8^{va}$ ou $o$, $O$, $\phi$ $\theta$ $\Theta$\\
 $amp$ é a amplitude escalar do terreno.\\
 $f$ é a frequência;\\
 $fxz$ é a frequência relativa a malha;\\

@@ -147,7 +147,7 @@ private:
         double oauxHX, oauxHZ;
         glm::vec3 oauxCX, oauxCZ;
         //Testes
-        
+        /*
         
         r.BaseH = pNoise.octaveNoise((double)x/(this->gridSize/8), (double)z/(this->gridSize/8), 8);
         r.FinalH = r.BaseH * 30;
