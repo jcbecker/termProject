@@ -119,7 +119,7 @@ com a altura e cor para algum ponto $(x, z)$.
     \For{$i=0$ \KwTo $k-1$}{
         \For{$j=0$ \KwTo $k-1$}{
             $v_{i \cdot k + j}.pos = (\Delta_{v} \cdot i, hEvaluation(x_{s} + i, z_{s} + j).h, \Delta{v} \cdot j)$\;
-            $v_{i \cdot k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).c$
+            $v_{i \cdot k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).c$\;
         }
     }
     $|E| = (k-1)^2 \cdot 6$\;
@@ -166,26 +166,28 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
 
 Usando ruído de Perlin...\\
 trocar $Octaves$ por $8^{va}$ ou $o$, $O$, $\phi$ $\theta$ $\Theta$\\
+$\theta$ são as oitavas, a quantidade de vezes que um ruído será calculado 
+como já explicado em perlin noise. DEBUG, fazer o que acabei de falar
 $amp$ é a amplitude escalar do terreno.\\
 $f$ é a frequência;\\
 $fxz$ é a frequência relativa a malha;\\
 $fxz = k/f$\\
-$h' = PerlinNoise(x/fxz, z/fxz, Octaves) \cdot amp$\\
+$h' = PerlinNoise(x/fxz, z/fxz, \theta) \cdot amp$\\
 $Altura = h' \cdot amp$
 
 Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
 
 \begin{figure}[H]
      \centering
-     \subfloat[][$Octaves = 1$]{\includegraphics[width=0.3\textwidth]{figuras/octaves1.png}\label{fig:octaves1}}\hspace{0.1cm}
-     \subfloat[][$Octaves = 4$]{\includegraphics[width=0.3\textwidth]{figuras/octaves4.png}\label{fig:octaves4}}\hspace{0.1cm}
-     \subfloat[][$Octaves = 16$]{\includegraphics[width=0.3\textwidth]{figuras/octaves16.png}\label{fig:octaves16}}
+     \subfloat[][$\theta = 1$]{\includegraphics[width=0.3\textwidth]{figuras/octaves1.png}\label{fig:octaves1}}\hspace{0.1cm}
+     \subfloat[][$\theta = 4$]{\includegraphics[width=0.3\textwidth]{figuras/octaves4.png}\label{fig:octaves4}}\hspace{0.1cm}
+     \subfloat[][$\theta = 16$]{\includegraphics[width=0.3\textwidth]{figuras/octaves16.png}\label{fig:octaves16}}
      \caption{Comparando influência das oitavas.}
      \label{fig:parametrosOctaves}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando $amp = 30$ e $Octaves = 8, seed = 15$ e variando a frequência.
+Usando $amp = 30$ e $\theta = 8, seed = 15$ e variando a frequência.
 
 \begin{figure}[H]
      \centering
@@ -197,7 +199,7 @@ Usando $amp = 30$ e $Octaves = 8, seed = 15$ e variando a frequência.
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando $f = 8, amp = 30$ e $Octaves = 8, seed = 15$ e variando a seed.
+Usando $f = 8, amp = 30$ e $\theta = 8, seed = 15$ e variando a seed.
 
 \begin{figure}[H]
      \centering
@@ -248,7 +250,7 @@ Para criar múltiplos biomas vamos usar os seguintes parâmetros para cada um
 
 \begin{tabular}{| c | c c c c c|}
     \hline
-    Tipo de Terreno (Bioma) & $f$ & $Octaves$ & $minColor'$ & $midColor'$ & $maxColor'$\\
+    Tipo de Terreno (Bioma) & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
     \hline
     Plains   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
     Montains & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
