@@ -58,9 +58,9 @@ uma \textit{thread} é acionada pedidndo para calcular uma nova chunk, com os pa
 $x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$, assim que ela
 estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
 Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
-$(x_{s} * \Delta{v}, 0.0, z_{s} * \Delta{v})$, já que internamente cada chunk vai 
-da posição $(0, 0)$ até $(\Delta{v}*(k-1), \Delta{v}*(k-1))$, mas representando a área 
-no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v}*(k-1), z_{s} + \Delta{v}*(k-1))$
+$(x_{s} \cdot \Delta{v}, 0.0, z_{s} \cdot \Delta{v})$, já que internamente cada chunk vai 
+da posição $(0, 0)$ até $(\Delta{v} \cdot (k-1), \Delta{v} \cdot (k-1))$, mas representando a área 
+no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v} \cdot (k-1), z_{s} + \Delta{v} \cdot (k-1))$
 
 \section{Criando Malha de Triângulos}
 A maneira que um jogo renderiza seu terreno no final das contas é sobre uma
@@ -118,21 +118,21 @@ com a altura e cor para algum ponto $(x, z)$.
     $|V| = k^2$\;
     \For{$i=0$ \KwTo $k-1$}{
         \For{$j=0$ \KwTo $k-1$}{
-            $v_{i*k + j}.pos = (\Delta_{v} * i, hEvaluation(x_{s} + i, z_{s} + j).h, \Delta{v} * j)$\;
-            $v_{i*k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).c$
+            $v_{i \cdot k + j}.pos = (\Delta_{v} \cdot i, hEvaluation(x_{s} + i, z_{s} + j).h, \Delta{v} \cdot j)$\;
+            $v_{i \cdot k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).c$
         }
     }
-    $|E| = (k-1)^2*6$\;
+    $|E| = (k-1)^2 \cdot 6$\;
     \For{$i=0$ \KwTo $k-2$}{
         \For{$j=0$ \KwTo $k-2$}{
             //posições em $V$ do primeio triângulo\;
-            $e_{(i*(k-1)+j)*6} = (i*k +j)$\;
-            $e_{(i*(k-1)+j)*6+1} = (i*k +j+1)$\;
-            $e_{(i*(k-1)+j)*6+2} = ((i+1)*k +j)$\;
+            $e_{(i\cdot(k-1)+j)\cdot 6} = (i\cdot k +j)$\;
+            $e_{(i\cdot (k-1)+j)\cdot 6+1} = (i\cdot k +j+1)$\;
+            $e_{(i\cdot (k-1)+j)\cdot 6+2} = ((i+1)\cdot k +j)$\;
             //posições em $V$ do segundo triângulo\;
-            $e_{(i*(k-1)+j)*6+3} = ((i+1)*k +j+1)$\;
-            $e_{(i*(k-1)+j)*6+4} = (i*k +j+1)$\;
-            $e_{(i*(k-1)+j)*6+5} = ((i+1)*k +j)$\;
+            $e_{(i \cdot (k-1)+j) \cdot 6+3} = ((i+1) \cdot k +j+1)$\;
+            $e_{(i \cdot (k-1)+j) \cdot 6+4} = (i \cdot k +j+1)$\;
+            $e_{(i \cdot (k-1)+j) \cdot 6+5} = ((i+1) \cdot k +j)$\;
         }
     }
     \caption{Construção da coleção de vértices e índices.}
@@ -160,18 +160,18 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{figuras/sssins.png}
-    \caption{Se a altura for $(sin(x/10) + sin(z/10)) * 4$}
+    \caption{Se a altura for $(sin(x/10) + sin(z/10)) \cdot 4$}
     \label{fig:sssins}
 \end{figure}
 
-Usando ruído de Perlin...
-
+Usando ruído de Perlin...\\
+trocar $Octaves$ por $8^{va}$ ou $o$, $O$, $\phi$\\
 $amp$ é a amplitude escalar do terreno.\\
 $f$ é a frequência;\\
 $fxz$ é a frequência relativa a malha;\\
 $fxz = k/f$\\
-$Baseh = PerlinNoise(x/fxz, z/fxz, Octaves) * amp$\\
-$Altura = Baseh * amp$
+$h' = PerlinNoise(x/fxz, z/fxz, Octaves) \cdot amp$\\
+$Altura = h' \cdot amp$
 
 Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
 
@@ -213,14 +213,16 @@ Usando $f = 8, amp = 30$ e $Octaves = 8, seed = 15$ e variando a seed.
 \subsection{Cores}
 Como em um jogo o terreno é representado por segmentos de planos e não um conjunto
 de vértices e arestas, vamos colorir o terreno apenas para facilitar um pouco a
-vizualização do mesmo. O valor $Baseh$ vai ficar com valores entre $-1$ e $1$, 
-quando passar desse intervalo temos certeza que $-2 < Baseh > 2$. Então podemos
+vizualização do mesmo. O valor $h'$ vai ficar com valores entre $-1$ e $1$, 
+quando passar desse intervalo temos certeza que $-2 < h' > 2$.DEBUG: preciso mostrar
+ a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
+Então podemos
 usar o seguinte algoritmo para definir a cor do vértice baseado na altura.
 
 \begin{algorithm}[H]\label{alg:colorValuation}
-    $auxNoise = clamp(Baseh, -1, 1)$\;
+    $auxNoise = clamp(h', -1, 1)$\;
     \If {$auxNoise < 0$}{
-        return $mix(midColor, minColor, auxNoise *-1)$\;
+        return $mix(midColor, minColor, auxNoise \cdot -1)$\;
     }\Else{
         return $mix(midColor, maxColor, auxNoise)$\;
     }
@@ -246,7 +248,7 @@ Para criar múltiplos biomas vamos usar os seguintes parâmetros para cada um
 
 \begin{tabular}{| c | c c c c c|}
     \hline
-    Tipo de Terreno (Bioma) & $f$ & $Octaves$ & minColor & midColor & maxColor\\
+    Tipo de Terreno (Bioma) & $f$ & $Octaves$ & $minColor'$ & $midColor'$ & $maxColor'$\\
     \hline
     Plains   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
     Montains & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
@@ -257,7 +259,8 @@ Para criar múltiplos biomas vamos usar os seguintes parâmetros para cada um
     \hline
 \end{tabular}
 
-aqui explica as funções
+$xColor = \frac{xColor'}{255}$
+DEBUG: aqui explica as funções
 
 \begin{figure}[H]
     \centering
@@ -303,5 +306,9 @@ aqui explica as funções
 \end{figure}
 
 \section{Separando Áreas de Biomas}
+
+DEBUG a função perlinNOise não pode receber inteiros como parametros, citar:
+http://ai2-s2-pdfs.s3.amazonaws.com/e04d/7772b91a83a901408eb0876bbb7814b1d4b5.pdf
+
 
 \section{Detectando fronteira entre Biomas}
