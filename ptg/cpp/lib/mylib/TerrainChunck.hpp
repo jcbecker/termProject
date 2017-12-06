@@ -420,7 +420,7 @@ private:
         
         
         
-        double areaValue = pNoise.noise0_1((dxs + 7.3) * 2.0, (dzs+ 7.3) * 2.0);
+        double areaValue = pNoise.noise0_1((dxs + 7.3)/50, (dzs+ 7.3)/50);
         areaValue = glm::clamp(areaValue, 0.0, 1.0);
         
         /*
