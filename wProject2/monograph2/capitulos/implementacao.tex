@@ -164,8 +164,7 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
     \label{fig:sssins}
 \end{figure}
 
-Usando ruído de Perlin...\\
-trocar $Octaves$ por $8^{va}$ ou $o$, $O$, $\phi$ $\theta$ $\Theta$\\
+DEBUG: Usando ruído de Perlin...\\
 $\theta$ são as oitavas, a quantidade de vezes que um ruído será calculado 
 como já explicado em perlin noise. DEBUG, fazer o que acabei de falar
 $amp$ é a amplitude escalar do terreno.\\
@@ -173,7 +172,7 @@ $f$ é a frequência;\\
 $fxz$ é a frequência relativa a malha;\\
 $fxz = k/f$\\
 $h' = PerlinNoise(x/fxz, z/fxz, \theta) \cdot amp$\\
-$Altura = h' \cdot amp$
+$h = h' \cdot amp$, $h$ é valor de altura recebido pelo algoritmo \ref{alg:genVectors}, quando chama $hEvaluation(x_{s} + i, z_{s} + j).h$.
 
 Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
 
@@ -195,7 +194,7 @@ Usando $amp = 30$ e $\theta = 8, seed = 15$ e variando a frequência.
      \subfloat[][$f = 4$]{\includegraphics[width=0.3\textwidth]{figuras/freq4.png}\label{fig:freq4}}\hspace{0.1cm}
      \subfloat[][$f = 16$]{\includegraphics[width=0.3\textwidth]{figuras/freq16.png}\label{fig:freq16}}
      \caption{Comparando influência da frequência.}
-     \label{fig:parametrosOctaves}
+     \label{fig:parametrosfreq}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
@@ -238,30 +237,38 @@ temos o resultado da figura \ref{fig:ssnhaha3}.
 \begin{figure}[H]
      \centering
      \subfloat[][malha branca]{\includegraphics[width=0.65\textwidth]{figuras/ssmeshblank.png}\label{fig:ssnhaha1}}\\
-     \subfloat[][segmentos de plano branco]{\includegraphics[width=0.45\textwidth]{figuras/ssplainblank.png}\label{fig:ssnhaha2}}\hspace{0.1cm}
-     \subfloat[][segmentos de plano coloridos]{\includegraphics[width=0.45\textwidth]{figuras/ssplaincolor.png}\label{fig:ssnhaha3}}
+     \subfloat[][segmentos de planos branco]{\includegraphics[width=0.45\textwidth]{figuras/ssplainblank.png}\label{fig:ssnhaha2}}\hspace{0.1cm}
+     \subfloat[][segmentos de planos coloridos]{\includegraphics[width=0.45\textwidth]{figuras/ssplaincolor.png}\label{fig:ssnhaha3}}
      \caption{Usando algoítmo de comparação de vértice.}
      \label{fig:color}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
 \subsection{Manipulando ruído para criar Biomas}
-Para criar múltiplos biomas vamos usar os seguintes parâmetros para cada um
+Para criar múltiplos biomas foi usado valores de cores distintas para cada um deles, 
+para que quando houvesse uma fronteira entre biomas a mesma podesse ser mais notada, as
+cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
+\begin{table}[H]
+    \centering
+    \caption{Descrição das cores por biomas.}
+    \label{tab:bioColors}
+    \begin{tabular}{| c | c c c c c|}
+        \hline
+        Tipo de Terreno (Bioma) & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
+        \hline
+        Plains   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
+        Montains & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
+        Valley   & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
+        Desert   & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+        Cânyons  & $6$  & $4$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+        \hline
+    \end{tabular}
+\end{table}
 
-\begin{tabular}{| c | c c c c c|}
-    \hline
-    Tipo de Terreno (Bioma) & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
-    \hline
-    Plains   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
-    Montains & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
-    Valley   & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
-    Desert   & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
-    Cânyons  & $6$  & $4$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
-    
-    \hline
-\end{tabular}
-
-$xColor = \frac{xColor'}{255}$
+Os valores descritos na tabela \ref{tab:bioColors} ainda não podem ser usados no
+algoritmo \ref{alg:colorValuation} por que estão em formatos diferentes, então temos
+que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . E cada uma das cores recebe um valor
+$0 \leq r, g, b \leq 1$.
 DEBUG: aqui explica as funções
 
 \begin{figure}[H]
