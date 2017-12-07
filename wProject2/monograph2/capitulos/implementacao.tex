@@ -13,11 +13,12 @@
 
 \chapter{Implementação}
 
-%Essa seção não é muito relevante para o resultado final, não sei se escrevo ela
 \section{Configuração do Ambiente}
+%DEBUG: Essa seção não é muito relevante para o resultado final, não sei se escrevo ela
+%falar sobre implementação do sistema de navegação
 
-%Mover para fundamentação teórica
 \subsection{Usando os Buffers do OpenGL e GLSL}
+%DEBUG: Mover para fundamentação teórica?
 
 \subsubsection{Descrição dos vértices}
 Um vértice $v$ é um conjunto de informações relacionadas a alguma unidade, %DEBUG: trocar o termo unidade
@@ -119,17 +120,17 @@ com a altura e cor para algum ponto $(x, z)$.
     \For{$i=0$ \KwTo $k-1$}{
         \For{$j=0$ \KwTo $k-1$}{
             $v_{i \cdot k + j}.pos = (\Delta_{v} \cdot i, hEvaluation(x_{s} + i, z_{s} + j).h, \Delta{v} \cdot j)$\;
-            $v_{i \cdot k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).c$\;
+            $v_{i \cdot k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).cor$\;
         }
     }
     $|E| = (k-1)^2 \cdot 6$\;
     \For{$i=0$ \KwTo $k-2$}{
         \For{$j=0$ \KwTo $k-2$}{
-            //posições em $V$ do primeio triângulo\;
+            \tcc{posições em $V$ do primeio triângulo}
             $e_{(i\cdot(k-1)+j)\cdot 6} = (i\cdot k +j)$\;
             $e_{(i\cdot (k-1)+j)\cdot 6+1} = (i\cdot k +j+1)$\;
             $e_{(i\cdot (k-1)+j)\cdot 6+2} = ((i+1)\cdot k +j)$\;
-            //posições em $V$ do segundo triângulo\;
+            \tcc{posições em $V$ do segundo triângulo}
             $e_{(i \cdot (k-1)+j) \cdot 6+3} = ((i+1) \cdot k +j+1)$\;
             $e_{(i \cdot (k-1)+j) \cdot 6+4} = (i \cdot k +j+1)$\;
             $e_{(i \cdot (k-1)+j) \cdot 6+5} = ((i+1) \cdot k +j)$\;
@@ -215,17 +216,19 @@ Usando $f = 8, amp = 30$ e $\theta = 8, seed = 15$ e variando a seed.
 Como em um jogo o terreno é representado por segmentos de planos e não um conjunto
 de vértices e arestas, vamos colorir o terreno apenas para facilitar um pouco a
 vizualização do mesmo. O valor $h'$ vai ficar com valores entre $-1$ e $1$, 
-quando passar desse intervalo temos certeza que $-2 < h' > 2$.DEBUG: preciso mostrar
- a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
+quando passar desse intervalo temos certeza que $-2 < h' > 2$.
+%DEBUG: preciso mostrar a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
 Então podemos
-usar o seguinte algoritmo para definir a cor do vértice baseado na altura.
+usar o algoritmo \ref{alg:colorValuation} para definir a cor do vértice baseado na altura.
+$cor$ no algorimo \ref{alg:colorValuation} é o valor recebido pelo algoritmo \ref{alg:genVectors}
+quando chama $hEvaluation(x_{s} + i, z_{s} + j).cor$.
 
 \begin{algorithm}[H]\label{alg:colorValuation}
     $auxNoise = clamp(h', -1, 1)$\;
     \If {$auxNoise < 0$}{
-        return $mix(midColor, minColor, auxNoise \cdot -1)$\;
+        cor = $mix(midColor, minColor, auxNoise \cdot -1)$\;
     }\Else{
-        return $mix(midColor, maxColor, auxNoise)$\;
+        cor = $mix(midColor, maxColor, auxNoise)$\;
     }
     
     \caption{Coloração de vértices.}
@@ -254,12 +257,12 @@ cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
     \label{tab:bioColors}
     \begin{tabular}{| c | c c c c c|}
         \hline
-        Tipo de Terreno (Bioma) & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
+        $biomaTipo$ & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
         \hline
-        Plains   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
-        Montains & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
-        Valley   & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
-        Desert   & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+        Planícies   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
+        Montanhas & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
+        Vales   & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
+        Deserto   & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
         Cânyons  & $6$  & $4$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
         \hline
     \end{tabular}
@@ -270,50 +273,80 @@ algoritmo \ref{alg:colorValuation} por que estão em formatos diferentes, então
 que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . E cada uma das cores recebe um valor
 $0 \leq r, g, b \leq 1$.
 DEBUG: aqui explica as funções
+Além de cada bioma ter uma frequencia ($f$) e quantidade de oitavas ($\theta$) associadas
+também tem uma função de manipulação do ruído, que é usar o valor $h'$ e um bioma
+para gerar a altura $h$.
+
+\begin{algorithm}[H]\label{alg:hBioValuation}
+    \If {biomaTipo == Planícies}{
+        $h = h'*10$\;
+    }
+    \uElseIf{biomaTipo == Montanhas}{
+        $h = 1.5^{h'\cdot 7}\cdot 5$\;
+    }
+    \uElseIf{biomaTipo == Vales}{
+        $h = ($clamp($h', -0.5, 1.0$)$\cdot 5)^{3}$\;
+    }
+    \uElseIf{biomaTipo == Deserto}{
+        $h = h'*16$\;
+    }
+    \Else{
+        \tcc{Cânyons}
+        h = $(1.5^{clamp(h', -0.3, 0.3) \cdot 14}) \cdot 5 + h' * 8$\;
+    }
+    
+    \caption{Altura por bioma.}
+\end{algorithm}
+
+Quando fixados os valores de cores com as mostradas
+na tabela \ref{tab:bioColors} e de $biomaTipo$, usando o
+algoritmo \ref{alg:hBioValuation} é gerado mapas com um bioma,
+os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figuras/bssPlains.png}
-    \caption{Plains}
-    \label{fig:bssPlains}
+     \centering
+     \subfloat[][$biomaTipo =$ Planícies]{\includegraphics[width=0.48\textwidth]{figuras/bssPlains.png}\label{fig:biomaTipo1}}\hspace{0.1cm}
+     \subfloat[][$biomaTipo =$ Montanhas]{\includegraphics[width=0.48\textwidth]{figuras/bssMontains.png}\label{fig:biomaTipo2}}\\
+     \subfloat[][$biomaTipo =$ Vales]{\includegraphics[width=0.48\textwidth]{figuras/bssValley.png}\label{fig:biomaTipo3}}\hspace{0.1cm}
+     \subfloat[][$biomaTipo =$ Deserto]{\includegraphics[width=0.48\textwidth]{figuras/bssDesert.png}\label{fig:biomaTipo4}}\\
+     \subfloat[][$biomaTipo =$ Cânyons]{\includegraphics[width=0.48\textwidth]{figuras/bssCanyons.png}\label{fig:biomaTipo5}}
+     
+     \caption{Resultado dos Biomas fixados.}
+     
+     \label{fig:bssComBiomasFixados}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figuras/bssMontains.png}
-    \caption{Montains}
-    \label{fig:bssMontains}
-\end{figure}
-
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figuras/bssValley.png}
-    \caption{Valley}
-    \label{fig:bssValley}
-\end{figure}
-
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figuras/bssDesert.png}
-    \caption{Desert}
-    \label{fig:bssDesert}
-\end{figure}
-
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figuras/bssCanyons.png}
-    \caption{Cânyons}
-    \label{fig:bssCanyons}
-\end{figure}
-
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.5\textwidth]{figuras/bssPlains.png}
+%    \caption{Planícies}
+%    \label{fig:bssPlains}
+%\end{figure}
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.5\textwidth]{figuras/bssMontains.png}
+%    \caption{Montanhas}
+%    \label{fig:bssMontains}
+%\end{figure}
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.5\textwidth]{figuras/bssValley.png}
+%    \caption{Vales}
+%    \label{fig:bssValley}
+%\end{figure}
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.5\textwidth]{figuras/bssDesert.png}
+%    \caption{Deserto}
+%    \label{fig:bssDesert}
+%\end{figure}
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.5\textwidth]{figuras/bssCanyons.png}
+%    \caption{Cânyons}
+%    \label{fig:bssCanyons}
+%\end{figure}
 \section{Separando Áreas de Biomas}
 
 DEBUG a função perlinNOise não pode receber inteiros como parametros, citar:
@@ -321,3 +354,5 @@ http://ai2-s2-pdfs.s3.amazonaws.com/e04d/7772b91a83a901408eb0876bbb7814b1d4b5.pd
 
 
 \section{Detectando fronteira entre Biomas}
+
+DEBUG: aqui eu comento as limitações?
