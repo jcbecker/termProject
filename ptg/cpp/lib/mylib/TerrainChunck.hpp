@@ -221,7 +221,7 @@ private:
         
         r.FinalH = actualH;
         r.ColorH = actualC;
-        
+        /*
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){//black
                 otherSide_x = getBiomeXZ(x + this->biomeBorderLen + 0.5, z);
@@ -362,8 +362,8 @@ private:
                 
                 
                 
-            }
-        }
+        //    }
+        //}
         
         
         
@@ -413,14 +413,31 @@ private:
         dxs = glm::trunc(dxs);
         dzs = glm::trunc(dzs);
         
+        /*
+        int di, dj;
+        di = dxs;
+        dj = dzs;
+        if(di%2){
+            if(dj%2){
+                return MONTAINS;
+                
+            }else{
+                return CANYONS;
+                
+            }
+        }else{
+            if(dj%2){
+                
+                return CANYONS;
+            }else{
+                return MONTAINS;
+                
+            }
+        }
+        */
         
         
-        
-        
-        
-        
-        
-        double areaValue = pNoise.noise0_1((dxs + 7.3)/50, (dzs+ 7.3)/50);
+        double areaValue = pNoise.noise0_1((dxs + 7.3)/0.5, (dzs+ 7.3)/0.5);
         areaValue = glm::clamp(areaValue, 0.0, 1.0);
         
         /*

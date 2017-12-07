@@ -255,15 +255,15 @@ cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
     \centering
     \caption{Descrição das cores por biomas.}
     \label{tab:bioColors}
-    \begin{tabular}{| c | c c c c c|}
+    \begin{tabular}{| c | c c c c c c|}
         \hline
-        $biomaTipo$ & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
+        $biomaTipo$ & int id & $f$ & $\theta$ & $minColor'$ & $midColor'$ & $maxColor'$\\
         \hline
-        Planícies   & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
-        Montanhas & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
-        Vales   & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
-        Deserto   & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
-        Cânyons  & $6$  & $4$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+        Planícies   & 0 & $10$ & $4$ & $(34, 139, 34) $ & $(154, 205, 50) $ & $(143,188,143)  $  \\
+        Montanhas & 1 & $18$ & $8$ & $(128, 128, 0) $ & $(112, 128, 144)$ & $(255, 255, 255)$  \\
+        Vales   & 2 & $8$  & $8$ & $(30, 144, 255)$ & $(46, 139, 87)  $ & $(34, 139, 34)  $  \\
+        Deserto   & 3 & $6$  & $2$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
+        Cânyons  & 4 & $6$  & $4$ & $(0, 0, 0)     $ & $(244, 164, 96) $ & $(255, 255, 255)$  \\
         \hline
     \end{tabular}
 \end{table}
@@ -348,10 +348,149 @@ os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
 %    \label{fig:bssCanyons}
 %\end{figure}
 \section{Separando Áreas de Biomas}
+Para separar áreas de biomas com tamanho $b$ e escolher um $biomaTipo$ nessas áreas
+vamos usar o seguinte algoritmo, considerando $dxs, dzs \in \mathbb{Q}$ e $di, dj \in \mathbb{N}$.
 
-DEBUG a função perlinNOise não pode receber inteiros como parametros, citar:
-http://ai2-s2-pdfs.s3.amazonaws.com/e04d/7772b91a83a901408eb0876bbb7814b1d4b5.pdf
+%DEBUG: explicar função trunc em algum lugar
+\begin{algorithm}[H]\label{alg:getBiomeXZXadrez}
+    $dxs = x/b$\;
+    $dzs = z/b$\;
+    \If {$dxs < 0$}{
+        $dxs -= 1$\;
+    }
+    \If {$dzs < 0$}{
+        $dzs -= 1$\;
+    }
+    $dxs = $trunc$(dxs)$\;
+    $dzs = $trunc$(dzs)$\;
+    $di = dxs$\;
+    $dj = dzs$\;
+    \If {$di\%2$}{
+        \If {$dj\%2$}{
+            $biomaTipo =$ Montanhas\;
+        }\Else{
+            $biomaTipo =$ Cânyons\;
+        }
+    }\Else{
+        \If {$dj\%2$}{
+            $biomaTipo =$ Cânyons\;
+        }\Else{
+            $biomaTipo =$ Montanhas\;
+        }
+    }
+    
+    
+    \caption{Escolhendo biomas em áreas de tamanho $b$, com áspecto xadrez.}
+\end{algorithm}
 
+Se remover as linhas 3 até 8 do algorimo \ref{alg:getBiomeXZXadrez} vamos ter o 
+problema do valor $0$ se repetir em $di$ ou $dj$ nos valores de $0 < x, z < b$ e $0 > x, z > -b$, 
+quando isso acontece temos os valores de $(di, dj)$ mostrados na
+matriz $B_{b}$ gerando as áreas mostradas na figura \ref{fig:xadrez}. Mas quando essas
+linhas do algoritmo estão inclusas os resultados estão representados na matriz $B_{a}$
+e na figura \ref{fig:xadrez}. Os parâmetros para gerar as
+imagens \ref{fig:ssxadrez} são: $\Delta_{v} = 0.5$, 
+$k = 2048$, $ x_{s} = -k/2 , z_{s} = -k/2$, $b = 200$ e $seed = 3$.
+
+\[
+B_{a} = 
+\begin{bmatrix}
+    \ddots                & \vdots & \vdots & \vdots & \vdots & \vdots & \reflectbox{$\ddots$} \\
+    \dots                 &(-2, 2) &(-1, 2) &(0, 2)  &(1, 2)  &(2, 2)  & \dots                 \\
+    \dots                 &(-2, 1) &(-1, 1) &(0, 1)  &(1, 1)  &(2, 1)  & \dots                 \\
+    \dots                 &(-2, 0) &(-1, 0) &(0, 0)  &(1, 0)  &(2, 0)  & \dots                 \\
+    \dots                 &(-2, -1)&(-1, -1)&(0, -1) &(1, -1) &(2, -1) & \dots                 \\
+    \dots                 &(-2, -2)&(-1, -2)&(0, -2) &(1, -2) &(2, -2) & \dots                 \\
+    \reflectbox{$\ddots$} & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots                \\
+    
+\end{bmatrix}
+\]
+\[
+B_{b} = 
+\begin{bmatrix}
+    \ddots                & \vdots & \vdots & \vdots & \vdots & \vdots & \reflectbox{$\ddots$} \\
+    \dots                 &(-1, 2) &(0, 2)  &(0, 2)  &(1, 2)  &(2, 2)  & \dots                 \\
+    \dots                 &(-1, 1) &(0, 1)  &(0, 1)  &(1, 1)  &(2, 1)  & \dots                 \\
+    \dots                 &(-1, 0) &(0, 0)  &(0, 0)  &(1, 0)  &(2, 0)  & \dots                 \\
+    \dots                 &(-1, 0) &(0, 0)  &(0, 0)  &(1, 0)  &(2, 0) & \dots                 \\
+    \dots                 &(-1, -1)&(0, -1) &(0, -1) &(1, -1) &(2, -1) & \dots                 \\
+    \reflectbox{$\ddots$} & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots                \\
+    
+\end{bmatrix}
+\]
+
+ 
+\begin{figure}[H]
+     \centering
+     \subfloat[][sem usar linhas 3 à 8]{\includegraphics[width=0.48\textwidth]{figuras/didjissue.png}\label{fig:xadrez}}\hspace{0.1cm}
+     \subfloat[][Usando as linhas 3 à 8]{\includegraphics[width=0.48\textwidth]{figuras/didjissuefix.png}\label{fig:xadrezFix}}\\
+     
+     \caption{Mostrando a influência das linhas 3 até 8 no algoritmo \ref{alg:getBiomeXZXadrez}.}
+     
+     \label{fig:ssxadrez}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Mas a intenção não é criar divisões nesse estilo de "xadrez" então será usado um 
+ruído como parametros $dxs$ e $dzs$ para definir o bioma de cada região é usado
+o algoritmo \ref{alg:getBiomeXZ}.
+
+\begin{algorithm}[H]\label{alg:getBiomeXZ}
+    $dxs = x/b$\;
+    $dzs = z/b$\;
+    \If {$dxs < 0$}{
+        $dxs -= 1$\;
+    }
+    \If {$dzs < 0$}{
+        $dzs -= 1$\;
+    }
+    $dxs = $trunc$(dxs)$\;
+    $dzs = $trunc$(dzs)$\;
+    
+    $areaValue = $Noise$((dxs + const)/fb, (dzs + const)/fb)$\;
+    $areaValue \cdot = 0.5$\;
+    $areaValue += 0.5$\;
+    $areaValue = $clamp$(areaValue, 0, 0.99)$\;
+    $biomaTipo = $trunc$(areaValue \cdot 5)$\;
+    \caption{Escolhendo biomas em áreas de tamanho $b$.}
+\end{algorithm}
+
+A variável $biomaTipo$ tem valoração inteira, então é possivel olhar a tabela \ref{tab:bioColors}
+o campo int id para saber qual valor inteiro é associado a qual bioma.
+$fb$ é a variavel que dita a frequencia na variação de biomas e $const$ é uma constante,
+$const \in \mathbb{Q}$, a constante previne que o parametro seja sempre inteiro, quando $fb$ é um valor muito baixo,
+a possibilidade de dxs e dzs serem inteiros é grande e quando parâmetros de Noise 
+são inteiros então seu retorno sempre será $0$ \cite{perlin1985image}. Todos os resultados 
+neste trabalho usam $const = 7.3$ escolhido arbitrariamente.
+
+Os parâmetros usados na figura \ref{fig:biomeareasanotherComp} são: $\Delta_{v} = 0.5$, 
+$k = 2048$, $b = 200$ e $seed = 3$. em duas chunks a primeira com $ x_{s} = -k/2 , z_{s} = -k/2$
+e a segunda com $ x_{s} = 1023 , z_{s} = -k/2$.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$fb = 0.5$]{\includegraphics[width=0.48\textwidth]{figuras/fbl/fb05l200.png}\label{fig:fb05l200}}\hspace{0.1cm}
+     \subfloat[][$fb = 4$]{\includegraphics[width=0.48\textwidth]{figuras/fbl/fb4l200.png}\label{fig:fb4l200}}\\
+     \subfloat[][$fb = 10$]{\includegraphics[width=0.48\textwidth]{figuras/fbl/fb10l200.png}\label{fig:fb10l200}}\hspace{0.1cm}
+     \subfloat[][$fb = 25$]{\includegraphics[width=0.48\textwidth]{figuras/fbl/fb25l200.png}\label{fig:fb25l200}}
+     \caption{Diferença entre frequencia de biomas.}
+     
+     \label{fig:biomeareasanotherComp}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+A figura \ref{fig:biomeareasanotherCompx} quase usa os mesmos parâmetros que imagens \ref{fig:biomeareasanotherComp}
+com diferença que desta vez $b = 512$.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$fb = 0.5$]{\includegraphics[width=0.48\textwidth]{figuras/fbl/fb05l512.png}\label{fig:fb05l512}}\hspace{0.1cm}
+     \subfloat[][$fb = 50$]{\includegraphics[width=0.48\textwidth]{figuras/fbl/fb50l512.png}\label{fig:fb50l512}}\\
+     \caption{Diferença entre frequencia de biomas com $b = 512$.}
+     
+     \label{fig:biomeareasanotherCompx}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
 
 \section{Detectando fronteira entre Biomas}
 
