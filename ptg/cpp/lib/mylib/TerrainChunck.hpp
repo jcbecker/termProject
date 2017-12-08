@@ -221,7 +221,7 @@ private:
         
         r.FinalH = actualH;
         r.ColorH = actualC;
-        /*
+        
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){//black
                 otherSide_x = getBiomeXZ(x + this->biomeBorderLen + 0.5, z);
@@ -279,8 +279,17 @@ private:
                 beyondTheWallBase_xz = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_xz].bOctaves);
                 beyondTheWallFinal_xz = biomeHeightValuation(otherSide_xz, beyondTheWallBase_xz);
                 
+                //r.FinalH = oauxHZ;
+                //r.ColorH = oauxCZ;
+                r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), biomeColorValuation(otherSide_x, beyondTheWallBase_x),  someAuxforZ.pDistToBorder);;
+                r.FinalH = glm::mix(beyondTheWallFinal_xz, beyondTheWallFinal_x,   someAuxforZ.pDistToBorder);
                 
                 
+                r.ColorH = glm::mix(r.ColorH, oauxCZ, someAuxforX.pDistToBorder);
+                r.FinalH = glm::mix(r.FinalH, oauxHZ, someAuxforX.pDistToBorder);
+                
+                
+                /*
                 if(someAuxforX.pDistToBorder + someAuxforZ.pDistToBorder  < 1){
                     r.FinalH = beyondTheWallFinal_xz;
                     
@@ -362,8 +371,8 @@ private:
                 
                 
                 
-        //    }
-        //}
+            }
+        }
         
         
         
@@ -413,28 +422,20 @@ private:
         dxs = glm::trunc(dxs);
         dzs = glm::trunc(dzs);
         
-        /*
+        
         int di, dj;
         di = dxs;
         dj = dzs;
-        if(di%2){
-            if(dj%2){
-                return MONTAINS;
-                
-            }else{
-                return CANYONS;
-                
-            }
-        }else{
-            if(dj%2){
-                
-                return CANYONS;
-            }else{
-                return MONTAINS;
-                
-            }
+        
+        if(di == 0 && dj == 0){
+            return PLAINS;
+        }else if(di == 0 && dj == 1){
+            return MONTAINS;
+        }else if(di == 1 && dj == 0){
+            return VALLEY;
+        }else if(di == 1 && dj == 1){
+            return DESERT;
         }
-        */
         
         
         double areaValue = pNoise.noise0_1((dxs + 7.3)/0.5, (dzs+ 7.3)/0.5);
