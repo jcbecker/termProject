@@ -197,21 +197,7 @@ private:
         
         BorderHelper someAuxforX = borderTest(x), someAuxforZ = borderTest(z);
         
-        if(someAuxforX.isBorder){
-            if(someAuxforX.borderAbove){
-                //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH,  someAuxforX.pDistToBorder);
-            }else{
-                //r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH,  someAuxforX.pDistToBorder);
-            }
-        }
         
-        if(someAuxforZ.isBorder){
-            if(someAuxforZ.borderAbove){
-                //r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH, someAuxforZ.pDistToBorder);
-            }else{
-                //r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH, someAuxforZ.pDistToBorder);
-            }
-        }
         
         BiomeType otherSide_x, otherSide_z, otherSide_xz;
         double beyondTheWallBase_x, beyondTheWallFinal_x;
@@ -221,6 +207,23 @@ private:
         
         r.FinalH = actualH;
         r.ColorH = actualC;
+        /*
+        if(someAuxforX.isBorder){
+            if(someAuxforX.borderAbove){
+                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH,  0.5);
+            }else{
+                r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH,  0.5);
+            }
+        }
+        
+        if(someAuxforZ.isBorder){
+            if(someAuxforZ.borderAbove){
+                r.ColorH = glm::mix(glm::vec3(1.0, 0.0, 0.0), r.ColorH, 0.5);
+            }else{
+                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 1.0), r.ColorH, 0.5);
+            }
+        }
+        */
         /*
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){//black

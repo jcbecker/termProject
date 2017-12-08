@@ -279,7 +279,7 @@ para gerar a altura $h$.
 
 \begin{algorithm}[H]\label{alg:hBioValuation}
     \If {biomaTipo == Planícies}{
-        $h = h'*10$\;
+        $h = h' \cdot 10$\;
     }
     \uElseIf{biomaTipo == Montanhas}{
         $h = 1.5^{h'\cdot 7}\cdot 5$\;
@@ -288,11 +288,11 @@ para gerar a altura $h$.
         $h = ($clamp($h', -0.5, 1.0$)$\cdot 5)^{3}$\;
     }
     \uElseIf{biomaTipo == Deserto}{
-        $h = h'*16$\;
+        $h = h' \cdot 16$\;
     }
     \Else{
         \tcc{Cânyons}
-        h = $(1.5^{clamp(h', -0.3, 0.3) \cdot 14}) \cdot 5 + h' * 8$\;
+        $h = (1.5^{clamp(h', -0.3, 0.3) \cdot 14}) \cdot 5 + h' \cdot 8$\;
     }
     
     \caption{Altura por bioma.}
@@ -505,3 +505,109 @@ a jogabilidade neste terreno. %descontinuos.png
     \caption{Terreno com fronteira descontinua.}
     \label{fig:descontinuos}
 \end{figure}
+
+Para detectar a proximidade de um vértice a alguma fronteira podemos calcular o 
+quão próximo ele está de algum ponto dívisivel por $b$, isso será feito com 
+o algoritmo \ref{alg:borderTest}. O algoritmo recebe uma entrada $in$ e calcula
+a distância euclidiana unidimensional com o valor divisivel por $b$ mais próximo 
+de $in$. Caso essa distância for menor que $l$ então o vértice em questão é 
+fronteira.
+
+O algoritmo \ref{alg:borderTest} retorna uma estrutra $BH$, com as informações
+se o parâmetro é uma fronteira $BH.bordaFlag \in \{true, false\}$, se a fronteira 
+está acima da entrada $BH.acimaFlag \in \{true, false\}$ e a distância relativa 
+da fronteira $BH.pDist \in \mathbb{Q}: 0 \leq BH.pDist \leq 1$, caso a distância de $in$ até $b$ for bem 
+próxima de $l$ e menor que $l$ então o valor de $BH.pDist$ será proporcionalmente
+próximo a $1$. As variáveis
+$in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
+
+\begin{algorithm}[H]\label{alg:borderTest}%Usando parâmetro e não k
+    $negativeFlag = in < 0$ ? true : false\;
+    \tcc{$in^{\star} \in \mathbb{N}$, então $in^{\star}$ vai receber um valor truncado}
+    $in^{\star} = negativeFlag$ ? $-in$ : $in$\;
+    $borda'$ = $(in^{\star}/b +1) \cdot b$\;
+    $borda''$ = $(in^{\star}/b) \cdot b$\;
+    
+    \If {$negativeFlag$}{
+        $borda' \cdot = -1$\;
+        $borada''  \cdot = -1$\;
+    }
+    
+    \If {$abs(borda' - in) < l$}{
+        \tcc{Caso1: $in$ é fronteira, e a fronteira está acima de $in$}
+        $BH.bordaFlag = $true\;
+        $BH.acimaFlag = $true\;
+        $BH.pDist = abs(borda' - in)/ l$\;
+    }
+    \uElseIf{$abs(borda'' - in) < l$}{
+        \tcc{Caso2: $in$ é fronteira, e a fronteira está abaixo de $in$}
+        $BH.bordaFlag = $true\;
+        $BH.acimaFlag = $false\;
+        $BH.pDist = abs(borda'' - in)/ l$\;
+    }
+    \Else{
+        \tcc{Caso3: $in$ não é fronteira}
+        $BH.bordaFlag = $false\;
+    }
+    \If {$negativeFlag$}{
+        $BH.acimaFlag = \neg BH.acimaFlag$\;
+    }
+    
+    \caption{Teste de fronteira.}
+\end{algorithm}
+
+Para analisar esse valoers é possivel colorir as fronteiras...
+
+\begin{algorithm}[H]\label{alg:borderColor}%Usando parâmetro e não k
+    $BH_{x} = $algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} = $algoritmo\ref{alg:borderTest}($z$)\;
+    
+    \If {$BH_{x}.bordaFlag$}{
+        \If {$BH_{x}.acimaFlag$}{
+            cor = mix($(0, 0, 0)$, cor, $peso$)\;\tcc{Preto}
+        }\Else{
+            cor = mix($(1, 1, 1)$, cor, $peso$)\;\tcc{Branco}
+        }
+    }
+    \If {$BH_{z}.bordaFlag$}{
+        \If {$BH_{z}.acimaFlag$}{
+            cor = mix($(1, 0, 0)$, cor, $peso$)\;\tcc{Vermelho}
+        }\Else{
+            cor = mix($(0, 0, 1)$, cor, $peso$)\;\tcc{Azul}
+        }
+    }
+    
+    \caption{Colorindo fronteira.}
+\end{algorithm}
+
+Executando o algoritmo \ref{alg:borderColor} com $peso = 0.5$. $\Delta_{v} = 0.5$, 
+$k = 2048$, $b = 512$, $seed = 3$ e $fb = 0.5$. em duas chunks a primeira com $ x_{s} = -k/2 , z_{s} = -k/2$
+e a segunda com $ x_{s} = 1023 , z_{s} = -k/2$.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$l = 32$]{\includegraphics[width=0.48\textwidth]{figuras/border/l32.png}\label{fig:l32np}}\hspace{0.1cm}
+     \subfloat[][$l = 128$]{\includegraphics[width=0.48\textwidth]{figuras/border/l128.png}\label{fig:l128np}}\\
+     \caption{Demarcação de fronteira.}
+     
+     \label{fig:borderlenanotherauxyeah}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Se usarmos como peso a distância relativa em cada cordenada, substituindo a variámovel
+$peso$ do algoritmo \ref{alg:borderColor} por $BH_{x}.pDist$ nas linhas $5$ e $8$, já
+nas linhas $13$ e $16$ substitui $peso$ por $BH_{z}.pDist$, o restante dos parâmetros
+da figura \ref{fig:borderlenanotherauxyeahp}, são os mesmos das imagens \ref{fig:borderlenanotherauxyeah}.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$l = 32$]{\includegraphics[width=0.48\textwidth]{figuras/border/l32p.png}\label{fig:l32p}}\hspace{0.1cm}
+     \subfloat[][$l = 128$]{\includegraphics[width=0.48\textwidth]{figuras/border/l128p.png}\label{fig:l128p}}\\
+     \caption{Demarcação de fronteira com peso na distância até a fronteira.}
+     
+     \label{fig:borderlenanotherauxyeahp}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Desta maneira, cada área de bioma $(di, dj)$ teria que ser responsável de fazer suavisação da 
+fronteira com seus $8$ vizinhos.
