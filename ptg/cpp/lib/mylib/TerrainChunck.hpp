@@ -211,23 +211,19 @@ private:
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){
                 r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 0.0), r.ColorH,  0.5);
-            }else{
-                r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH,  0.5);
             }
         }
         
         if(someAuxforZ.isBorder){
             if(someAuxforZ.borderAbove){
                 r.ColorH = glm::mix(glm::vec3(1.0, 0.0, 0.0), r.ColorH, 0.5);
-            }else{
-                r.ColorH = glm::mix(glm::vec3(0.0, 0.0, 1.0), r.ColorH, 0.5);
             }
         }
         */
-        /*
+        
         if(someAuxforX.isBorder){
             if(someAuxforX.borderAbove){//black
-                otherSide_x = getBiomeXZ(x + this->biomeBorderLen + 0.5, z);
+                otherSide_x = getBiomeXZ(x + this->biomeBorderLen, z);
                 auxfxz = (double) this->gridSize/bvbuild[otherSide_x].bFrequence;
                 beyondTheWallBase_x = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_x].bOctaves);
                 beyondTheWallFinal_x = biomeHeightValuation(otherSide_x, beyondTheWallBase_x);
@@ -247,7 +243,7 @@ private:
         }
         if(someAuxforZ.isBorder){
             if(someAuxforZ.borderAbove){//black
-                otherSide_z = getBiomeXZ(x, z + this->biomeBorderLen + 0.5);
+                otherSide_z = getBiomeXZ(x, z + this->biomeBorderLen);
                 auxfxz = (double) this->gridSize/bvbuild[otherSide_z].bFrequence;
                 beyondTheWallBase_z = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_z].bOctaves);
                 beyondTheWallFinal_z = biomeHeightValuation(otherSide_z, beyondTheWallBase_z);
@@ -277,14 +273,14 @@ private:
                 //r.ColorH = glm::mix(r.ColorH, glm::vec3(0.0, 0.0, 0.0), (someAuxforZ.pDistToBorder + someAuxforX.pDistToBorder) * 0.5);
                 //r.ColorH = biomeColorValuation(r.BioTp, r.BaseH);
                 
-                otherSide_xz = getBiomeXZ(x + this->biomeBorderLen + 0.5, z + this->biomeBorderLen + 0.5);
+                otherSide_xz = getBiomeXZ(x + this->biomeBorderLen, z + this->biomeBorderLen);
                 auxfxz = (double) this->gridSize/bvbuild[otherSide_xz].bFrequence;
                 beyondTheWallBase_xz = pNoise.octaveNoise((double)x/auxfxz, (double)z/auxfxz, bvbuild[otherSide_xz].bOctaves);
                 beyondTheWallFinal_xz = biomeHeightValuation(otherSide_xz, beyondTheWallBase_xz);
                 
                 //r.FinalH = oauxHZ;
                 //r.ColorH = oauxCZ;
-                r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), biomeColorValuation(otherSide_x, beyondTheWallBase_x),  someAuxforZ.pDistToBorder);;
+                r.ColorH = glm::mix(biomeColorValuation(otherSide_xz, beyondTheWallBase_xz), biomeColorValuation(otherSide_x, beyondTheWallBase_x),  someAuxforZ.pDistToBorder);
                 r.FinalH = glm::mix(beyondTheWallFinal_xz, beyondTheWallFinal_x,   someAuxforZ.pDistToBorder);
                 
                 
@@ -374,10 +370,30 @@ private:
                 
                 
                 
-        //    }
-        //}
+            }
+        }
         
-        
+        if(r.BioTp == DESERT){
+            if(someAuxforX.isBorder && !someAuxforZ.isBorder){
+                if(someAuxforX.borderAbove){
+                    r.ColorH = glm::mix(glm::vec3(1.0, 0.4, 0.4), r.ColorH,  0.5);
+                }
+            }
+            
+            if(someAuxforZ.isBorder && ! someAuxforX.isBorder){
+                if(someAuxforZ.borderAbove){
+                    r.ColorH = glm::mix(glm::vec3(0.4, 1.0, 0.4), r.ColorH, 0.5);
+                }
+            }
+            if(someAuxforZ.isBorder && someAuxforX.isBorder){
+                if(someAuxforZ.borderAbove && someAuxforX.borderAbove){
+                    r.ColorH = glm::mix(glm::vec3(1.0, 1.0, 1.0), r.ColorH, 0.5);
+                    
+                }
+            }
+            
+            
+        }
         
         
         return r;
@@ -425,21 +441,21 @@ private:
         dxs = glm::trunc(dxs);
         dzs = glm::trunc(dzs);
         
-        /*
+        
         int di, dj;
         di = dxs;
         dj = dzs;
         
         if(di == 0 && dj == 0){
-            return PLAINS;
+            return DESERT;
         }else if(di == 0 && dj == 1){
             return MONTAINS;
         }else if(di == 1 && dj == 0){
             return VALLEY;
         }else if(di == 1 && dj == 1){
-            return DESERT;
+            return PLAINS;
         }
-        */
+        
         
         double areaValue = pNoise.noise0_1((dxs + 7.3)/0.5, (dzs+ 7.3)/0.5);
         areaValue = glm::clamp(areaValue, 0.0, 1.0);

@@ -272,7 +272,6 @@ Os valores descritos na tabela \ref{tab:bioColors} ainda não podem ser usados n
 algoritmo \ref{alg:colorValuation} por que estão em formatos diferentes, então temos
 que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . E cada uma das cores recebe um valor
 $0 \leq r, g, b \leq 1$.
-DEBUG: aqui explica as funções
 Além de cada bioma ter uma frequencia ($f$) e quantidade de oitavas ($\theta$) associadas
 também tem uma função de manipulação do ruído, que é usar o valor $h'$ e um bioma
 para gerar a altura $h$.
@@ -451,7 +450,7 @@ o algoritmo \ref{alg:getBiomeXZ}.
     $areaValue \cdot = 0.5$\;
     $areaValue += 0.5$\;
     $areaValue = $clamp$(areaValue, 0, 0.99)$\;
-    $biomaTipo = $trunc$(areaValue \cdot 5)$\;
+    $biomaTipo = $trunc$(areaValue \cdot \bar{N})$\;\tcc{$\bar{N} = 5$ Quantidade de biomas distintos}
     \caption{Escolhendo biomas em áreas de tamanho $b$.}
 \end{algorithm}
 
@@ -532,7 +531,7 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
         $borda' \cdot = -1$\;
         $borada''  \cdot = -1$\;
     }
-    
+    \tcc{Precisamos respeitar a restrição $l < b/2$ para o algoritmo entrar em apenas um dos seguintes casos}
     \If {$abs(borda' - in) < l$}{
         \tcc{Caso1: $in$ é fronteira, e a fronteira está acima de $in$}
         $BH.bordaFlag = $true\;
@@ -610,4 +609,93 @@ da figura \ref{fig:borderlenanotherauxyeahp}, são os mesmos das imagens \ref{fi
 \end{figure}
 
 Desta maneira, cada área de bioma $(di, dj)$ teria que ser responsável de fazer suavisação da 
-fronteira com seus $8$ vizinhos.
+fronteira com seus $8$ vizinhos 
+$\{(di+1, dj+1), (di+1, dj), (di+1, dj-1), (di, dj+1), (di, dj-1), (di-1, dj+1), (di-1, dj), (di-1, dj-1)\}$
+, é possivel fazer com que cada bioma faça suavisação com apenas 3 vizinhos, no caso do 
+$(di, dj)$, fará com $\{(di+1, dj), (di, dj+1), (di+1, dj+1)\}$, assim cada 
+bioma fará interpolação quando for sua flag $acimaFlag$ for verdadeira. Então
+será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:borderColor}.
+
+\begin{algorithm}[H]\label{alg:borderColorr}%Usando parâmetro e não k
+    $BH_{x} = $algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} = $algoritmo\ref{alg:borderTest}($z$)\;
+    
+    \If {$BH_{x}.bordaFlag$}{
+        \If {$BH_{x}.acimaFlag$}{
+            cor = mix($(0, 0, 0)$, cor, $peso$)\;\tcc{Preto}
+        }
+    }
+    \If {$BH_{z}.bordaFlag$}{
+        \If {$BH_{z}.acimaFlag$}{
+            cor = mix($(1, 0, 0)$, cor, $peso$)\;\tcc{Vermelho}
+        }
+    }
+    
+    \caption{Colorindo fronteira apenas acima.}
+\end{algorithm}
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][Usando algoritmo \ref{alg:borderColor}]{\includegraphics[width=0.48\textwidth]{figuras/border/l128.png}\label{fig:l32np666}}\hspace{0.1cm}
+     \subfloat[][Usando algoritmo \ref{alg:borderColorr}]{\includegraphics[width=0.48\textwidth]{figuras/border/l128aboveonly.png}\label{fig:l128aboveonly}}\\
+     \caption{Comparando algoritmos com $l=128$.}
+     
+     \label{fig:borderlenanotherauxyeahaboveonly}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Para suavizar as fronteriras é preciso saber quais valores de altura ($h$) e cor o
+vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figuras/border/yeah.png}
+    \caption{Algumas variáveis do algoritmo \ref{alg:borderFinal}}
+    \label{fig:paralgborder}
+\end{figure}
+
+\begin{algorithm}[H]\label{alg:borderFinal}%Usando parâmetro e não k
+    $BH_{x} = $algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} = $algoritmo\ref{alg:borderTest}($z$)\;
+    $h_{p} = h$\;
+    $cor_{p} = cor$\;
+    \tcc{Caso1: $(x, z)$ é fronteira em $x$}
+    \If {$BH_{x}.bordaFlag \land BH_{x}.acimaFlag$}{
+        $Bioma_{xp}$ = Algoritmo\ref{alg:getBiomeXZ}($x + l, z$)\;
+        $afxy = k/f_{Bioma_{xp}}$\;
+        $h'_{xp} =$ perlinNoise$(x/afxy, z/afxy, \theta_{Bioma_{xp}})$\;
+        $h_{xp} =$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xp}$, $h'_{xp}$)\;
+        $cor_{xp} = $Algoritmo\ref{alg:colorValuation}$(minColor_{Bioma_{xp}}, midColor_{Bioma_{xp}}, maxColor_{Bioma_{xp}})$\;
+        \tcc{Interpolação linear}
+        $h = $ mix($h_{xp}, h_{p}, BH_{x}.pDist$)\;
+        $cor $=  mix($cor_{xp}, cor_{p}, BH_{x}.pDist$)\;
+    }
+    \tcc{Caso2: $(x, z)$ é fronteira em $z$}
+    \If {$BH_{z}.bordaFlag \land BH_{z}.acimaFlag$}{
+        $Bioma_{zp}$ = Algoritmo\ref{alg:getBiomeXZ}($x, z + l$)\;
+        $afxy = k/f_{Bioma_{zp}}$\;
+        $h'_{zp} =$ perlinNoise$(x/afxy, z/afxy, \theta_{Bioma_{zp}})$\;
+        $h_{zp} =$ Algoritmo\ref{alg:hBioValuation}($Bioma_{zp}$, $h'_{zp}$)\;
+        $cor_{zp} = $Algoritmo\ref{alg:colorValuation}$(minColor_{Bioma_{zp}}, midColor_{Bioma_{zp}}, maxColor_{Bioma_{zp}})$\;
+        \tcc{Interpolação linear}
+        $h = $ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
+        $cor $=  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
+    }
+    \tcc{Caso 3: $(x, z)$ é fronteira em $x$ e $z$}
+    \If {$BH_{z}.bordaFlag \land BH_{x}.bordaFlag \land BH_{z}.acimaFlag \land BH_{x}.acimaFlag$}{
+        $Bioma_{xzp}$ = Algoritmo\ref{alg:getBiomeXZ}($x + l, z + l$)\;
+        $afxy = k/f_{Bioma_{xzp}}$\;
+        $h'_{xzp} =$ perlinNoise$(x/afxy, z/afxy, \theta_{Bioma_{xzp}})$\;
+        $h_{xzp} =$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xzp}$, $h'_{xzp}$)\;
+        $cor_{xzp} = $Algoritmo\ref{alg:colorValuation}$(minColor_{Bioma_{xzp}}, midColor_{Bioma_{xzp}}, maxColor_{Bioma_{xzp}})$\;
+        \tcc{Interpolação biliniar com os 4 biomas}
+        $h_{i1} = $mix($h_{xzp}, h_{xp}, BH_{z}.pDist$)\;
+        $cor_{i1} = $mix($cor_{xzp}, cor_{xp}, BH_{z}.pDist$)\;
+        $h_{i2} = $ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
+        $cor_{i2} =$  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
+        $h =$ mix($h_{i1}, h_{i2}, BH_{x}.pDist$)\;
+        $cor =$ mix($cor_{i1}, cor_{i2}, BH_{x}.pDist$)\;
+    }
+    
+    \caption{Suavizando fronteiras.}
+\end{algorithm}
