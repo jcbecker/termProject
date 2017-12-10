@@ -224,13 +224,15 @@ $cor$ no algorimo \ref{alg:colorValuation} é o valor recebido pelo algoritmo \r
 quando chama $hEvaluation(x_{s} + i, z_{s} + j).cor$.
 
 \begin{algorithm}[H]\label{alg:colorValuation}
+    \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
+    \Input{$minColor \in \mathbb{Q}^{3}, midColor \in \mathbb{Q}^{3}, maxColor \in \mathbb{Q}^{3}, h' \in \mathbb{Q}$}
     $auxNoise =$ clamp($h', -1, 1$)\;
     \If {$auxNoise < 0$}{
         $cor =$ mix($midColor, minColor, auxNoise \cdot -1$)\;
     }\Else{
         $cor =$ mix($midColor, maxColor, auxNoise$)\;
     }
-    
+    retorna $cor$\;
     \caption{Coloração de vértices.}
 \end{algorithm}
 
@@ -277,23 +279,25 @@ também tem uma função de manipulação do ruído, que é usar o valor $h'$ e 
 para gerar a altura $h$.
 
 \begin{algorithm}[H]\label{alg:hBioValuation}
-    \If {biomaTipo = Planícies}{
+    \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
+    \Input{$biomaTipo \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}, h' \in \mathbb{Q}$}
+    \If {$biomaTipo$ = Planícies}{
         $h = h' \cdot 10$\;
     }
-    \uElseIf{biomaTipo = Montanhas}{
+    \uElseIf{$biomaTipo$ = Montanhas}{
         $h = 1.5^{h'\cdot 7}\cdot 5$\;
     }
-    \uElseIf{biomaTipo = Vales}{
+    \uElseIf{$biomaTipo$ = Vales}{
         $h = ($clamp($h', -0.5, 1.0$)$\cdot 5)^{3}$\;
     }
-    \uElseIf{biomaTipo = Deserto}{
+    \uElseIf{$biomaTipo$ = Deserto}{
         $h = h' \cdot 16$\;
     }
     \Else{
         \tcc{Cânyons}
         $h = (1.5^{clamp(h', -0.3, 0.3) \cdot 14}) \cdot 5 + h' \cdot 8$\;
     }
-    
+    retorna $h$\;
     \caption{Altura por bioma.}
 \end{algorithm}
 
@@ -405,6 +409,8 @@ ruído como parametros $dxs$ e $dzs$ para definir o bioma de cada região é usa
 o algoritmo \ref{alg:getBiomeXZ}.
 
 \begin{algorithm}[H]\label{alg:getBiomeXZ}
+    \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
+    \Input{$x \in \mathbb{Q}, z \in \mathbb{Q}$}
     $dxs = x/b$\;
     $dzs = z/b$\;
     \If {$dxs < 0$}{
@@ -421,11 +427,12 @@ o algoritmo \ref{alg:getBiomeXZ}.
     $areaValue += 0.5$\;
     $areaValue =$ clamp($areaValue, 0, 0.99$)\;
     $biomaTipo =$ trunc($areaValue \cdot \bar{N}$)\;\tcc{$\bar{N} = 5$ Quantidade de biomas distintos}
+    retorna $biomaTipo$\;
     \caption{Escolhendo biomas em áreas de tamanho $b$.}
 \end{algorithm}
 
 A variável $biomaTipo$ tem valoração inteira, então é possivel olhar a tabela \ref{tab:bioColors}
-o campo int id para saber qual valor inteiro é associado a qual bioma.
+o campo int id para saber qual valor inteiro é associado a qual bioma, $biomaTipo \in \{Planícies, Montanhas, Vales, Deserto, Cânyons\}$
 $fb$ é a variavel que dita a frequencia na variação de biomas e $const$ é uma constante,
 $const \in \mathbb{Q}$, a constante previne que o parametro seja sempre inteiro, quando $fb$ é um valor muito baixo,
 a possibilidade de dxs e dzs serem inteiros é grande e quando parâmetros de Noise 
@@ -491,6 +498,8 @@ próximo a $1$. As variáveis
 $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
 
 \begin{algorithm}[H]\label{alg:borderTest}%Usando parâmetro e não k
+    \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
+    \Input{$in \in \mathbb{Q}$}
     $negativeFlag = in < 0$ ? true : false\;
     \tcc{$in^{\star} \in \mathbb{N}$, então $in^{\star}$ vai receber um valor truncado}
     $in^{\star} = negativeFlag$ ? $-in$ : $in$\;
@@ -521,7 +530,7 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
     \If {$negativeFlag$}{
         $BH.acimaFlag = \neg BH.acimaFlag$\;
     }
-    
+    retorna $BH$\;
     \caption{Teste de fronteira.}
 \end{algorithm}
 
@@ -636,7 +645,6 @@ vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
         $h'_{xp} \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma_{xp}}$)\;
         $h_{xp} \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xp}$, $h'_{xp}$)\;
         $cor_{xp} \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma_{xp}}, midColor_{Bioma_{xp}}, maxColor_{Bioma_{xp}}, h'_{xp}$)\;
-        \tcc{Interpolação linear}
         $h \leftarrow$ mix($h_{xp}, h_{p}, BH_{x}.pDist$)\;
         $cor \leftarrow$  mix($cor_{xp}, cor_{p}, BH_{x}.pDist$)\;
     }
@@ -647,7 +655,6 @@ vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
         $h'_{zp} \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma_{zp}}$)\;
         $h_{zp} \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma_{zp}$, $h'_{zp}$)\;
         $cor_{zp} \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma_{zp}}, midColor_{Bioma_{zp}}, maxColor_{Bioma_{zp}}, h'_{zp}$)\;
-        \tcc{Interpolação linear}
         $h \leftarrow$ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
         $cor \leftarrow$  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
     }
@@ -658,7 +665,6 @@ vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
         $h'_{xzp} \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma_{xzp}}$)\;
         $h_{xzp} \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xzp}$, $h'_{xzp}$)\;
         $cor_{xzp} \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma_{xzp}}, midColor_{Bioma_{xzp}}, maxColor_{Bioma_{xzp}}, h'_{xzp}$)\;
-        \tcc{Interpolação biliniar com os 4 biomas}
         $h_{i1} \leftarrow$ mix($h_{xzp}, h_{xp}, BH_{z}.pDist$)\;
         $cor_{i1} \leftarrow$ mix($cor_{xzp}, cor_{xp}, BH_{z}.pDist$)\;
         $h_{i2} \leftarrow$ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
