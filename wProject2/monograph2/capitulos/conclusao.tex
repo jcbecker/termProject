@@ -1,1 +1,22 @@
 \chapter{Conclusões e Trabalhos futuros}
+Nos algoritmos apresentados na sessão de implementação, é mostrado uma técnica para 
+criar um terreno com múltiplas características de relevo chamados de bioma neste trabalho
+onde a fronteira entre esses biomas é contínua e suavizada, as características interpoladas
+neste trabalho foram altura e cor, mas é possível usar a mesma técnica para suavizar
+outras características como: temperatura, vegetação, frequência de vegetação.
+Essa técnica pode ajudar bastante a desenvolver um terreno massivo para jogos com
+múltiplas características de terreno separadas em áreas quadradas.
+
+\section{Trabalhos futuros}
+
+\begin{itemize}
+    \item Aplicar ruído unidimensional, nas fronteiras, desta maneira a área de fronteira
+    não seria retângulos de $b \cdot l$ como são neste trabalho, as retas de de tamanho
+    $b$ deixariam de ser retas para assumir uma forma mais orgânica.
+    \item Dividir áreas de biomas com um formato não necessariamente quadrados de $b$ por $b$, 
+    e dividir as áreas usando \textit{sites} do diagrama de Voronoi.
+    \item Usar tesselação, criando quantidade de polígonos no terreno por demanda, 
+    isso vai aumentar o desempenho de \textit{frames} por segundo da aplicação, durante esse trabalho 
+    desempenho de \textit{fps} não foi levado em consideração por não ser objetivo deste projeto.
+    
+\end{itemize}
