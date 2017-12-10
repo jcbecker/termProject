@@ -117,23 +117,23 @@ com a altura e cor para algum ponto $(x, z)$.
  
 \begin{algorithm}[H]\label{alg:genVectors}
     $|V| = k^2$\;
-    \For{$i=0$ \KwTo $k-1$}{
-        \For{$j=0$ \KwTo $k-1$}{
-            $v_{i \cdot k + j}.pos = (\Delta_{v} \cdot i, hEvaluation(x_{s} + i, z_{s} + j).h, \Delta{v} \cdot j)$\;
-            $v_{i \cdot k + j}.cor = hEvaluation(x_{s} + i, z_{s} + j).cor$\;
+    \For{$i \leftarrow 0$ \KwTo $k-1$}{
+        \For{$j \leftarrow 0$ \KwTo $k-1$}{
+            $v_{i \cdot k + j}.pos \leftarrow (\Delta_{v} \cdot i, $Algoritmo\ref{alg:vertexValuationm}$(x_{s} + i, z_{s} + j).h, \Delta{v} \cdot j)$\;
+            $v_{i \cdot k + j}.cor \leftarrow $Algoritmo\ref{alg:vertexValuationm}$(x_{s} + i, z_{s} + j).cor$\;
         }
     }
     $|E| = (k-1)^2 \cdot 6$\;
-    \For{$i=0$ \KwTo $k-2$}{
-        \For{$j=0$ \KwTo $k-2$}{
+    \For{$i \leftarrow 0$ \KwTo $k-2$}{
+        \For{$j \leftarrow 0$ \KwTo $k-2$}{
             \tcc{posições em $V$ do primeio triângulo}
-            $e_{(i\cdot(k-1)+j)\cdot 6} = (i\cdot k +j)$\;
-            $e_{(i\cdot (k-1)+j)\cdot 6+1} = (i\cdot k +j+1)$\;
-            $e_{(i\cdot (k-1)+j)\cdot 6+2} = ((i+1)\cdot k +j)$\;
+            $e_{(i\cdot(k-1)+j)\cdot 6} \leftarrow (i\cdot k +j)$\;
+            $e_{(i\cdot (k-1)+j)\cdot 6+1} \leftarrow (i\cdot k +j+1)$\;
+            $e_{(i\cdot (k-1)+j)\cdot 6+2} \leftarrow ((i+1)\cdot k +j)$\;
             \tcc{posições em $V$ do segundo triângulo}
-            $e_{(i \cdot (k-1)+j) \cdot 6+3} = ((i+1) \cdot k +j+1)$\;
-            $e_{(i \cdot (k-1)+j) \cdot 6+4} = (i \cdot k +j+1)$\;
-            $e_{(i \cdot (k-1)+j) \cdot 6+5} = ((i+1) \cdot k +j)$\;
+            $e_{(i \cdot (k-1)+j) \cdot 6+3} \leftarrow ((i+1) \cdot k +j+1)$\;
+            $e_{(i \cdot (k-1)+j) \cdot 6+4} \leftarrow (i \cdot k +j+1)$\;
+            $e_{(i \cdot (k-1)+j) \cdot 6+5} \leftarrow ((i+1) \cdot k +j)$\;
         }
     }
     \caption{Construção da coleção de vértices e índices.}
@@ -228,9 +228,9 @@ quando chama $hEvaluation(x_{s} + i, z_{s} + j).cor$.
     \Input{$minColor \in \mathbb{Q}^{3}, midColor \in \mathbb{Q}^{3}, maxColor \in \mathbb{Q}^{3}, h' \in \mathbb{Q}$}
     $auxNoise =$ clamp($h', -1, 1$)\;
     \If {$auxNoise < 0$}{
-        $cor =$ mix($midColor, minColor, auxNoise \cdot -1$)\;
+        $cor \leftarrow$ mix($midColor, minColor, auxNoise \cdot -1$)\;
     }\Else{
-        $cor =$ mix($midColor, maxColor, auxNoise$)\;
+        $cor \leftarrow$ mix($midColor, maxColor, auxNoise$)\;
     }
     retorna $cor$\;
     \caption{Coloração de vértices.}
@@ -244,7 +244,7 @@ temos o resultado da figura \ref{fig:ssnhaha3}.
      \subfloat[][malha branca]{\includegraphics[width=0.65\textwidth]{figuras/ssmeshblank.png}\label{fig:ssnhaha1}}\\
      \subfloat[][segmentos de planos branco]{\includegraphics[width=0.45\textwidth]{figuras/ssplainblank.png}\label{fig:ssnhaha2}}\hspace{0.1cm}
      \subfloat[][segmentos de planos coloridos]{\includegraphics[width=0.45\textwidth]{figuras/ssplaincolor.png}\label{fig:ssnhaha3}}
-     \caption{Usando algoítmo de comparação de vértice.}
+     \caption{Usando algoritmo de coloração de vértice.}
      \label{fig:color}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
@@ -282,20 +282,20 @@ para gerar a altura $h$.
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
     \Input{$biomaTipo \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}, h' \in \mathbb{Q}$}
     \If {$biomaTipo$ = Planícies}{
-        $h = h' \cdot 10$\;
+        $h \leftarrow h' \cdot 10$\;
     }
     \uElseIf{$biomaTipo$ = Montanhas}{
-        $h = 1.5^{h'\cdot 7}\cdot 5$\;
+        $h \leftarrow 1.5^{h'\cdot 7}\cdot 5$\;
     }
     \uElseIf{$biomaTipo$ = Vales}{
-        $h = ($clamp($h', -0.5, 1.0$)$\cdot 5)^{3}$\;
+        $h \leftarrow ($clamp($h', -0.5, 1.0$)$\cdot 5)^{3}$\;
     }
     \uElseIf{$biomaTipo$ = Deserto}{
-        $h = h' \cdot 16$\;
+        $h \leftarrow h' \cdot 16$\;
     }
     \Else{
         \tcc{Cânyons}
-        $h = (1.5^{clamp(h', -0.3, 0.3) \cdot 14}) \cdot 5 + h' \cdot 8$\;
+        $h \leftarrow (1.5^{clamp(h', -0.3, 0.3) \cdot 14}) \cdot 5 + h' \cdot 8$\;
     }
     retorna $h$\;
     \caption{Altura por bioma.}
@@ -326,29 +326,29 @@ vamos usar o seguinte algoritmo, considerando $dxs, dzs \in \mathbb{Q}$ e $di, d
 
 %DEBUG: explicar função trunc em algum lugar
 \begin{algorithm}[H]\label{alg:getBiomeXZXadrez}
-    $dxs = x/b$\;
-    $dzs = z/b$\;
+    $dxs \leftarrow x/b$\;
+    $dzs \leftarrow z/b$\;
     \If {$dxs < 0$}{
-        $dxs -= 1$\;
+        $dxs \leftarrow dxs - 1$\;
     }
     \If {$dzs < 0$}{
-        $dzs -= 1$\;
+        $dzs \leftarrow dzs - 1$\;
     }
-    $dxs =$ trunc($dxs$)\;
-    $dzs =$ trunc($dzs$)\;
-    $di = dxs$\;
-    $dj = dzs$\;
-    \If {$di\%2$}{
-        \If {$dj\%2$}{
-            $biomaTipo =$ Montanhas\;
+    $dxs \leftarrow$ trunc($dxs$)\;
+    $dzs \leftarrow$ trunc($dzs$)\;
+    $di \leftarrow dxs$\;
+    $dj \leftarrow dzs$\;
+    \If {$di$ é divisivel por $2$}{
+        \If {$dj$ é divisivel por $2$}{
+            $biomaTipo \leftarrow$ Montanhas\;
         }\Else{
-            $biomaTipo =$ Cânyons\;
+            $biomaTipo \leftarrow$ Cânyons\;
         }
     }\Else{
-        \If {$dj\%2$}{
-            $biomaTipo =$ Cânyons\;
+        \If {$dj$ é divisivel por $2$}{
+            $biomaTipo \leftarrow$ Cânyons\;
         }\Else{
-            $biomaTipo =$ Montanhas\;
+            $biomaTipo \leftarrow$ Montanhas\;
         }
     }
     
@@ -411,22 +411,21 @@ o algoritmo \ref{alg:getBiomeXZ}.
 \begin{algorithm}[H]\label{alg:getBiomeXZ}
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
     \Input{$x \in \mathbb{Q}, z \in \mathbb{Q}$}
-    $dxs = x/b$\;
-    $dzs = z/b$\;
+    $dxs \leftarrow x/b$\;
+    $dzs \leftarrow z/b$\;
     \If {$dxs < 0$}{
-        $dxs -= 1$\;
+        $dxs \leftarrow dxs - 1$\;
     }
     \If {$dzs < 0$}{
-        $dzs -= 1$\;
+        $dzs \leftarrow dzs - 1$\;
     }
-    $dxs =$ trunc($dxs$)\;
-    $dzs =$ trunc($dzs$)\;
+    $dxs \leftarrow$ trunc($dxs$)\;
+    $dzs \leftarrow$ trunc($dzs$)\;
     
-    $areaValue =$ Noise$((dxs + const)/fb, (dzs + const)/fb)$\;
-    $areaValue \cdot = 0.5$\;
-    $areaValue += 0.5$\;
-    $areaValue =$ clamp($areaValue, 0, 0.99$)\;
-    $biomaTipo =$ trunc($areaValue \cdot \bar{N}$)\;\tcc{$\bar{N} = 5$ Quantidade de biomas distintos}
+    $areaValue \leftarrow$ Noise$((dxs + const)/fb, (dzs + const)/fb)$\;
+    $areaValue \leftarrow  areaValue \cdot 0.5 + 0.5$\;
+    $areaValue \leftarrow$ clamp($areaValue, 0, 0.99$)\;
+    $biomaTipo \leftarrow$ trunc($areaValue \cdot \bar{N}$)\;\tcc{$\bar{N} = 5$ Quantidade de biomas distintos}
     retorna $biomaTipo$\;
     \caption{Escolhendo biomas em áreas de tamanho $b$.}
 \end{algorithm}
@@ -500,35 +499,36 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
 \begin{algorithm}[H]\label{alg:borderTest}%Usando parâmetro e não k
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
     \Input{$in \in \mathbb{Q}$}
-    $negativeFlag = in < 0$ ? true : false\;
+    $negativeFlag \leftarrow in < 0$ ? true : false\;
     \tcc{$in^{\star} \in \mathbb{N}$, então $in^{\star}$ vai receber um valor truncado}
-    $in^{\star} = negativeFlag$ ? $-in$ : $in$\;
-    $borda'$ = $(in^{\star}/b +1) \cdot b$\;
-    $borda''$ = $(in^{\star}/b) \cdot b$\;
+    $in^{\star} \leftarrow negativeFlag$ ? $-in$ : $in$\;
+    \tcc{($in^{\star}/b$) divisão entre dois inteiros será outro inteiro}
+    $borda' \leftarrow (in^{\star}/b +1) \cdot b$\;
+    $borda'' \leftarrow (in^{\star}/b) \cdot b$\;
     
     \If {$negativeFlag$}{
-        $borda' \cdot = -1$\;
-        $borada''  \cdot = -1$\;
+        $borda' \leftarrow -borada'$\;
+        $borada'' \leftarrow -borada''$\;
     }
     \tcc{Precisamos respeitar a restrição $l < b/2$ para o algoritmo entrar em apenas um dos seguintes casos}
     \If {abs$(borda' - in) < l$}{
         \tcc{Caso1: $in$ é fronteira, e a fronteira está acima de $in$}
-        $BH.bordaFlag = $true\;
-        $BH.acimaFlag = $true\;
-        $BH.pDist =$ abs$(borda' - in)/ l$\;
+        $BH.bordaFlag \leftarrow $true\;
+        $BH.acimaFlag \leftarrow $true\;
+        $BH.pDist \leftarrow$ abs$(borda' - in)/ l$\;
     }
     \uElseIf{abs$(borda'' - in) < l$}{
         \tcc{Caso2: $in$ é fronteira, e a fronteira está abaixo de $in$}
-        $BH.bordaFlag = $true\;
-        $BH.acimaFlag = $false\;
-        $BH.pDist =$ abs$(borda'' - in)/ l$\;
+        $BH.bordaFlag \leftarrow $true\;
+        $BH.acimaFlag \leftarrow $false\;
+        $BH.pDist \leftarrow$ abs$(borda'' - in)/ l$\;
     }
     \Else{
         \tcc{Caso3: $in$ não é fronteira}
-        $BH.bordaFlag = $false\;
+        $BH.bordaFlag \leftarrow $false\;
     }
     \If {$negativeFlag$}{
-        $BH.acimaFlag = \neg BH.acimaFlag$\;
+        $BH.acimaFlag \leftarrow \neg BH.acimaFlag$\;
     }
     retorna $BH$\;
     \caption{Teste de fronteira.}
@@ -537,21 +537,21 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
 Para analisar esse valoers é possivel colorir as fronteiras...
 
 \begin{algorithm}[H]\label{alg:borderColor}%Usando parâmetro e não k
-    $BH_{x} =$ Algoritmo\ref{alg:borderTest}($x$)\;
-    $BH_{z} =$ Algoritmo\ref{alg:borderTest}($z$)\;
+    $BH_{x} \leftarrow$ Algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} \leftarrow$ Algoritmo\ref{alg:borderTest}($z$)\;
     
     \If {$BH_{x}.bordaFlag$}{
         \If {$BH_{x}.acimaFlag$}{
-            $cor =$ mix($(0, 0, 0)$, $cor$, $peso$)\;\tcc{Preto}
+            $cor \leftarrow$ mix($(0, 0, 0)$, $cor$, $peso$)\;\tcc{Preto}
         }\Else{
-            $cor =$ mix($(1, 1, 1)$, $cor$, $peso$)\;\tcc{Branco}
+            $cor \leftarrow$ mix($(1, 1, 1)$, $cor$, $peso$)\;\tcc{Branco}
         }
     }
     \If {$BH_{z}.bordaFlag$}{
         \If {$BH_{z}.acimaFlag$}{
-            $cor =$ mix($(1, 0, 0)$, $cor$, $peso$)\;\tcc{Vermelho}
+            $cor \leftarrow$ mix($(1, 0, 0)$, $cor$, $peso$)\;\tcc{Vermelho}
         }\Else{
-            $cor =$ mix($(0, 0, 1)$, $cor$, $peso$)\;\tcc{Azul}
+            $cor \leftarrow$ mix($(0, 0, 1)$, $cor$, $peso$)\;\tcc{Azul}
         }
     }
     
@@ -596,17 +596,17 @@ bioma fará interpolação quando for sua flag $acimaFlag$ for verdadeira. Entã
 será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:borderColor}.
 
 \begin{algorithm}[H]\label{alg:borderColorr}%Usando parâmetro e não k
-    $BH_{x} =$ Algoritmo\ref{alg:borderTest}($x$)\;
-    $BH_{z} =$ Algoritmo\ref{alg:borderTest}($z$)\;
+    $BH_{x} \leftarrow$ Algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} \leftarrow$ Algoritmo\ref{alg:borderTest}($z$)\;
     
     \If {$BH_{x}.bordaFlag$}{
         \If {$BH_{x}.acimaFlag$}{
-            $cor =$ mix($(0, 0, 0)$, $cor$, $peso$)\;\tcc{Preto}
+            $cor \leftarrow$ mix($(0, 0, 0)$, $cor$, $peso$)\;\tcc{Preto}
         }
     }
     \If {$BH_{z}.bordaFlag$}{
         \If {$BH_{z}.acimaFlag$}{
-            $cor =$ mix($(1, 0, 0)$, $cor$, $peso$)\;\tcc{Vermelho}
+            $cor \leftarrow$ mix($(1, 0, 0)$, $cor$, $peso$)\;\tcc{Vermelho}
         }
     }
     
@@ -681,7 +681,9 @@ vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
 Ainda resta juntar os alguns algoritmos em ordem...
 
 \begin{algorithm}[H]\label{alg:vertexValuationm}%Usando parâmetro e não k
-    $Bioma \leftarrow $Algoritmo\ref{alg:getBiomeXZ}($x, y$)\;
+    \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
+    \Input{$x \in \mathbb{Q}, z \in \mathbb{Q}$}
+    $Bioma \leftarrow $Algoritmo\ref{alg:getBiomeXZ}($x, z$)\;
     $afxz \leftarrow k/f_{Bioma}$\;
     $h' \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma}$)\;
     $cor \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma}, midColor_{Bioma}, maxColor_{Bioma}, h'$)\;
