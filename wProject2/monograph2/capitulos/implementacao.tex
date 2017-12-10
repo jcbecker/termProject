@@ -431,7 +431,7 @@ o algoritmo \ref{alg:getBiomeXZ}.
 \end{algorithm}
 
 A variável $biomaTipo$ tem valoração inteira, então é possivel olhar a tabela \ref{tab:bioColors}
-o campo int id para saber qual valor inteiro é associado a qual bioma, $biomaTipo \in \{Planícies, Montanhas, Vales, Deserto, Cânyons\}$
+o campo int id para saber qual valor inteiro é associado a qual bioma, $biomaTipo \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$
 $fb$ é a variavel que dita a frequencia na variação de biomas e $const$ é uma constante,
 $const \in \mathbb{Q}$, a constante previne que o parametro seja sempre inteiro, quando $fb$ é um valor muito baixo,
 a possibilidade de dxs e dzs serem inteiros é grande e quando parâmetros de Noise 
@@ -675,6 +675,18 @@ vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
     
     \caption{Interpolação nas fronteiras.}
 \end{algorithm}
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][Não usando algoritmo \ref{alg:borderFinal}] {\includegraphics[width=0.48\textwidth]{figuras/border/a9/1s.png}\label{fig:nhaha1s}}\hspace{0.1cm}
+     \subfloat[][Usando algoritmo \ref{alg:borderFinal}]{\includegraphics[width=0.48\textwidth]{figuras/border/a9/1c.png}\label{fig:nhaha1c}}\\
+     \subfloat[][Não usando algoritmo \ref{alg:borderFinal}] {\includegraphics[width=0.48\textwidth]{figuras/border/a9/4s.png}\label{fig:nhaha4s}}\hspace{0.1cm}
+     \subfloat[][Usando algoritmo \ref{alg:borderFinal}]{\includegraphics[width=0.48\textwidth]{figuras/border/a9/4c.png}\label{fig:nhaha4c}}\\
+     \caption{Mostrando uso do algoritmo \ref{alg:borderFinal}.}
+     
+     \label{fig:a9usingandnot}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
 
 \section{Valoração dos vértices}
 

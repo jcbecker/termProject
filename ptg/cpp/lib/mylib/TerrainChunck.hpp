@@ -372,7 +372,7 @@ private:
                 
             }
         }
-        
+        /*
         if(r.BioTp == DESERT){
             if(someAuxforX.isBorder && !someAuxforZ.isBorder){
                 if(someAuxforX.borderAbove){
@@ -391,10 +391,8 @@ private:
                     
                 }
             }
-            
-            
         }
-        
+        */
         
         return r;
     }
