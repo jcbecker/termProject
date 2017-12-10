@@ -224,11 +224,11 @@ $cor$ no algorimo \ref{alg:colorValuation} é o valor recebido pelo algoritmo \r
 quando chama $hEvaluation(x_{s} + i, z_{s} + j).cor$.
 
 \begin{algorithm}[H]\label{alg:colorValuation}
-    $auxNoise = clamp(h', -1, 1)$\;
+    $auxNoise =$ clamp($h', -1, 1$)\;
     \If {$auxNoise < 0$}{
-        cor = $mix(midColor, minColor, auxNoise \cdot -1)$\;
+        $cor =$ mix($midColor, minColor, auxNoise \cdot -1$)\;
     }\Else{
-        cor = $mix(midColor, maxColor, auxNoise)$\;
+        $cor =$ mix($midColor, maxColor, auxNoise$)\;
     }
     
     \caption{Coloração de vértices.}
@@ -277,16 +277,16 @@ também tem uma função de manipulação do ruído, que é usar o valor $h'$ e 
 para gerar a altura $h$.
 
 \begin{algorithm}[H]\label{alg:hBioValuation}
-    \If {biomaTipo == Planícies}{
+    \If {biomaTipo = Planícies}{
         $h = h' \cdot 10$\;
     }
-    \uElseIf{biomaTipo == Montanhas}{
+    \uElseIf{biomaTipo = Montanhas}{
         $h = 1.5^{h'\cdot 7}\cdot 5$\;
     }
-    \uElseIf{biomaTipo == Vales}{
+    \uElseIf{biomaTipo = Vales}{
         $h = ($clamp($h', -0.5, 1.0$)$\cdot 5)^{3}$\;
     }
-    \uElseIf{biomaTipo == Deserto}{
+    \uElseIf{biomaTipo = Deserto}{
         $h = h' \cdot 16$\;
     }
     \Else{
@@ -316,36 +316,6 @@ os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.5\textwidth]{figuras/bssPlains.png}
-%    \caption{Planícies}
-%    \label{fig:bssPlains}
-%\end{figure}
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.5\textwidth]{figuras/bssMontains.png}
-%    \caption{Montanhas}
-%    \label{fig:bssMontains}
-%\end{figure}
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.5\textwidth]{figuras/bssValley.png}
-%    \caption{Vales}
-%    \label{fig:bssValley}
-%\end{figure}
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.5\textwidth]{figuras/bssDesert.png}
-%    \caption{Deserto}
-%    \label{fig:bssDesert}
-%\end{figure}
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.5\textwidth]{figuras/bssCanyons.png}
-%    \caption{Cânyons}
-%    \label{fig:bssCanyons}
-%\end{figure}
 \section{Separando Áreas de Biomas}
 Para separar áreas de biomas com tamanho $b$ e escolher um $biomaTipo$ nessas áreas
 vamos usar o seguinte algoritmo, considerando $dxs, dzs \in \mathbb{Q}$ e $di, dj \in \mathbb{N}$.
@@ -360,8 +330,8 @@ vamos usar o seguinte algoritmo, considerando $dxs, dzs \in \mathbb{Q}$ e $di, d
     \If {$dzs < 0$}{
         $dzs -= 1$\;
     }
-    $dxs = $trunc$(dxs)$\;
-    $dzs = $trunc$(dzs)$\;
+    $dxs =$ trunc($dxs$)\;
+    $dzs =$ trunc($dzs$)\;
     $di = dxs$\;
     $dj = dzs$\;
     \If {$di\%2$}{
@@ -443,14 +413,14 @@ o algoritmo \ref{alg:getBiomeXZ}.
     \If {$dzs < 0$}{
         $dzs -= 1$\;
     }
-    $dxs = $trunc$(dxs)$\;
-    $dzs = $trunc$(dzs)$\;
+    $dxs =$ trunc($dxs$)\;
+    $dzs =$ trunc($dzs$)\;
     
-    $areaValue = $Noise$((dxs + const)/fb, (dzs + const)/fb)$\;
+    $areaValue =$ Noise$((dxs + const)/fb, (dzs + const)/fb)$\;
     $areaValue \cdot = 0.5$\;
     $areaValue += 0.5$\;
-    $areaValue = $clamp$(areaValue, 0, 0.99)$\;
-    $biomaTipo = $trunc$(areaValue \cdot \bar{N})$\;\tcc{$\bar{N} = 5$ Quantidade de biomas distintos}
+    $areaValue =$ clamp($areaValue, 0, 0.99$)\;
+    $biomaTipo =$ trunc($areaValue \cdot \bar{N}$)\;\tcc{$\bar{N} = 5$ Quantidade de biomas distintos}
     \caption{Escolhendo biomas em áreas de tamanho $b$.}
 \end{algorithm}
 
@@ -532,17 +502,17 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
         $borada''  \cdot = -1$\;
     }
     \tcc{Precisamos respeitar a restrição $l < b/2$ para o algoritmo entrar em apenas um dos seguintes casos}
-    \If {$abs(borda' - in) < l$}{
+    \If {abs$(borda' - in) < l$}{
         \tcc{Caso1: $in$ é fronteira, e a fronteira está acima de $in$}
         $BH.bordaFlag = $true\;
         $BH.acimaFlag = $true\;
-        $BH.pDist = abs(borda' - in)/ l$\;
+        $BH.pDist =$ abs$(borda' - in)/ l$\;
     }
-    \uElseIf{$abs(borda'' - in) < l$}{
+    \uElseIf{abs$(borda'' - in) < l$}{
         \tcc{Caso2: $in$ é fronteira, e a fronteira está abaixo de $in$}
         $BH.bordaFlag = $true\;
         $BH.acimaFlag = $false\;
-        $BH.pDist = abs(borda'' - in)/ l$\;
+        $BH.pDist =$ abs$(borda'' - in)/ l$\;
     }
     \Else{
         \tcc{Caso3: $in$ não é fronteira}
@@ -558,21 +528,21 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
 Para analisar esse valoers é possivel colorir as fronteiras...
 
 \begin{algorithm}[H]\label{alg:borderColor}%Usando parâmetro e não k
-    $BH_{x} = $algoritmo\ref{alg:borderTest}($x$)\;
-    $BH_{z} = $algoritmo\ref{alg:borderTest}($z$)\;
+    $BH_{x} =$ Algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} =$ Algoritmo\ref{alg:borderTest}($z$)\;
     
     \If {$BH_{x}.bordaFlag$}{
         \If {$BH_{x}.acimaFlag$}{
-            cor = mix($(0, 0, 0)$, cor, $peso$)\;\tcc{Preto}
+            $cor =$ mix($(0, 0, 0)$, $cor$, $peso$)\;\tcc{Preto}
         }\Else{
-            cor = mix($(1, 1, 1)$, cor, $peso$)\;\tcc{Branco}
+            $cor =$ mix($(1, 1, 1)$, $cor$, $peso$)\;\tcc{Branco}
         }
     }
     \If {$BH_{z}.bordaFlag$}{
         \If {$BH_{z}.acimaFlag$}{
-            cor = mix($(1, 0, 0)$, cor, $peso$)\;\tcc{Vermelho}
+            $cor =$ mix($(1, 0, 0)$, $cor$, $peso$)\;\tcc{Vermelho}
         }\Else{
-            cor = mix($(0, 0, 1)$, cor, $peso$)\;\tcc{Azul}
+            $cor =$ mix($(0, 0, 1)$, $cor$, $peso$)\;\tcc{Azul}
         }
     }
     
@@ -608,26 +578,26 @@ da figura \ref{fig:borderlenanotherauxyeahp}, são os mesmos das imagens \ref{fi
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Desta maneira, cada área de bioma $(di, dj)$ teria que ser responsável de fazer suavisação da 
+Desta maneira, cada área de bioma $(dxs, dzs)$ teria que ser responsável de fazer suavisação da 
 fronteira com seus $8$ vizinhos 
-$\{(di+1, dj+1), (di+1, dj), (di+1, dj-1), (di, dj+1), (di, dj-1), (di-1, dj+1), (di-1, dj), (di-1, dj-1)\}$
+$\{(dxs+1, dzs+1), (dxs+1, dzs), (dxs+1, dzs-1), (dxs, dzs+1), (dxs, dzs-1), (dxs-1, dzs+1), (dxs-1, dzs), (dxs-1, dzs-1)\}$
 , é possivel fazer com que cada bioma faça suavisação com apenas 3 vizinhos, no caso do 
-$(di, dj)$, fará com $\{(di+1, dj), (di, dj+1), (di+1, dj+1)\}$, assim cada 
+$(dxs, dzs)$, fará com $\{(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)\}$, assim cada 
 bioma fará interpolação quando for sua flag $acimaFlag$ for verdadeira. Então
 será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:borderColor}.
 
 \begin{algorithm}[H]\label{alg:borderColorr}%Usando parâmetro e não k
-    $BH_{x} = $algoritmo\ref{alg:borderTest}($x$)\;
-    $BH_{z} = $algoritmo\ref{alg:borderTest}($z$)\;
+    $BH_{x} =$ Algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} =$ Algoritmo\ref{alg:borderTest}($z$)\;
     
     \If {$BH_{x}.bordaFlag$}{
         \If {$BH_{x}.acimaFlag$}{
-            cor = mix($(0, 0, 0)$, cor, $peso$)\;\tcc{Preto}
+            $cor =$ mix($(0, 0, 0)$, $cor$, $peso$)\;\tcc{Preto}
         }
     }
     \If {$BH_{z}.bordaFlag$}{
         \If {$BH_{z}.acimaFlag$}{
-            cor = mix($(1, 0, 0)$, cor, $peso$)\;\tcc{Vermelho}
+            $cor =$ mix($(1, 0, 0)$, $cor$, $peso$)\;\tcc{Vermelho}
         }
     }
     
@@ -655,47 +625,62 @@ vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
 \end{figure}
 
 \begin{algorithm}[H]\label{alg:borderFinal}%Usando parâmetro e não k
-    $BH_{x} = $algoritmo\ref{alg:borderTest}($x$)\;
-    $BH_{z} = $algoritmo\ref{alg:borderTest}($z$)\;
-    $h_{p} = h$\;
-    $cor_{p} = cor$\;
+    $BH_{x} \leftarrow$ Algoritmo\ref{alg:borderTest}($x$)\;
+    $BH_{z} \leftarrow$ Algoritmo\ref{alg:borderTest}($z$)\;
+    $h_{p} \leftarrow h$\;
+    $cor_{p} \leftarrow cor$\;
     \tcc{Caso1: $(x, z)$ é fronteira em $x$}
     \If {$BH_{x}.bordaFlag \land BH_{x}.acimaFlag$}{
-        $Bioma_{xp}$ = Algoritmo\ref{alg:getBiomeXZ}($x + l, z$)\;
-        $afxy = k/f_{Bioma_{xp}}$\;
-        $h'_{xp} =$ perlinNoise$(x/afxy, z/afxy, \theta_{Bioma_{xp}})$\;
-        $h_{xp} =$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xp}$, $h'_{xp}$)\;
-        $cor_{xp} = $Algoritmo\ref{alg:colorValuation}$(minColor_{Bioma_{xp}}, midColor_{Bioma_{xp}}, maxColor_{Bioma_{xp}})$\;
+        $Bioma_{xp} \leftarrow$ Algoritmo\ref{alg:getBiomeXZ}($x + l, z$)\;
+        $afxz \leftarrow k/f_{Bioma_{xp}}$\;
+        $h'_{xp} \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma_{xp}}$)\;
+        $h_{xp} \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xp}$, $h'_{xp}$)\;
+        $cor_{xp} \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma_{xp}}, midColor_{Bioma_{xp}}, maxColor_{Bioma_{xp}}, h'_{xp}$)\;
         \tcc{Interpolação linear}
-        $h = $ mix($h_{xp}, h_{p}, BH_{x}.pDist$)\;
-        $cor $=  mix($cor_{xp}, cor_{p}, BH_{x}.pDist$)\;
+        $h \leftarrow$ mix($h_{xp}, h_{p}, BH_{x}.pDist$)\;
+        $cor \leftarrow$  mix($cor_{xp}, cor_{p}, BH_{x}.pDist$)\;
     }
     \tcc{Caso2: $(x, z)$ é fronteira em $z$}
     \If {$BH_{z}.bordaFlag \land BH_{z}.acimaFlag$}{
-        $Bioma_{zp}$ = Algoritmo\ref{alg:getBiomeXZ}($x, z + l$)\;
-        $afxy = k/f_{Bioma_{zp}}$\;
-        $h'_{zp} =$ perlinNoise$(x/afxy, z/afxy, \theta_{Bioma_{zp}})$\;
-        $h_{zp} =$ Algoritmo\ref{alg:hBioValuation}($Bioma_{zp}$, $h'_{zp}$)\;
-        $cor_{zp} = $Algoritmo\ref{alg:colorValuation}$(minColor_{Bioma_{zp}}, midColor_{Bioma_{zp}}, maxColor_{Bioma_{zp}})$\;
+        $Bioma_{zp} \leftarrow$ Algoritmo\ref{alg:getBiomeXZ}($x, z + l$)\;
+        $afxz \leftarrow k/f_{Bioma_{zp}}$\;
+        $h'_{zp} \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma_{zp}}$)\;
+        $h_{zp} \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma_{zp}$, $h'_{zp}$)\;
+        $cor_{zp} \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma_{zp}}, midColor_{Bioma_{zp}}, maxColor_{Bioma_{zp}}, h'_{zp}$)\;
         \tcc{Interpolação linear}
-        $h = $ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
-        $cor $=  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
+        $h \leftarrow$ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
+        $cor \leftarrow$  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
     }
     \tcc{Caso 3: $(x, z)$ é fronteira em $x$ e $z$}
     \If {$BH_{z}.bordaFlag \land BH_{x}.bordaFlag \land BH_{z}.acimaFlag \land BH_{x}.acimaFlag$}{
-        $Bioma_{xzp}$ = Algoritmo\ref{alg:getBiomeXZ}($x + l, z + l$)\;
-        $afxy = k/f_{Bioma_{xzp}}$\;
-        $h'_{xzp} =$ perlinNoise$(x/afxy, z/afxy, \theta_{Bioma_{xzp}})$\;
-        $h_{xzp} =$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xzp}$, $h'_{xzp}$)\;
-        $cor_{xzp} = $Algoritmo\ref{alg:colorValuation}$(minColor_{Bioma_{xzp}}, midColor_{Bioma_{xzp}}, maxColor_{Bioma_{xzp}})$\;
+        $Bioma_{xzp} \leftarrow$ Algoritmo\ref{alg:getBiomeXZ}($x + l, z + l$)\;
+        $afxz \leftarrow k/f_{Bioma_{xzp}}$\;
+        $h'_{xzp} \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma_{xzp}}$)\;
+        $h_{xzp} \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma_{xzp}$, $h'_{xzp}$)\;
+        $cor_{xzp} \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma_{xzp}}, midColor_{Bioma_{xzp}}, maxColor_{Bioma_{xzp}}, h'_{xzp}$)\;
         \tcc{Interpolação biliniar com os 4 biomas}
-        $h_{i1} = $mix($h_{xzp}, h_{xp}, BH_{z}.pDist$)\;
-        $cor_{i1} = $mix($cor_{xzp}, cor_{xp}, BH_{z}.pDist$)\;
-        $h_{i2} = $ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
-        $cor_{i2} =$  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
-        $h =$ mix($h_{i1}, h_{i2}, BH_{x}.pDist$)\;
-        $cor =$ mix($cor_{i1}, cor_{i2}, BH_{x}.pDist$)\;
+        $h_{i1} \leftarrow$ mix($h_{xzp}, h_{xp}, BH_{z}.pDist$)\;
+        $cor_{i1} \leftarrow$ mix($cor_{xzp}, cor_{xp}, BH_{z}.pDist$)\;
+        $h_{i2} \leftarrow$ mix($h_{zp}, h_{p}, BH_{z}.pDist$)\;
+        $cor_{i2} \leftarrow$  mix($cor_{zp}, cor_{p}, BH_{z}.pDist$)\;
+        $h \leftarrow$ mix($h_{i1}, h_{i2}, BH_{x}.pDist$)\;
+        $cor \leftarrow$ mix($cor_{i1}, cor_{i2}, BH_{x}.pDist$)\;
     }
     
-    \caption{Suavizando fronteiras.}
+    \caption{Interpolação nas fronteiras.}
+\end{algorithm}
+
+\section{Valoração dos vértices}
+
+Ainda resta juntar os alguns algoritmos em ordem...
+
+\begin{algorithm}[H]\label{alg:vertexValuationm}%Usando parâmetro e não k
+    $Bioma \leftarrow $Algoritmo\ref{alg:getBiomeXZ}($x, y$)\;
+    $afxz \leftarrow k/f_{Bioma}$\;
+    $h' \leftarrow$ perlinNoise($x/afxz, z/afxz, \theta_{Bioma}$)\;
+    $cor \leftarrow$ Algoritmo\ref{alg:colorValuation}($minColor_{Bioma}, midColor_{Bioma}, maxColor_{Bioma}, h'$)\;
+    $h \leftarrow$ Algoritmo\ref{alg:hBioValuation}($Bioma$, $h'$)\;
+    Algoritmo\ref{alg:borderFinal}\;
+    retorna $cor, h$\;
+    \caption{Valoração de vértices.}
 \end{algorithm}
