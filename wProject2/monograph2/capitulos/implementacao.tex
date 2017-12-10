@@ -213,10 +213,52 @@ Usando $f = 8, amp = 30$ e $\theta = 8, seed = 15$ e variando a seed.
 
 
 \subsection{Cores}
-Como em um jogo o terreno é representado por segmentos de planos e não um conjunto
-de vértices e arestas, vamos colorir o terreno apenas para facilitar um pouco a
+Como em um jogo o terreno é representado por segmentos de planos, polignos preenchidos e não um conjunto
+de vértices e arestas, portanto será colorido o terreno apenas para facilitar um pouco a
 vizualização do mesmo. O valor $h'$ vai ficar com valores entre $-1$ e $1$, 
-quando passar desse intervalo temos certeza que $-2 < h' > 2$.
+quando passar desse intervalo temos certeza que $-2 < h' > 2$, já que a função Noise 
+usa um gradiente para gerar seus valores e o seu resultado jamais vai ser maior que $1$
+e menor que $-1$ \cite{perlin1985image}, a entrada da função noise será um ponto($point$) no espaço, e $point \in \mathbb{Q}^{3}$.
+Na equação \ref{eq:thePerlinNoise} temos a recorrência de somatório da função
+\textit{Perlin Noise}, já nas equeções \ref{eq:thePerlinNoisedesg1} e \ref{eq:thePerlinNoisedesg2}
+observasse os valores de borda, caso a função de \textit{Noise} sempre retornasse $1$ ou $-1$
+
+\begin{equation}\label{eq:thePerlinNoise}
+  \begin{split}
+    perlinNoise(point, \theta) = \sum_{t=0}^{t=\theta} \frac{Noise(point \cdot 2^{t})}{2^{t}}
+  \end{split}
+\end{equation}
+A equação \ref{eq:thePerlinNoisedesg1} apresenta um caso desgenerado caso a função
+\textit{Noise} sempre retornar $1$, o resultado de $2^{-\theta} \cdot (2^{\theta +1}-1)$
+apresenta o maior valor possivel retornado na função \textit{perlinNoise} em função da quantidade 
+de oitavas($\theta$), analogamente a equação \ref{eq:thePerlinNoisedesg2} representa o menor valor.
+ 
+\begin{equation}\label{eq:thePerlinNoisedesg1}
+  \begin{split}
+    \sum_{t=0}^{t=\theta} \frac{1}{2^{t}} = 2^{-\theta} \cdot (2^{\theta +1}-1)
+  \end{split}
+\end{equation}
+\begin{equation}\label{eq:thePerlinNoisedesg2}
+  \begin{split}
+    \sum_{t=0}^{t=\theta} -\frac{1}{2^{t}} = -2^{-\theta} \cdot (2^{\theta +1}-1)
+  \end{split}
+\end{equation}
+
+\begin{table}[H]
+    \centering
+    \caption{Tabela de casos de borda para alguns valores de $\theta$.}
+    \label{tab:degenerateNoise}
+    \begin{tabular}{| c | c c c c c c|}
+        \hline
+        $\theta$ & $0$ & $1$ & $2$ & $3$ & $4$ & $\infty$\\
+        \hline
+        $2^{-\theta} \cdot (2^{\theta +1}-1)$           & $1$  & $\frac{3}{2}$ & $\frac{7}{4}$ & $\frac{15}{8}$    & $\frac{31}{16}$ &   \\
+        Decimal na equação \ref{eq:thePerlinNoisedesg1} & $1$  & $1.5$   & $1.75$  & $1.875$ & $1.9375$  & $2$  \\
+        Decimal na equação \ref{eq:thePerlinNoisedesg2} & $-1$ & $-1.5$  & $-1.75$ & $-1.875$ & $1.9375$ & $-2$  \\
+        \hline
+    \end{tabular}
+\end{table}
+
 %DEBUG: preciso mostrar a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
 Então podemos
 usar o algoritmo \ref{alg:colorValuation} para definir a cor do vértice baseado na altura.
@@ -319,6 +361,10 @@ os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
      \label{fig:bssComBiomasFixados}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
+
+Para acessar os valores de algum bioma descrito na tabela \ref{tab:bioColors} como oitava por exemplo
+é denotado como $\theta_{biomaTipo}$, fixando em algum bioma específico como nas imagens \ref{fig:bssComBiomasFixados}
+é notado como $\theta_{Planícies}$.
 
 \section{Separando Áreas de Biomas}
 Para separar áreas de biomas com tamanho $b$ e escolher um $biomaTipo$ nessas áreas

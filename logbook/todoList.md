@@ -7,7 +7,7 @@
 * um comentario exemplefica como usar vários VAOs https://www.opengl.org/discussion_boards/showthread.php/185119-Understanding-VAO-s-VBO-s-and-drawing-two-objects
 * aprender a usar geometry shader
 
-* Reocmendável mudar Revisão Bibliográfica para Referencial Teórico e Representação Adotada
+* Reocmendável mudar Revisão Bibliográfica e Referencial Teórico e Representação Adotada
 
 * Resultados um capítulo
 
