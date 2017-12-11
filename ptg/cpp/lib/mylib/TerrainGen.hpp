@@ -23,7 +23,7 @@ public:
         this->vertexInterval = 0.5;
         this->chunckSize = 1024*2;
         this->biomeSize = 512;
-        this->borderLen = 128;
+        this->borderLen = 255;
     //    this->globalPos = glm::vec3(0.0f, 17.0f, -25.0f)
         tca1 = new TerrainChunck(this->seed, this->vertexInterval, this->chunckSize, this->chunckSize/2.0f*-1.0f,  this->chunckSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
     //    tca2 = new TerrainChunck(this->seed, this->vertexInterval, this->chunckSize, 0, 0, this->biomeSize, this->borderLen);

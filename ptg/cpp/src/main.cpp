@@ -87,7 +87,7 @@ int main(){
     
     
     rebuildflag = false;
-    TerrainGen tManager(3, terrainProgram.ID);
+    TerrainGen tManager(0, terrainProgram.ID);
     
     
     glViewport(0, 0, ISCR_W, ISCR_H);
@@ -215,8 +215,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         //cam->pos = glm::vec3(-62.243267, 167.922119, 466.284637);
         //cam->front = glm::vec3(0.751850, -0.372178, -0.544247);
         //(463.676422, 834.113159, -979.279053),(0.012264, -0.624562, 0.780879)
-        cam->pos = glm::vec3(463.676422, 834.113159, -979.279053);
-        cam->front = glm::vec3(0.012264, -0.624562, 0.780879);
+        cam->pos = glm::vec3(42.237156, 142.904083, -199.660156);
+        cam->front = glm::vec3(0.921904, -0.365689, -0.127925);
         
     }
     
