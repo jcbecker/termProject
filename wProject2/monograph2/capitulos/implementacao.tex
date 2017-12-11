@@ -20,7 +20,7 @@
 %\subsection{Usando os Buffers do OpenGL e GLSL}
 %DEBUG: Mover para fundamentação teórica?
 
-\subsubsection{Descrição dos vértices}
+\section{Descrição dos vértices}
 Um vértice $v$ é um conjunto de informações relacionadas a alguma unidade, %DEBUG: trocar o termo unidade
 a informação necessária para este projeto é posição no espaço, então cada vértice
 vai possuir uma posição notada por $v.pos$, e $v.pos$ é composto por 
@@ -29,7 +29,7 @@ informação auxiliar, usada para melhor visualização dos resultados,
 representada por $\{r, g, b \in \mathbb{Q}:0 \leq r, g, b \leq 1\}$ onde cada um desses
 vai referir a proporção de vermelho, verde e azul respectivamente.
 
-\subsubsection{Implementação do sistema de Navegação}
+%\subsubsection{Implementação do sistema de Navegação}
 
 \section{\textit{Terrain chunk}}
 Representando um fragmento do terreno, o objeto \textit{Terrain chunk} é responsável
@@ -341,8 +341,9 @@ algoritmo \ref{alg:colorValuation} por que estão em formatos diferentes, então
 que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . E cada uma das cores recebe um valor
 $0 \leq r, g, b \leq 1$.
 Além de cada bioma ter uma frequência ($f$) e quantidade de oitavas ($\theta$) associadas
-também tem uma função de manipulação do ruído, que é usar o valor $h'$ e um bioma
-para gerar a altura $h$.
+também tem uma função de manipulação do ruído, o Algoritmo \ref{alg:hBioValuation}, 
+como entrada tem o valor $h'$ e $biomaTipo$ para definir a maneira com que a altura vai ser
+calculada.
 
 \begin{algorithm}[H]\label{alg:hBioValuation}
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -371,20 +372,6 @@ Quando fixados os valores de cores com as mostradas
 na tabela \ref{tab:bioColors} e de $biomaTipo$, usando o
 algoritmo \ref{alg:hBioValuation} é gerado mapas com um bioma,
 os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
-
-\begin{figure}[H]
-     \centering
-     \subfloat[][$biomaTipo =$ Planícies]{\includegraphics[width=0.48\textwidth]{figuras/bssPlains.png}\label{fig:biomaTipo1}}\hspace{0.1cm}
-     \subfloat[][$biomaTipo =$ Montanhas]{\includegraphics[width=0.48\textwidth]{figuras/bssMontains.png}\label{fig:biomaTipo2}}\\
-     \subfloat[][$biomaTipo =$ Vales]{\includegraphics[width=0.48\textwidth]{figuras/bssValley.png}\label{fig:biomaTipo3}}\hspace{0.1cm}
-     \subfloat[][$biomaTipo =$ Deserto]{\includegraphics[width=0.48\textwidth]{figuras/bssDesert.png}\label{fig:biomaTipo4}}\\
-     \subfloat[][$biomaTipo =$ Cânyons]{\includegraphics[width=0.48\textwidth]{figuras/bssCanyons.png}\label{fig:biomaTipo5}}
-     
-     \caption{Resultado dos Biomas fixados.}
-     
-     \label{fig:bssComBiomasFixados}
-     % usar \hspace{0.1cm}, é gambiarra mas funciona
-\end{figure}
 
 Para acessar os valores de algum bioma descrito na tabela \ref{tab:bioColors} como oitava por exemplo
 é denotado como $\theta_{biomaTipo}$, fixando em algum bioma específico como nas imagens \ref{fig:bssComBiomasFixados}

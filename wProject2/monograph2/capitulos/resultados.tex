@@ -1,11 +1,104 @@
 \chapter{Resultados}
+Com a técnica de geração procedural de terrenos proposta neste trabalho, é possivel criar uma 
+malha de triângulos para desenhar o terreno, a abordagem é procedural, sem nenhuma 
+intervenção humana, os resultados apresentam regiões para diferentes aspectos de terrenos,
+os biomas, o algoritmo proposto é capaz de deixar as fronteiras entre estes com carácteristicas 
+contínuas, tendo uma transição gradual e linear entre os biomas.
+
+Cada bioma tem seus parâmetros para o ruído de \textit{perlin}, que são as oitavas ($\theta$)
+e a freqência ($f$), 'deserto' e 'planícies' tem aparências mais onduladas, potanto tem
+um valor menor em $\theta$. Além dos parâmetros do ruído a maneira com que cada 
+bioma usa o retorno gerado pela função ($h'$) também é diferente, este valor de retorno
+é usado para calcular a cor e cada bioma tem três cores para decedir como fazer o cálculo de interpolação
+de cores, uma cor para alturas mais elevadas, medianas e baixas. Outro uso do $h'$
+é como parâmetro para decedir a altura, e cada bioma tem uma maneira diferente de fazer
+este cálculo, as 'planícies' e 'deserto' apenas multiplicam $h'$ por um escalar, enquanto
+'montanhas' usam exponenciais, já o 'deserto' usa \textit{clamp} em $h'$ para depois
+usar um expoente. Os resultados de cada bioma podem ser vistos nas imagens \ref{fig:bssComBiomasFixados}.
+O trabalho de definir o compartamento de cada bioma com os parâmetros apresentados 
+e tanto quanto artístico, de nenhuma maneira este trabalho tenta fazer grandes aproximações
+com os aspectos encontrados na natureza, a proposta aqui feita é mostrar como usar
+a saída do ruído de perlin para poder criar diferentes caracteristicas em algum terreno, e em 
+seguida mostrar uma maneira procedural de separar estes biomas em regiões, e criar fronteiras
+entre biomas distintos de maneira contínua, mesmo com esta diferença de aspectos.
+
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{figuras/resultados/sseditada.png}
+%    \caption{sseditada}
+%    \label{fig:sseditada}
+%\end{figure}
+\begin{figure}[H]
+     \centering
+     \subfloat[][$biomaTipo =$ Planícies]{\includegraphics[width=0.48\textwidth]{figuras/bssPlains.png}\label{fig:biomaTipo1}}\hspace{0.1cm}
+     \subfloat[][$biomaTipo =$ Montanhas]{\includegraphics[width=0.48\textwidth]{figuras/bssMontains.png}\label{fig:biomaTipo2}}\\
+     \subfloat[][$biomaTipo =$ Vales]{\includegraphics[width=0.48\textwidth]{figuras/bssValley.png}\label{fig:biomaTipo3}}\hspace{0.1cm}
+     \subfloat[][$biomaTipo =$ Deserto]{\includegraphics[width=0.48\textwidth]{figuras/bssDesert.png}\label{fig:biomaTipo4}}\\
+     \subfloat[][$biomaTipo =$ Cânyons]{\includegraphics[width=0.48\textwidth]{figuras/bssCanyons.png}\label{fig:biomaTipo5}}
+     
+     \caption{Resultado dos Biomas fixados.}
+     
+     \label{fig:bssComBiomasFixados}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+As regiões dos biomas são separadas em áreas quadradas de proporção $b$, para defenir
+qual bioma pertence a cada área é usado ruído, mais uma vez, mas dessa vez são em valores
+truncados da localização dividida por $b$, e temos o parâmetro $fb$ que define a freqência nas
+mudanças de bioma. A influência destes parâmetros podem ser visualizados nas imagens \ref{fig:comparandoareadebiomasyeah} e \ref{fig:comparandofreqdebiomasyeah}.
+
+Uma das vantagens de usar ruído para decedir qual bioma pertence a qual 
+região é que ele matem próximo biomas de valores parecidos, neste trabalho a ordem de 
+valores usados foi \{Planícies, Montanhas, Vales, Deserto e Cânyons\}, então temos as seguintes
+caracteristicas encontradas, 'planícies' e 'cânyons' estão nas extremidades, então eles 
+tem ocorencias raras, 'planícies' costumam ser rodeados por montanhas, 'cânyons' costumam
+ser rodeados por 'deserto', provavelmente terá a ocorencia de 'vales' entre 'montanhas' e 'desertos'.
+Isso pode ser facilmente ser usado para desenvolver um jogo na hora de distribuir 
+a raridade dos biomas e a problidade de proximidade entre eles, isso é vizivel em algumas das imagens \ref{fig:comparandofreqdebiomasyeah}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{figuras/resultados/sseditada.png}
-    \caption{sseditada}
-    \label{fig:sseditada}
+     \centering
+     \subfloat[][$b = 16$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/b/16f4.png}\label{fig:re2bfb_b_16f4}}\hspace{0.1cm}
+     \subfloat[][$b = 32$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/b/32f4.png}\label{fig:re2bfb_b_32f4}}\hspace{0.1cm}
+     \subfloat[][$b = 64$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/b/64f4.png}\label{fig:re2bfb_b_64f4}}\\
+     \subfloat[][$b = 128$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/b/128f4.png}\label{fig:re2bfb_b_128f4}}\hspace{0.1cm}
+     \subfloat[][$b = 256$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/b/256f4.png}\label{fig:re2bfb_b_256f4}}\hspace{0.1cm}
+     \subfloat[][$b = 512$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/b/512f4.png}\label{fig:re2bfb_b_512f4}}
+     
+     \caption{Diferentes tamanhos para áreas de bioma($b$), usando $fb = 4$.}
+     
+     \label{fig:comparandoareadebiomasyeah}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][$fb = 0.5$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/fb/05b32.png}\label{fig:re2bfb_fb_05b32}}\hspace{0.1cm}
+     \subfloat[][$fb = 1$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/fb/1b32.png}\label{fig:re2bfb_fb_1b32}}\hspace{0.1cm}
+     \subfloat[][$fb = 8$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/fb/8b32.png}\label{fig:re2bfb_fb_8b32}}\\
+     \subfloat[][$fb = 16$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/fb/16b32.png}\label{fig:re2bfb_fb_16b32}}\hspace{0.1cm}
+     \subfloat[][$fb = 32$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/fb/32b32.png}\label{fig:re2bfb_fb_32b32}}\hspace{0.1cm}
+     \subfloat[][$fb = 64$]{\includegraphics[width=0.31\textwidth]{figuras/re2bfb/fb/64b32.png}\label{fig:re2bfb_fb_64b32}}
+     
+     \caption{Diferentes freqências de biomas, para tamanho de área $b = 32$.}
+     
+     \label{fig:comparandofreqdebiomasyeah}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
+
+Para a fronteira entre os biomas distintos obter uma forma mais orgânica, e deixar o 
+terreno com melhor jogabilidade, já que descontinuidade no terreno seria um empecilho em alguns jogos.
+Foi feito interpolação linear nas ocorencias de fronteiras, nas diagonais de área de bioma foi 
+usado interpolação bilinear, já que o mesmo cobre o pior caso, que é fronteira entre quatro biomas distintos.%debug: figura pior caso ref aqui
+
+A distância em que uma interpolação começa a ser feita é definida pelo parâmetro $l$,
+quanto maior for $l$ maior será a área de interpolação, e mais suave será transição de um bioma para o outro.
+
+
+
+
+
+
 
 
 \begin{figure}[H]
