@@ -21,19 +21,17 @@
 %DEBUG: Mover para fundamentação teórica?
 
 \section{Descrição dos vértices}
-Um vértice $v$ é um conjunto de informações relacionadas a alguma unidade, %DEBUG: trocar o termo unidade
-a informação necessária para este projeto é posição no espaço, então cada vértice
-vai possuir uma posição notada por $v.pos$, e $v.pos$ é composto por 
-$\{x, y, z\} \in \mathbb{Q}^3$. Um segundo dado será usado, a cor, vai ser uma 
-informação auxiliar, usada para melhor visualização dos resultados, 
-representada por $\{r, g, b \in \mathbb{Q}:0 \leq r, g, b \leq 1\}$ onde cada um desses
-vai referir a proporção de vermelho, verde e azul respectivamente.
+Um vértice $v \in V$ é posição no espaço e a cor. A
+posição é notada por $v.pos$, e $v.pos$ é composto por 
+$\{x, y, z\} \in \mathbb{Q}^3$. A cor
+é notada por $\{r, g, b \in \mathbb{Q}:0 \leq r, g, b \leq 1\}$ onde cada um é,
+respectivamente, proporção de vermelho, verde e azul.
 
 %\subsubsection{Implementação do sistema de Navegação}
 
 \section{\textit{Terrain chunk}}
 Representando um fragmento do terreno, o objeto \textit{Terrain chunk} é responsável
-por gerar uma malha para o terreno com $k^2$ vértices, o construtor pode receber 
+por gerar uma malha para o terreno com $k^2$ vértices, uma \textit{Terrain chunk} usa
 a seguinte tupla para inicialização: 
 $terrainChunk(seed, \Delta{v}, k, x_{s}, z_{s}, b, l)$
 %referenciar as fatias do fernando
@@ -51,52 +49,45 @@ $terrainChunk(seed, \Delta{v}, k, x_{s}, z_{s}, b, l)$
 \end{itemize}
 
 
-Em cada execução da implementação os valores que podem mudar de uma chunk para 
+Em cada execução da implementação os valores, que podem mudar de uma chunk para 
 outra são apenas $x_{s}$ e $z_{s}$. Uma maneira de conseguir gerar terreno sobre demanda
 é usando a localização da câmera $(x_{c}, y_{c}, z_{c})$, quando ela se
 aproxima de alguma borda da chunk atual
 uma \textit{thread} é acionada pedindo para calcular uma nova chunk, com os parâmetros
 $x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$, assim que ela
 estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
+
+\textit{Terrain chunk} detem as estrutura $V$, um \textit{array} unidimensional que armazena
+vértices da malha.
 Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
-$(x_{s} \cdot \Delta{v}, 0.0, z_{s} \cdot \Delta{v})$, já que internamente cada chunk vai 
-da posição $(0, 0)$ até $(\Delta{v} \cdot (k-1), \Delta{v} \cdot (k-1))$, mas representando a área 
-no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v} \cdot (k-1), z_{s} + \Delta{v} \cdot (k-1))$
+$(x_{s} \cdot \Delta{v}, 0.0, z_{s} \cdot \Delta{v})$, já que internamente cada $v \in V$ vai 
+da posição $(0, 0)$ até $(\Delta{v} \cdot (k-1), \Delta{v} \cdot (k-1))$ figura \ref{fig:attt}, mas representando a área 
+no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v} \cdot (k-1), z_{s} + \Delta{v} \cdot (k-1))$ figura \ref{fig:affff}.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][coordenadas de uma chunk no mundo]{\includegraphics[width=0.48\textwidth]{figuras/implementacao/affff.png}\label{fig:affff}}\hspace{0.1cm}
+     \subfloat[][coordenadas com limitação de $V$]{\includegraphics[width=0.48\textwidth]{figuras/implementacao/attt.png}\label{fig:attt}}
+     \caption{Diferentes abstrações de coordenadas}
+     \label{fig:coordenadasuahsuahs}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
 
 \section{Criando Malha de Triângulos}
-A maneira que um jogo renderiza seu terreno no final das contas é sobre uma
-malha, uma malha é um conjunto de vértices que podem representar fragmentos
-de uma superfície do terreno.
-
-Para representar um segmento de plano precisamos de pelo menos $3$ vértices, 
-já que com dois podemos apenas representar segmentos de retas. Um plano precisar
-ter um mesmo vetor normal para todo o plano.
-
-A malha segue pelo plano $X \times Z$, e cada vértice do plano vai ter uma altura
-$y$ definida mais tarde por ruído. Se quisermos que o conjunto de pontos pertença
-ao mesmo segmento de plano precisamos que os quatro pontos respeitem a mesma
-equação do plano.%colocar referêrencia da malha de triângulos
-
-Se usarmos como plano $4$ pontos em $\mathbb{Q}^3$
-\begin{equation}\label{comp_sign_inter_sem_peso_aux}
-    P = \{p_{0}(0, y_{0}, 0), p_{1}(0, y_{1}, 1), p_{2}(1, y_{2}, 0), p_{3}(1, y_{3}, 1)\}
-\end{equation}
-Para montar a equação do plano temos $\{y_{0}, y_{1}, y_{2}\}$ como valores livres e $y_{3}$
-vai depender dos valores de $\{p_{0}, p_{1}, p_{2}\}, x_{3} e z_{3}$
+A maneira que um jogo renderiza seu terreno é com malha de triângulos \cite{dachsbacher2006interactive}.%refereincias
+Para representar um segmento de plano, é preciso de pelo menos $3$ vértices, 
+já que com apenas dois podemos apenas representar segmentos de retas. Com $4$ ou mais vértices,
+pelo menos um deles não teria a altura como variável livre, dessa maneira impossibilitando geração procedural de altura para todos os vértices.
 
 %Aqui vai o cálculo da equação do plano ou do vetor normal para mostrar o que
 %acabei de afirmar acima
 %Calculando o vetor normal associado ao plano formado por $\{v0, v1, v2\}$
 %$v0v1 = (0, y1-y0, 1)$
 %$v0v2 = (1, y2-y0, 0)$
-
-mas não é isso o objetivo, já que o ruído pode retornar valores para $y_{3}$
-que não respeitem a equação do plano queremos que todos os pontos tenha valores de $y$
-livres, portanto, será uma malha de triângulos. Então pro conjunto de vértices
-acima temos dois triângulos associados:
-$T_{1} = \{p_{0}, p_{1}, p_{2}\}, T_{2} = \{p_{3}, p_{1}, p_{2}\}$, que podem ser
-visualizados na figura \ref{fig:t1t2}. 
-Desta maneira temos todos os pontos com $y$ livre.
+O \textit{OpenGL} precisa saber a ordem de desenhar cada triângulo e quais vértices fazem parte dele, 
+pra isso é usado a estrutura $E$, também detido por \textit{Terrain chunk}. 
+$E$ é um \textit{array} de índices, $e \in E: 0 \leq e_{i} \in \mathbb{N}$ se por exemplo $E = \{ 0, 1, 2, 1, 2, 3\}$, Então sabemos
+que existem dois triângulos na malha para serem renderizados, $T_{1} = \{ v_{0}, v_{1}, v_{2}\}, T_{2} = \{ v_{1}, v_{2}, v_{3}\}$.
 
 \begin{figure}[H]
     \centering
@@ -105,15 +96,10 @@ Desta maneira temos todos os pontos com $y$ livre.
     \label{fig:t1t2}
 \end{figure}
 
-
-Então para montar um \textit{grid} renderizável usamos o algoritmo \ref{alg:genVectors}
-$V$ é a estrutura que armazena os vértices, de $v_{0}$ até $v_{k^2-1}$ 
-$E$ é a estrutura que armazena os índices, já que o \textit{OpenGL} precisa
-saber a ordem de desenhar cada triângulo e quais vértices fazem parte dele, 
-cada elemento de $e_{i} \in \mathbb{N}$ e a estrutura vai de $e_{0}$ até $e_{(k-1)^2 \cdot 6 - 1}$.
-
-A função \textit{$Algoritmo\ref{alg:vertexValuationm}$}, será comentada mais adiante, ela retorna uma estrutura
-com a altura e cor para algum ponto $(x, z)$.
+O Algoritmo \ref{alg:genVectors} monta a estrutura $V$ com tamanho $k^2$, para cada $v \in V$
+é determinado $(x, z)$ e usa $y$ Algoritmo \ref{alg:vertexValuationm}. 
+Para definir a cor de cada vértice também é usado Algoritmo \ref{alg:vertexValuationm}. Em seguida é montado o
+\textit{array} $E$.
  
 \begin{algorithm}[H]\label{alg:genVectors}
     $|V| = k^2$\;
@@ -139,7 +125,7 @@ com a altura e cor para algum ponto $(x, z)$.
     \caption{Construção da coleção de vértices e índices.}
 \end{algorithm}
 
-Considerando que Algoritmo\ref{alg:vertexValuationm}($x, z$) retorne sempre a cor branca
+Considerando que Algoritmo \ref{alg:vertexValuationm}($x, z$) retorne sempre a cor branca
 e a altura $0.0$, por hora os parâmetros $seed, b, l$ não terão influência, os mesmos 
 só serão usados na função Algoritmo\ref{alg:vertexValuationm}, e fixando os parâmetros: $x_{s}, z_{s} = 0$, 
 podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:parametrosGrid}.
@@ -156,10 +142,10 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
 
 \section{Valoração dos vértices}
 
-O algoritmo \ref{alg:vertexValuationm} será chamado para cada vértice $v \in V$, 
-este algoritmo será responsável para decidir os valores de $y$ e $cor$ associados
-a cada $v$ no algoritmo \ref{alg:genVectors}. A altura do vértice está representada
-como $h$ no algoritmo\ref{alg:vertexValuationm}.
+O Algoritmo \ref{alg:vertexValuationm} será chamado para cada vértice $v \in V$. 
+Este algoritmo será responsável para decidir os valores de $y$ e $cor$ associados
+a cada $v$ no Algoritmo \ref{alg:genVectors}. A altura do vértice está representada
+como $h$ no Algoritmo \ref{alg:vertexValuationm}.
 
 \begin{algorithm}[H]\label{alg:vertexValuationm}%Usando parâmetro e não k
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -173,14 +159,26 @@ como $h$ no algoritmo\ref{alg:vertexValuationm}.
     retorna $cor, h$\;
     \caption{Valoração de vértices.}
 \end{algorithm}
+O Algoritmo \ref{alg:vertexValuationm}, recebe como parâmetro um
+ponto $(x, z) \in \mathbb{Q}^{2}$, e retorna o valor de altura($h$), e $cor$ para o valor de parâmetro.
+E detém as seguinets varáveis:
+\begin{itemize}
+    \item $Bioma \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$: bioma de $(x, z)$;
+    \item $f_{Bioma} \in \mathbb{Q}$: frequencia do bioma $Bioma$;
+    \item $afxz \in \mathbb{Q}$: frequência relativa ao tamanho da malha;
+    \item $h'$: valor retornado pelo $perlinNoise$;
+    \item $\theta_{Bioma} \in \mathbb{N}: \theta_{Bioma} > 0$ quantidade de oitavas a serem computadas do $Bioma$.
+\end{itemize}
 
-O algoritmo\ref{alg:borderFinal} é uma sequencia direta do função de valoração de 
-descrita acima, ambos pertencem ao mesmo escopo, o algoritmo\ref{alg:borderFinal}
+
+O Algoritmo \ref{alg:borderFinal} é uma sequencia direta da função de valoração 
+descrita acima(Algoritmo\ref{alg:vertexValuationm}), ambos pertencem ao mesmo escopo, o Algoritmo \ref{alg:borderFinal}
 se encarrega de fazer interpolação entre áreas de biomas quando $(x, z)$ pertence
 a alguma fronteira.
 
 \section{Aplicando Ruído de Perlin nos Vértices}
-
+Supondo que o Algoritmo \ref{alg:vertexValuationm} retorne sempre $h = (sin(x/10) + sin(z/10)) \cdot 4$ e 
+a cor branca, o resultado seria a figura\ref{fig:sssins}. Assim podemos perceber o papel do Algoritmo \ref{alg:vertexValuationm}.
 
 \begin{figure}[H]
     \centering
@@ -189,17 +187,36 @@ a alguma fronteira.
     \label{fig:sssins}
 \end{figure}
 
-DEBUG: Usando ruído de Perlin...\\
-$\theta$ são as oitavas, a quantidade de vezes que um ruído será calculado 
-como já explicado em perlin noise. DEBUG, fazer o que acabei de falar
-$amp$ é a amplitude escalar do terreno.\\
-$f$ é a frequência;\\
-$fxz$ é a frequência relativa a malha;\\
-$fxz = k/f$\\
-$h' = PerlinNoise(x/fxz, z/fxz, \theta) \cdot amp$\\
-$h = h' \cdot amp$, $h$ é valor de altura recebido pelo algoritmo \ref{alg:genVectors}, quando chama $hEvaluation(x_{s} + i, z_{s} + j).h$.
+A função $perlinNoise(point, \theta)$, tendo um $point$ que pode pertencer ao
+conjunto $\mathbb{Q}$, $\mathbb{Q}^{2}$ ou $\mathbb{Q}^{3}$, retorna um valor $h' \in \mathbb{Q}$ para aquele $point$
+usando $\theta$ oitavas. Podemos descrever a função $perlinNoise$ com a equação \ref{eq:thePerlinNoise22}.
 
-Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
+\begin{equation}\label{eq:thePerlinNoise22}
+  \begin{split}
+    perlinNoise(point, \theta) = \sum_{t=0}^{t=\theta} \frac{Noise(point \cdot 2^{t})}{2^{t}}
+  \end{split}
+\end{equation}
+
+A função $Noise$ jamais vai retornar um valor maior que $1$ ou menor que $-1$ \cite{perlin1985image}, e o retorno dela
+está no conjunto $\mathbb{Q}$.
+
+Supondo que o Algoritmo \ref{alg:vertexValuationm} retorne sempre $h$ descrito na equação \ref{eq:thePerlinNoise22}
+e cor branca, usando $afxz = k/f$, e usando os parâmetros descritos nas imagens \ref{fig:parametrosOctaves},
+\ref{fig:parametrosfreq} e \ref{fig:parametrosSeed} podemos visualizar seus resultados nas próprias imagens.
+
+\begin{equation}\label{eq:thePerlinNoise22}
+  \begin{split}
+    h = PerlinNoise(x/afxz, z/afxz, \theta) \cdot amp
+  \end{split}
+\end{equation}
+
+Usando:
+\begin{itemize}
+    \item $f = 8$
+    \item $amp = 30$
+    \item $seed = 15$
+    \item encontramos os resultados das figuras \ref{fig:parametrosOctaves}
+\end{itemize}
 
 \begin{figure}[H]
      \centering
@@ -211,7 +228,13 @@ Usando $f = 8$, $amp = 30, seed = 15$ e variando o número de oitavas.
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando $amp = 30$ e $\theta = 8, seed = 15$ e variando a frequência.
+Usando:
+\begin{itemize}
+    \item $amp = 30$
+    \item $\theta = 8$
+    \item $seed = 15$
+    \item encontramos os resultados das figuras \ref{fig:parametrosfreq}
+\end{itemize}
 
 \begin{figure}[H]
      \centering
@@ -223,7 +246,13 @@ Usando $amp = 30$ e $\theta = 8, seed = 15$ e variando a frequência.
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando $f = 8, amp = 30$ e $\theta = 8, seed = 15$ e variando a seed.
+Usando:
+\begin{itemize}
+    \item $f = 8$
+    \item $amp = 30$
+    \item $\theta = 8$
+    \item encontramos os resultados das figuras \ref{fig:parametrosSeed}
+\end{itemize}
 
 \begin{figure}[H]
      \centering
@@ -237,11 +266,11 @@ Usando $f = 8, amp = 30$ e $\theta = 8, seed = 15$ e variando a seed.
 
 
 \subsection{Cores}
-Como em um jogo o terreno é representado por segmentos de planos, polígonos preenchidos e não um conjunto
-de vértices e arestas, portanto será colorido o terreno apenas para facilitar um pouco a
-visualização do mesmo. O valor $h'$ vai ficar com valores entre $-1$ e $1$, 
+Como em um jogo, o terreno é representado por segmentos de planos, polígonos preenchidos e não um conjunto
+de vértices e arestas. O terreno será colorido apenas para facilitar a
+visualização. O valor $h'$ vai ficar com valores entre $-1$ e $1$, 
 quando passar desse intervalo temos certeza que $-2 < h' > 2$, já que a função Noise 
-usa um gradiente para gerar seus valores e o seu resultado jamais vai ser maior que $1$
+usa um gradiente para gerar seus valores e o seu resultado jamais será maior que $1$
 e menor que $-1$ \cite{perlin1985image}, a entrada da função noise será um ponto($point$) no espaço, e $point \in \mathbb{Q}^{3}$.
 Na equação \ref{eq:thePerlinNoise} temos a recorrência de somatório da função
 \textit{Perlin Noise}, já nas equações \ref{eq:thePerlinNoisedesg1} e \ref{eq:thePerlinNoisedesg2}
@@ -284,7 +313,7 @@ de oitavas($\theta$), analogamente a equação \ref{eq:thePerlinNoisedesg2} repr
 \end{table}
 
 %DEBUG: preciso mostrar a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
-Então podemos
+Assim podemos
 usar o algoritmo \ref{alg:colorValuation} para definir a cor do vértice baseado na altura.
 $cor$ no algoritmo \ref{alg:colorValuation} é o valor recebido pelo algoritmo \ref{alg:genVectors}
 quando chama Algoritmo \ref{alg:vertexValuationm}$(x_{s} + i, z_{s} + j).cor$.
@@ -316,9 +345,9 @@ temos o resultado da figura \ref{fig:ssnhaha3}.
 \end{figure}
 
 \subsection{Manipulando ruído para criar Biomas}
-Para criar múltiplos biomas foi usado valores de cores distintas para cada um deles, 
-para que quando houvesse uma fronteira entre biomas a mesma pudesse ser mais notada, as
-cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
+Para criar múltiplos biomas foi empregado valores de cores distintas para cada um deles, 
+para que quando houvesse uma fronteira entre biomas a mesma pudesse ser mais notada. 
+Cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
 \begin{table}[H]
     \centering
     \caption{Descrição das cores por biomas.}
@@ -337,8 +366,8 @@ cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
 \end{table}
 
 Os valores descritos na tabela \ref{tab:bioColors} ainda não podem ser usados no
-algoritmo \ref{alg:colorValuation} por que estão em formatos diferentes, então temos
-que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . E cada uma das cores recebe um valor
+algoritmo \ref{alg:colorValuation} porque estão em formatos diferentes, dessa forma temos
+que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . Cada uma das cores recebe um valor
 $0 \leq r, g, b \leq 1$.
 Além de cada bioma ter uma frequência ($f$) e quantidade de oitavas ($\theta$) associadas
 também tem uma função de manipulação do ruído, o Algoritmo \ref{alg:hBioValuation}, 
@@ -373,12 +402,12 @@ na tabela \ref{tab:bioColors} e de $biomaTipo$, usando o
 algoritmo \ref{alg:hBioValuation} é gerado mapas com um bioma,
 os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
 
-Para acessar os valores de algum bioma descrito na tabela \ref{tab:bioColors} como oitava por exemplo
+Para acessar os valores de algum bioma descrito na tabela \ref{tab:bioColors}, como oitava por exemplo,
 é denotado como $\theta_{biomaTipo}$, fixando em algum bioma específico como nas imagens \ref{fig:bssComBiomasFixados}
 é notado como $\theta_{Planícies}$.
 
 \section{Separando Áreas de Biomas}
-Para separar áreas de biomas com tamanho $b$ e escolher um $biomaTipo$ nessas áreas
+Para separar áreas de biomas com tamanho $b$ e escolher um $biomaTipo$. Nessas áreas
 vamos usar o seguinte algoritmo, considerando $dxs, dzs \in \mathbb{Q}$ e $di, dj \in \mathbb{N}$.
 
 %DEBUG: explicar função trunc em algum lugar
@@ -487,9 +516,9 @@ o algoritmo \ref{alg:getBiomeXZ}.
     \caption{Escolhendo biomas em áreas de tamanho $b$.}
 \end{algorithm}
 
-A variável $biomaTipo$ tem valoração inteira, então é possível olhar a tabela \ref{tab:bioColors}
-o campo int id para saber qual valor inteiro é associado a qual bioma, $biomaTipo \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$
-$fb$ é a variável que dita a frequência na variação de biomas e $const$ é uma constante,
+A variável $biomaTipo$ tem valoração inteira, deste modo, é possível olhar a tabela \ref{tab:bioColors}
+o campo int id para saber qual valor inteiro é associado a qual bioma, $biomaTipo \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$.
+A variável $fb$ dita a frequência na variação de biomas e $const$ é uma constante,
 $const \in \mathbb{Q}$, a constante previne que o parâmetro seja sempre inteiro, quando $fb$ é um valor muito baixo,
 a possibilidade de dxs e dzs serem inteiros é grande e quando parâmetros de Noise 
 são inteiros então seu retorno sempre será $0$ \cite{perlin1985image}. Todos os resultados 
@@ -526,7 +555,7 @@ com diferença que desta vez $b = 512$.
 
 \section{Detectando fronteira entre Biomas}
 
-Porem da maneira que está as fronteiras entre os biomas não tem um terreno
+Contudo, da maneira que estão as fronteiras entre os biomas não há um terreno
 contínuo, como é visível na imagem \ref{fig:descontinuos}, em uma aplicação para jogos
 dificultaria consideravelmente
 a jogabilidade neste terreno. %descontinuos.png
@@ -548,7 +577,7 @@ fronteira.
 O algoritmo \ref{alg:borderTest} retorna uma estrutura $BH$, com as informações
 se o parâmetro é uma fronteira $BH.bordaFlag \in \{true, false\}$, se a fronteira 
 está acima da entrada $BH.acimaFlag \in \{true, false\}$ e a distância relativa 
-da fronteira $BH.pDist \in \mathbb{Q}: 0 \leq BH.pDist \leq 1$, caso a distância de $in$ até $b$ for bem 
+da fronteira $BH.pDist \in \mathbb{Q}: 0 \leq BH.pDist \leq 1$. Caso a distância de $in$ até $b$ for bem 
 próxima de $l$ e menor que $l$ então o valor de $BH.pDist$ será proporcionalmente
 próximo a $1$. As variáveis
 $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
@@ -646,8 +675,8 @@ da figura \ref{fig:borderlenanotherauxyeahp}, são os mesmos das imagens \ref{fi
 
 Desta maneira, cada área de bioma $(dxs, dzs)$ teria que ser responsável de fazer suavização da 
 fronteira com seus $8$ vizinhos 
-$\{(dxs+1, dzs+1), (dxs+1, dzs), (dxs+1, dzs-1), (dxs, dzs+1), (dxs, dzs-1), (dxs-1, dzs+1), (dxs-1, dzs), (dxs-1, dzs-1)\}$
-, é possível fazer com que cada bioma faça suavização com apenas 3 vizinhos, no caso do 
+$\{(dxs+1, dzs+1), (dxs+1, dzs), (dxs+1, dzs-1), (dxs, dzs+1), (dxs, dzs-1), (dxs-1, dzs+1), (dxs-1, dzs), (dxs-1, dzs-1)\}$.
+Sendo possível fazer com que cada bioma faça suavização com apenas três vizinhos. No caso do 
 $(dxs, dzs)$, fará com $\{(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)\}$, assim cada 
 bioma fará interpolação quando for sua \textit{flag} $acimaFlag$ for verdadeira. Então
 será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:borderColor}.
