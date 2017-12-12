@@ -6,13 +6,13 @@ os biomas, o algoritmo proposto é capaz de deixar as fronteiras entre esses com
 contínuas, tendo uma transição gradual e linear entre os biomas.
 
 Cada bioma tem seus parâmetros para o ruído de \textit{perlin}, que são as oitavas ($\theta$)
-e a frequência ($f$). O 'deserto' e a 'planície' possuem aparências mais onduladas, portanto, têm
+e a frequência ($f$). O \textit{deserto} e a \textit{planície} possuem aparências mais onduladas, portanto, têm
 um valor menor em $\theta$. Além dos parâmetros do ruído, a maneira com que cada 
 bioma usa o retorno gerado por essa função ($h'$) também é diferente. Esse valor de retorno
 é usado para calcular a cor e cada bioma possui três cores para escolher como fazer o cálculo de interpolação, as cores obtidas se referem às alturas mais elevadas, medianas e baixas. Outro uso do $h'$
 é como parâmetro para decidir a altura e cada bioma tem uma maneira diferente de realizar
-esse cálculo. A 'planície' e o 'deserto' apenas são multiplicadas $h'$ por um escalar, enquanto
-'montanhas' usam exponenciais, já o 'deserto' utiliza \textit{clamp} em $h'$ para depois
+esse cálculo. A \textit{planície} e o \textit{deserto} apenas são multiplicadas $h'$ por um escalar, enquanto
+\textit{montanhas} usam exponenciais, já o \textit{deserto} utiliza \textit{clamp} em $h'$ para depois
 usar um expoente. Os resultados de cada bioma podem ser vistos nas imagens \ref{fig:bssComBiomasFixados}.
 O trabalho de definir o comportamento de cada bioma com os parâmetros apresentados 
 é tanto quanto artístico, de nenhuma maneira este trabalho tenta fazer grandes aproximações
@@ -49,9 +49,9 @@ mudanças de bioma. A influência destes parâmetros podem ser visualizados nas 
 Uma das vantagens de usar ruído para decidir qual bioma pertence a qual 
 região é que ele matem próximo biomas de valores parecidos, neste trabalho a ordem de 
 valores usados foi \{Planícies, Montanhas, Vales, Deserto e Cânyons\}, então temos as seguintes
-características encontradas, 'planícies' e 'cânyons' estão nas extremidades, então eles 
-tem ocorrências raras, 'planícies' costumam ser rodeados por montanhas, 'cânyons' costumam
-ser rodeados por 'deserto', provavelmente terá a ocorrência de 'vales' entre 'montanhas' e 'desertos'.
+características encontradas, \textit{planícies} e \textit{cânyons} estão nas extremidades, então eles 
+tem ocorrências raras, \textit{planícies} costumam ser rodeados por montanhas, \textit{cânyons} costumam
+ser rodeados por \textit{deserto}, provavelmente terá a ocorrência de \textit{vales} entre \textit{montanhas} e \textit{desertos}.
 Isso pode ser facilmente ser usado para desenvolver um jogo na hora de distribuir 
 a raridade dos biomas e a probabilidade de proximidade entre eles, isso é visível em algumas das imagens \ref{fig:comparandofreqdebiomasyeah}.
 
