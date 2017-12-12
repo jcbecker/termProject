@@ -49,10 +49,10 @@ $terrainChunk(seed, \Delta{v}, k, x_{s}, z_{s}, b, l)$
 \end{itemize}
 
 
-Em cada execução da implementação os valores, que podem mudar de uma chunk para 
+Em cada execução da implementação os valores, que podem mudar de uma \textit{chunk} para 
 outra são apenas $x_{s}$ e $z_{s}$. Uma maneira de conseguir gerar terreno sobre demanda
 é usando a localização da câmera $(x_{c}, y_{c}, z_{c})$, quando ela se
-aproxima de alguma borda da chunk atual
+aproxima de alguma borda da \textit{chunk} atual
 uma \textit{thread} é acionada pedindo para calcular uma nova chunk, com os parâmetros
 $x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$, assim que ela
 estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
@@ -210,12 +210,11 @@ e cor branca, usando $afxz = k/f$, e usando os parâmetros descritos nas imagens
   \end{split}
 \end{equation}
 
-Usando:
+Parâmetros da figura \ref{fig:parametrosOctaves}:
 \begin{itemize}
     \item $f = 8$
     \item $amp = 30$
     \item $seed = 15$
-    \item encontramos os resultados das figuras \ref{fig:parametrosOctaves}
 \end{itemize}
 
 \begin{figure}[H]
@@ -228,12 +227,11 @@ Usando:
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando:
+Parâmetros da figura \ref{fig:parametrosfreq}:
 \begin{itemize}
     \item $amp = 30$
     \item $\theta = 8$
     \item $seed = 15$
-    \item encontramos os resultados das figuras \ref{fig:parametrosfreq}
 \end{itemize}
 
 \begin{figure}[H]
@@ -246,12 +244,11 @@ Usando:
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
 
-Usando:
+Parâmetros da figura \ref{fig:parametrosSeed}:
 \begin{itemize}
     \item $f = 8$
     \item $amp = 30$
     \item $\theta = 8$
-    \item encontramos os resultados das figuras \ref{fig:parametrosSeed}
 \end{itemize}
 
 \begin{figure}[H]
@@ -274,7 +271,7 @@ usa um gradiente para gerar seus valores e o seu resultado jamais será maior qu
 e menor que $-1$ \cite{perlin1985image}, a entrada da função noise será um ponto($point$) no espaço, e $point \in \mathbb{Q}^{3}$.
 Na equação \ref{eq:thePerlinNoise} temos a recorrência de somatório da função
 \textit{Perlin Noise}, já nas equações \ref{eq:thePerlinNoisedesg1} e \ref{eq:thePerlinNoisedesg2}
-observasse os valores de borda, caso a função de \textit{Noise} sempre retornasse $1$ ou $-1$
+observasse os valores de borda, caso a função de \textit{Noise} sempre retornasse $1$ ou $-1$.
 
 \begin{equation}\label{eq:thePerlinNoise}
   \begin{split}
@@ -314,9 +311,13 @@ de oitavas($\theta$), analogamente a equação \ref{eq:thePerlinNoisedesg2} repr
 
 %DEBUG: preciso mostrar a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
 Assim podemos
-usar o algoritmo \ref{alg:colorValuation} para definir a cor do vértice baseado na altura.
-$cor$ no algoritmo \ref{alg:colorValuation} é o valor recebido pelo algoritmo \ref{alg:genVectors}
+usar o Algoritmo \ref{alg:colorValuation} para definir a cor do vértice baseado na altura.
+$cor$ no algoritmo \ref{alg:colorValuation} é o valor recebido pelo Algoritmo \ref{alg:genVectors}
 quando chama Algoritmo \ref{alg:vertexValuationm}$(x_{s} + i, z_{s} + j).cor$.
+
+A função $clamp$ limita seu primeiro parâmetro em um intervalo, Por exemplo, se for 
+usado $clamp(x, a, b)$, a resposta será $x$ caso $a \leq x \leq b$, será $a$ se $a > x$ e $b$ se $x > b$.
+Devemos sempre ter $b > a$.
 
 \begin{algorithm}[H]\label{alg:colorValuation}
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -366,7 +367,7 @@ Cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
 \end{table}
 
 Os valores descritos na tabela \ref{tab:bioColors} ainda não podem ser usados no
-algoritmo \ref{alg:colorValuation} porque estão em formatos diferentes, dessa forma temos
+Algoritmo \ref{alg:colorValuation} porque estão em formatos diferentes, dessa forma temos
 que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . Cada uma das cores recebe um valor
 $0 \leq r, g, b \leq 1$.
 Além de cada bioma ter uma frequência ($f$) e quantidade de oitavas ($\theta$) associadas
@@ -399,7 +400,7 @@ calculada.
 
 Quando fixados os valores de cores com as mostradas
 na tabela \ref{tab:bioColors} e de $biomaTipo$, usando o
-algoritmo \ref{alg:hBioValuation} é gerado mapas com um bioma,
+Algoritmo \ref{alg:hBioValuation} é gerado mapas com um bioma,
 os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
 
 Para acessar os valores de algum bioma descrito na tabela \ref{tab:bioColors}, como oitava por exemplo,
@@ -442,7 +443,7 @@ vamos usar o seguinte algoritmo, considerando $dxs, dzs \in \mathbb{Q}$ e $di, d
     \caption{Escolhendo biomas em áreas de tamanho $b$, com aspecto xadrez.}
 \end{algorithm}
 
-Se remover as linhas 3 até 8 do algoritmo \ref{alg:getBiomeXZXadrez} vamos ter o 
+Se remover as linhas 3 até 8 do Algoritmo \ref{alg:getBiomeXZXadrez} vamos ter o 
 problema do valor $0$ se repetir em $di$ ou $dj$ nos valores de $0 < x, z < b$ e $0 > x, z > -b$, 
 quando isso acontece temos os valores de $(di, dj)$ mostrados na
 matriz $B_{b}$ gerando as áreas mostradas na figura \ref{fig:xadrez}. Mas quando essas
@@ -492,7 +493,7 @@ B_{b} =
 
 Mas a intenção não é criar divisões nesse estilo de "xadrez" então será usado um 
 ruído como parâmetros $dxs$ e $dzs$ para definir o bioma de cada região é usado
-o algoritmo \ref{alg:getBiomeXZ}.
+o Algoritmo \ref{alg:getBiomeXZ}.
 
 \begin{algorithm}[H]\label{alg:getBiomeXZ}
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -569,12 +570,12 @@ a jogabilidade neste terreno. %descontinuos.png
 
 Para detectar a proximidade de um vértice a alguma fronteira podemos calcular o 
 quão próximo ele está de algum ponto divisível por $b$, isso será feito com 
-o algoritmo \ref{alg:borderTest}. O algoritmo recebe uma entrada $in$ e calcula
+o Algoritmo \ref{alg:borderTest}. O algoritmo recebe uma entrada $in$ e calcula
 a distância euclidiana unidimensional com o valor divisível por $b$ mais próximo 
 de $in$. Caso essa distância for menor que $l$ então o vértice em questão é 
 fronteira.
 
-O algoritmo \ref{alg:borderTest} retorna uma estrutura $BH$, com as informações
+O Algoritmo \ref{alg:borderTest} retorna uma estrutura $BH$, com as informações
 se o parâmetro é uma fronteira $BH.bordaFlag \in \{true, false\}$, se a fronteira 
 está acima da entrada $BH.acimaFlag \in \{true, false\}$ e a distância relativa 
 da fronteira $BH.pDist \in \mathbb{Q}: 0 \leq BH.pDist \leq 1$. Caso a distância de $in$ até $b$ for bem 
@@ -644,7 +645,7 @@ Para analisar esse valores é possível colorir as fronteiras...
     \caption{Colorindo fronteira.}
 \end{algorithm}
 
-Executando o algoritmo \ref{alg:borderColor} com $peso = 0.5$. $\Delta_{v} = 0.5$, 
+Executando o Algoritmo \ref{alg:borderColor} com $peso = 0.5$. $\Delta_{v} = 0.5$, 
 $k = 2048$, $b = 512$, $seed = 3$ e $fb = 0.5$. em duas \textit{chunks} a primeira com $ x_{s} = -k/2 , z_{s} = -k/2$
 e a segunda com $ x_{s} = 1023 , z_{s} = -k/2$.
 
@@ -659,8 +660,9 @@ e a segunda com $ x_{s} = 1023 , z_{s} = -k/2$.
 \end{figure}
 
 Se usarmos como peso a distância relativa em cada coordenada, substituindo a variável
-$peso$ do algoritmo \ref{alg:borderColor} por $BH_{x}.pDist$ nas linhas $5$ e $8$, já
-nas linhas $13$ e $16$ substitui $peso$ por $BH_{z}.pDist$, o restante dos parâmetros
+$peso$ do Algoritmo \ref{alg:borderColor} por $BH_{x}.pDist$ nas linhas $5$ e $8$, já
+nas linhas $13$ e $16$ substitui $peso$ por $BH_{z}.pDist$, é 
+encontrado o resultado das imagens \ref{fig:borderlenanotherauxyeahp}. O restante dos parâmetros
 da figura \ref{fig:borderlenanotherauxyeahp}, são os mesmos das imagens \ref{fig:borderlenanotherauxyeah}.
 
 \begin{figure}[H]
@@ -679,7 +681,7 @@ $\{(dxs+1, dzs+1), (dxs+1, dzs), (dxs+1, dzs-1), (dxs, dzs+1), (dxs, dzs-1), (dx
 Sendo possível fazer com que cada bioma faça suavização com apenas três vizinhos. No caso do 
 $(dxs, dzs)$, fará com $\{(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)\}$, assim cada 
 bioma fará interpolação quando for sua \textit{flag} $acimaFlag$ for verdadeira. Então
-será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:borderColor}.
+será o usado o Algoritmo \ref{alg:borderColorr} e não o Algoritmo \ref{alg:borderColor}.
 E a fronteira de $(dxs, dzs)$ com $(dxs-1, dzs)$ por exemplo, será calculada quando
 os vértices da área $(dxs-1, dzs)$ estiverem sendo computadas.
 
@@ -774,6 +776,17 @@ No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
     \caption{Interpolação nas fronteiras.}
 \end{algorithm}
 
+No Algoritmo \ref{alg:borderFinal} as variáveis calculadas:
+\begin{itemize}
+    \item $h_{xp}$: altura do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{xp}$;
+    \item $h_{zp}$: altura do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{zp}$;
+    \item $h_{xzp}$: altura do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{xzp}$;
+    \item $cor_{xp}$: cor do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{xp}$;
+    \item $cor_{zp}$: cor do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{zp}$;
+    \item $cor_{xzp}$: cor do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{xzp}$;
+    
+\end{itemize}
+
 \begin{figure}[H]
      \centering
      \subfloat[][Não usando algoritmo \ref{alg:borderFinal}] {\includegraphics[width=0.48\textwidth]{figuras/border/a9/1s.png}\label{fig:nhaha1s}}\hspace{0.1cm}
@@ -785,3 +798,7 @@ No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
      \label{fig:a9usingandnot}
      % usar \hspace{0.1cm}, é gambiarra mas funciona
 \end{figure}
+
+Na figura \ref{fig:nhaha1c} é abordado o pior caso possível, Uma região de
+fronteira entre quatro biomas distintos, como podemos ver a interpolação
+bilinear consegue deixar todos os vértices com altura e cor contínuas.
