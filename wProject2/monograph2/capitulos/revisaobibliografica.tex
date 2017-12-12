@@ -164,6 +164,39 @@ ou para usar processos que geram imagens de luz e sombra, ilustrados na figura \
     \label{fig:hmap}
 \end{figure}
 
+Neste trabalho será implementado um sistema de navegação por câmera, oferecendo \textit{3D view}, 
+uma visão com perspectiva, isso será útil para visualizar os resultados em diferentes
+ângulos, e movimentação sobre o terreno gerado.
+
+\section{Interpolação Linear}
+
+Para a fronteira entre biomas não ser descontinua, mas sim suave, é usado uma interpolação linear entre dois pontos.
+Tendo um $x_{0} \leq x \leq x_{1}$, é possível determinar um valor de $y$, baseado em $y_{0}, y_{1}$ usando a distância
+de $x$ com $x_{0}$ como peso, representado na equação \ref{eq:interLinear}.
+
+\begin{equation}\label{eq:interLinear}
+  \begin{split}
+    y = y_{0} + (y_{1} - y_{0}) \cdot \frac{x - x_{0}}{x_{1} - x_{0}}
+  \end{split}
+\end{equation}
+
+Neste trabalho será usado interpolação linear para suavizar altura e cor quando
+o vértice está em área de fronteira, no trabalho de \cite{carli2012canion} interpolação 
+foi usado para gerar altura entre planaltos de alturas distintas em seus cânyons, no 
+trabalho de \cite{fernando2009costas} foi usado interpolação para definir a textura 
+em cada parte do terreno.
+
+A função de interpolação usada será a $mix$(mistura), ela vai usar o peso de proporção $a$, 
+com $a \in \mathbb{Q}: 0 \leq a \leq 1$, para interpolar valores $x$ e $y$. Os valores $x$ e $y$
+podem ser uma estrutura de $array$ ou um escalar em $\mathbb{Q}$, mas $x$ e $y$ precisam ser do mesmo tipo.
+Essa função está descrita na equação \ref{eq:mixfunc}.
+
+\begin{equation}\label{eq:mixfunc}
+  \begin{split}
+    mix(x, y, a) = x \cdot (1 - a) + y \cdot a
+  \end{split}
+\end{equation}
+
 %trabalhos correlatos
 %gerador de costas do fenando
 %voronoi do indiano

@@ -57,7 +57,7 @@ uma \textit{thread} é acionada pedindo para calcular uma nova chunk, com os par
 $x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$, assim que ela
 estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
 
-\textit{Terrain chunk} detem as estrutura $V$, um \textit{array} unidimensional que armazena
+\textit{Terrain chunk} detém as estrutura $V$, um \textit{array} unidimensional que armazena
 vértices da malha.
 Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
 $(x_{s} \cdot \Delta{v}, 0.0, z_{s} \cdot \Delta{v})$, já que internamente cada $v \in V$ vai 
@@ -161,10 +161,10 @@ como $h$ no Algoritmo \ref{alg:vertexValuationm}.
 \end{algorithm}
 O Algoritmo \ref{alg:vertexValuationm}, recebe como parâmetro um
 ponto $(x, z) \in \mathbb{Q}^{2}$, e retorna o valor de altura($h$), e $cor$ para o valor de parâmetro.
-E detém as seguinets varáveis:
+E detém as seguintes varáveis:
 \begin{itemize}
     \item $Bioma \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$: bioma de $(x, z)$;
-    \item $f_{Bioma} \in \mathbb{Q}$: frequencia do bioma $Bioma$;
+    \item $f_{Bioma} \in \mathbb{Q}$: frequência do bioma $Bioma$;
     \item $afxz \in \mathbb{Q}$: frequência relativa ao tamanho da malha;
     \item $h'$: valor retornado pelo $perlinNoise$;
     \item $\theta_{Bioma} \in \mathbb{N}: \theta_{Bioma} > 0$ quantidade de oitavas a serem computadas do $Bioma$.
@@ -200,11 +200,11 @@ usando $\theta$ oitavas. Podemos descrever a função $perlinNoise$ com a equaç
 A função $Noise$ jamais vai retornar um valor maior que $1$ ou menor que $-1$ \cite{perlin1985image}, e o retorno dela
 está no conjunto $\mathbb{Q}$.
 
-Supondo que o Algoritmo \ref{alg:vertexValuationm} retorne sempre $h$ descrito na equação \ref{eq:thePerlinNoise22}
+Supondo que o Algoritmo \ref{alg:vertexValuationm} retorne sempre $h$ descrito na equação \ref{eq:thePerlinNoise223}
 e cor branca, usando $afxz = k/f$, e usando os parâmetros descritos nas imagens \ref{fig:parametrosOctaves},
 \ref{fig:parametrosfreq} e \ref{fig:parametrosSeed} podemos visualizar seus resultados nas próprias imagens.
 
-\begin{equation}\label{eq:thePerlinNoise22}
+\begin{equation}\label{eq:thePerlinNoise223}
   \begin{split}
     h = PerlinNoise(x/afxz, z/afxz, \theta) \cdot amp
   \end{split}
@@ -680,6 +680,8 @@ Sendo possível fazer com que cada bioma faça suavização com apenas três viz
 $(dxs, dzs)$, fará com $\{(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)\}$, assim cada 
 bioma fará interpolação quando for sua \textit{flag} $acimaFlag$ for verdadeira. Então
 será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:borderColor}.
+E a fronteira de $(dxs, dzs)$ com $(dxs-1, dzs)$ por exemplo, será calculada quando
+os vértices da área $(dxs-1, dzs)$ estiverem sendo computadas.
 
 \begin{algorithm}[H]\label{alg:borderColorr}%Usando parâmetro e não k
     $BH_{x} \leftarrow$ Algoritmo\ref{alg:borderTest}($x$)\;
@@ -711,6 +713,16 @@ será o usado o algoritmo \ref{alg:borderColorr} e não o algoritmo \ref{alg:bor
 
 Para suavizar as fronteiras é preciso saber quais valores de altura ($h$) e cor o
 vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
+No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
+\begin{itemize}
+    \item Caso 1: $(x, y)$ está contida em uma fronteira com bioma $(dxs+1, dzs)$, 
+    na imagem \ref{fig:paralgborder} $Bioma_{xp}$;
+    \item Caso 2: $(x, y)$ está contida em uma fronteira com bioma $(dxs, dzs+1)$, 
+    na imagem \ref{fig:paralgborder} $Bioma_{zp}$;
+    \item Caso 3: interseção dos Casos 1 e 2, então ambos já foram computados, 
+    e desta vez $(x, y)$ está em uma área de fronteira com os biomas $(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)$, 
+    na imagem \ref{fig:paralgborder}, $Bioma_{xp}, Bioma_{zp}, Bioma_{xzp}$ respectivamente.
+\end{itemize}
 
 \begin{figure}[H]
     \centering
