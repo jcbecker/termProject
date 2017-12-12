@@ -28,12 +28,14 @@ entre outros. A força de trabalho costuma ser a parte mais cara da
 criação do jogo.
 
 \section{Apresentação}
-O trabalho em questão tem a finalidade de avaliar algumas características
-de relevo, como planícies e cordilheiras, implementar um algoritmo sem 
-interferência do usuário, que forme proceduralmente o relevo destas características.
-O relevo precisa ser contínuo quando houver fronteira ou transição de uma para 
-a outra. O tamanho do mapa deve ser pseudo-infinito e carregar apenas regiões
-próximas da câmera.
+O trabalho em questão tem a finalidade de implementar um algoritmo,
+que forme proceduralmente relevo para jogos, sem 
+interferência do usuário.
+O terreno gerado precisa conter aspectos de relevos diferentes, chamados de biomas,
+estes biomas devem estar separados em regiões e quando ocorrer uma fronteira
+entre biomas distintos, ela deve ser contínua (sem paredões ou mudanças bruscas na altitude),
+caso contrário um jogador que manipula uma entidade terrestre teria problemas para 
+transitar de um bioma para outro.
 
 Uma maneira de conseguir diminuir os gastos no desenvolvimento de conteúdo, é 
 gerando os mesmos proceduralmente, as chamadas técnicas de \textit{PCG}. 
@@ -48,34 +50,6 @@ para criar um cenário pseudo-infinitos, entre eles, \textit{Limit Theory}, nele
 são criados pseudo-infinitos sistemas planetários, de forma procedural, e em cada
 sistema planetário os planetas e seus relevos também são gerados proceduralmente
 \cite{abreu1990toward}.
-
-O algoritmo para criar o terreno deve ser implementado conforme as
-características do bioma alvo, como exemplo, a implementação de 
-\cite{gabrielle2016canion} e \cite{carli2012canion}, ambos geram relevos de
-cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{figuras/carli2012result.png}
-    \caption{Resultado do trabalho de \cite{carli2012canion}}
-    \label{fig:carli2012result}
-\end{figure}
-
-Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada uma podendo ter
-múltiplos biomas. Para começar é criado um diagrama de Voronoi, onde cada \textit{site}
-vai representar uma região do mapa, os \textit{sites} são gerados em posições
-aleatórias, seguido por Lloyd's algorithm no diagrama para
-deixar as regiões mais relaxadas.
-Então é usados uma sequencia de ruídos bidimensionais sobre o mapa para decidir
-áreas de oceano ou ilha, altura da região e bioma da região, seguido por funções
-de ruídos unidimensionais para as bordas da ilha e fronteiras das regiões ter
-uma aparência mais natural, por fim tendo como resultado final ilustrado na
-figura \ref{fig:voronoi-map-goal-distorted}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.4\textwidth]{figuras/voronoi-map-goal-distorted.png}
-    \caption{Resultado final de \cite{patel2010polygonal}}
-    \label{fig:voronoi-map-goal-distorted}
-\end{figure}
 
 O jogo \textit{minecraft} tem uma implementação de geração procedural,
 seus mundos são de tamanho pseudo-infinito, 
@@ -102,45 +76,3 @@ ilustrar fronteiras entre biomas, cada cor no mapa é um bioma \ref{fig:chunkbas
     \caption{Perspectiva de um jogador no \textit{minecraft}, com visão para fronteira entre três biomas}
     \label{fig:biomesminecraftgameplay}
 \end{figure}
-
-\section{Objetivo Geral}
-Este projeto tem como objetivo gerar mapas de tamanho pseudo-infinitos, com 
-relevo gerado proceduralmente usando ruído 
-de Perlin, de maneira não assistida, os mapas de altura devem representar o 
-relevo de pelo menos dois biomas arbitrários com fronteiras contínuas.
-
-%Criar um método procedural para múltiplos biomas ter fronteiras contínuas
-
-\section{Objetivo Específico}
-
-\begin{itemize}
-    \item Implementar malhas da superfície com tamanho pseudo-infinito;
-    \item Selecionar biomas, e as características dos mesmos a ser representadas;
-    \item Construir algoritmo para manipular ruído de Perlin e gerar características
-        selecionadas do bioma;
-    \item Gerar divisões entre biomas sobre a malha de regiões;
-    \item Implementar fronteiras contínuas entre biomas;
-    \item Comparar resultado com cenários de jogos;
-\end{itemize}
-%\subsubsection{Exemplo de ilustração}
-
-%\begin{figure}[h]
-%\captionsetup{justification=raggedright, singlelinecheck=false}
-%\centering
-%\includegraphics[scale=0.4]{figuras/uffs.eps}
-%\caption{Exemplo de ilustração.}
-%\label{fig:uffs}
-%\end{figure}
-
-
-
-%Exemplo do Matheus
-%\begin{figure}[H]
-%  \centering
-%  \includegraphics[width=0.9\textwidth]{figuras/tcc2/pts_sem_peso/evento_de_site_insercao_fronteiras.png}
-%  \caption{ES para o \textit{site} $s$.}
-%  \label{fig:cenario_insercao_de_fronteiras}
-%\end{figure}
-%
-%  Levando em consideração o cenário da figura \ref{fig:cenario_insercao_de_fronteiras}, 
-%$s$ está contido em $R^{*}_{q}$, portanto serão criadas as fronteiras $C^{-}_{qs}$ e $C^{+}_{qs}$,

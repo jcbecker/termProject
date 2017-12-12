@@ -200,15 +200,81 @@ Essa função está descrita na equação \ref{eq:mixfunc}.
 %trabalhos correlatos
 %gerador de costas do fenando
 %voronoi do indiano
-\section{Trabalho de Carli}
+\section{Trabalhos Correlatos}
+\subsection{Trabalho de Carli}
+O algoritmo para criar o terreno deve ser implementado conforme as
+características do bioma alvo, como exemplo, a implementação de 
+\cite{gabrielle2016canion} e \cite{carli2012canion}, ambos geram relevos de
+cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figuras/carli2012result.png}
+    \caption{Resultado do trabalho de \cite{carli2012canion}}
+    \label{fig:carli2012result}
+\end{figure}
+
 O trabalho do \cite{carli2012canion} não só gera o mapa de altura, mas também
-faz busca de percursos de rio e agentes no mapa. As maiores semelhanças deste 
+faz busca de percursos de rio e agentes no mapa.
+
+A semelhança deste 
 trabalho com o proposto, é que se faz uso da manipulação dos resultados do ruído de
 de Perlin para recriar alguns padrões de relevo e também é uma técnica não assistida.
+
 Entretanto no projeto que 
 estou propondo se faz necessário ter pelo menos duas manipulações de ruído distintas
-e criar fronteiras contínuas quando as mesmas se encontram, o trabalho 
+e criar fronteiras contínuas quando as mesmas se encontram. O trabalho 
 do \cite{carli2012canion} se preocupa com os parâmetros usados no ruído e manipulação do
 resultado, já que o objetivo dele foi criar cânyons realistas, aqui estes parâmetros serão arbitrários
 sem a intensão de criar terrenos realistas, mas sim propor uma técnica que cria terreno de múltiplos biomas com fronteira suaves.
 
+\subsection{Técnica de Patel}
+Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada uma podendo ter
+múltiplos biomas. Para começar é criado um diagrama de Voronoi, onde cada \textit{site}
+vai representar uma região do mapa, os \textit{sites} são gerados em posições
+aleatórias, seguido por algoritmo de Lloyd's no diagrama para
+deixar as regiões mais relaxadas.
+Então é usados uma sequencia de ruídos bidimensionais sobre o mapa para decidir
+áreas de oceano ou ilha, altura da região e bioma da região, seguido por funções
+de ruídos unidimensionais para as bordas da ilha e fronteiras das regiões ter
+uma aparência mais natural, por fim tendo como resultado final ilustrado na
+figura \ref{fig:voronoi-map-goal-distorted}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{figuras/voronoi-map-goal-distorted.png}
+    \caption{Resultado final de \cite{patel2010polygonal}}
+    \label{fig:voronoi-map-goal-distorted}
+\end{figure}
+
+Da mesma maneira que \cite{patel2010polygonal} separa zonas e regiões para bioma,
+a técnica que será proposta também fará, todavia o técnica proposta por \cite{patel2010polygonal}
+tem regiões demarcadas por um diagrama de Voronoi, a técnica deste trabalho vai 
+usar regiões quadradas de $b$ por $b$ para demarcar áreas de biomas.
+Para atribuir um bioma a uma região será feito da mesma maneira que \cite{patel2010polygonal}
+usando um identificador da região como entrada para uma função de ruído, em seguida
+usar a resposta do ruído para escolher o bioma de determinada região.
+
+No trabalho de \cite{patel2010polygonal} não tem diferentes manipulações de ruído
+para biomas distintos, logo todos os biomas tem o mesmo padrão de relevo e as 
+fronteiras são contínuas sem necessidade de interpolar fronteiras, que é o 
+oposto do trabalho aqui proposto, cada bioma terá características de relevo distintas 
+e será necessário suavizar as fronteiras para mantelas contínuas.
+
+\subsection{Trabalho de Bevilacqua}
+O trabalho de \cite{fernando2009costas} que gera bordas para terrenos, diferente dos 
+outros trabalhos correlatos o de \cite{fernando2009costas} gera terrenos com tamanhos
+pseudo-infinitos, calculando aspectos apenas do terreno perto do jogador ou câmera, 
+da mesma maneira o trabalho aqui proposto pode ser usado.
+
+Um dos problemas encontrados por \cite{fernando2009costas} foi de descontinuidade %foto aqui
+nas costas, figura \ref{fig:fe_fe1}. Ele resolveu usando o problema aplicando ruído unidimensional na distância da costa
+para o mar figura \ref{fig:fe_fe2}. A descontinuidade entre biomas deste trabalho será resolvida por interpolação 
+entre biomas distintos.
+
+\begin{figure}[H]
+     \centering
+     \subfloat[][]{\includegraphics[width=0.45\textwidth]{figuras/fe/fe1.png}\label{fig:fe_fe1}}\hspace{0.1cm}
+     \subfloat[][]{\includegraphics[width=0.45\textwidth]{figuras/fe/fe2.png}\label{fig:fe_fe2}}
+     \caption{Amostras do trabalho de \cite{fernando2009costas}.}
+     \label{fig:fefefefefe}
+     % usar \hspace{0.1cm}, é gambiarra mas funciona
+\end{figure}
