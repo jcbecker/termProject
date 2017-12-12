@@ -7,12 +7,12 @@ Se entende por técnica não assistida quando não é necessário intervenção 
 terrenos gerados pelo algoritmo \cite{gabrielle2016canion}.
 
 \section{Biomas}
-Neste trabalho o conceito de bioma vai ser outro, o resultado deste
-vai ser unicamente mapas de altura, então a única característica que é relevante
+Neste trabalho o conceito de bioma vai ser padrões de relevo, já que o resultado do trabalho
+é mapas de altura, então a única característica que é relevante
 são as altitudes do solo e seus padrões, descartando dados como tipo da
 vegetação e sua distribuição, umidade e entre outros. Então no restante 
 do trabalho, quando for usado os termos "característica do bioma", o mesmo vai
-se referir a alguma característica de altitude do bioma. A cor será um segundo auxílio
+se referir a alguma característica de altitude do bioma. Cor é uma carácteristica 
 para ajudar na percepção de biomas distintos em um mapa.
 
 Para fins de restringir o escopo do projeto vamos agrupar os biomas por padrões
@@ -72,7 +72,7 @@ aresta para os vértices $\{v_{i+1, j+1}, v_{i-1, j-1}\}$.
 
 O terreno precisa ser formado por polígonos, para que seja possível renderizar pedaços de planos.
 Se a quantidade de vértices por polígono for maior que $3$, então tem pelo menos um ponto com altura sendo uma 
-variável não livre.
+variável não livre. Mas neste trabalho a altura de todos os vértices precisa ser varável livre, logo o terreno será representado por uma malha de triângulos.
 %\subsection{Diagrama de Voronoi}
 %Um diagrama de Voronoi é uma partição no plano para separar regiões, recebendo
 %como entrada um conjunto de pontos chamados de \textit{sites}, o algoritmo
@@ -186,7 +186,7 @@ Neste trabalho será usado interpolação linear para suavizar altura e cor quan
 o vértice está em área de fronteira, no trabalho de \cite{carli2012canion} interpolação 
 foi usado para gerar altura entre planaltos de alturas distintas em seus cânyons, no 
 trabalho de \cite{fernando2009costas} foi usado interpolação para definir a textura 
-em cada parte do terreno.
+em altitude do terreno.
 
 A função de interpolação usada será a $mix$(mistura), ela vai usar o peso de proporção $a$, 
 com $a \in \mathbb{Q}: 0 \leq a \leq 1$, para interpolar valores $x$ e $y$. Os valores $x$ e $y$
@@ -218,8 +218,8 @@ cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
 O trabalho do \cite{carli2012canion} não só gera o mapa de altura, mas também
 faz busca de percursos de rio e agentes no mapa.
 
-A semelhança deste 
-trabalho com o proposto, é que se faz uso da manipulação dos resultados do ruído
+A semelhança do 
+trabalho dele com o este, é que se faz uso da manipulação dos resultados do ruído
 de Perlin para recriar alguns padrões de relevo e também é uma técnica não assistida.
 
 
