@@ -86,8 +86,8 @@ pelo menos um deles não teria a altura como variável livre, dessa maneira impo
 %$v0v2 = (1, y2-y0, 0)$
 O \textit{OpenGL} precisa saber a ordem de desenhar cada triângulo e quais vértices fazem parte dele, 
 pra isso é usado a estrutura $E$, também detido por \textit{Terrain chunk}. 
-$E$ é um \textit{array} de índices, $e \in E: 0 \leq e_{i} \in \mathbb{N}$ se por exemplo $E = \{ 0, 1, 2, 1, 2, 3\}$, Então sabemos
-que existem dois triângulos na malha para serem renderizados, $T_{1} = \{ v_{0}, v_{1}, v_{2}\}, T_{2} = \{ v_{1}, v_{2}, v_{3}\}$.
+$E$ é um \textit{array} de índices, $e \in E: 0 \leq e_{i} \in \mathbb{N}$. Por exemplo, se $E = \{ 0, 1, 2, 1, 2, 3\}$,
+então existem dois triângulos na malha para serem renderizados, $T_{1} = \{ v_{0}, v_{1}, v_{2}\}, T_{2} = \{ v_{1}, v_{2}, v_{3}\}$, figura \ref{fig:t1t2}.
 
 \begin{figure}[H]
     \centering
@@ -520,10 +520,9 @@ o Algoritmo \ref{alg:getBiomeXZ}.
 A variável $biomaTipo$ tem valoração inteira, deste modo, é possível olhar a tabela \ref{tab:bioColors}
 o campo int id para saber qual valor inteiro é associado a qual bioma, $biomaTipo \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$.
 A variável $fb$ dita a frequência na variação de biomas e $const$ é uma constante,
-$const \in \mathbb{Q}$, a constante previne que o parâmetro seja sempre inteiro, quando $fb$ é um valor muito baixo,
-a possibilidade de dxs e dzs serem inteiros é grande e quando parâmetros de Noise 
-são inteiros então seu retorno sempre será $0$ \cite{perlin1985image}. Todos os resultados 
-neste trabalho usam $const = 7.3$ escolhido arbitrariamente.
+$const \in \mathbb{Q}$, a constante previne que o parâmetro seja sempre inteiro. Exemplo quando $fb = 0.5$
+os parâmetros de Noise são inteiros, quando isso acontece seu retorno é $0$ \cite{perlin1985image}, desta maneira todas as áreas terão o mesmo bioma associado. Todos os resultados 
+deste trabalho usam $const = 7.3$ escolhido arbitrariamente.
 
 Os parâmetros usados na figura \ref{fig:biomeareasanotherComp} são: $\Delta_{v} = 0.5$, 
 $k = 2048$, $b = 200$ e $seed = 3$. em duas \textit{chunks} a primeira com $ x_{s} = -k/2 , z_{s} = -k/2$

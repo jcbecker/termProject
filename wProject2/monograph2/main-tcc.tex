@@ -88,7 +88,9 @@
 %==============================================================================
 % Identificação do trabalho
 %==============================================================================
-\title{Geração procedural de biomas}
+%\title{Geração procedural de biomas}
+\title{Geração procedural de terrenos com biomas distintos para jogos}
+
 
 \author{Becker}{João Carlos}
 %Descomentar se for uma "autora"
@@ -207,13 +209,10 @@
     os mesmos, trazendo mais conteúdo agregado. O tempo para produzir este conteúdo
     demanda muito esforço de trabalho. Com a intenção de auxilar nestas
     dificuldades, a geração procedural de conteúdo consegue gerar gráficos com pouca
-    ou nenhum esforço do usuário. Neste trabalho será avaliado algumas características
-    de relevo, como planícies e cordilheiras, e implementar um algoritmo não 
-    assistido que forme proceduralmente o relevo dessas características, na ocorrência
-    de fronteiras de biomas com relevo distintos, a mesma será contínua.
-    No final será feito um julgamento visual sobre os resultados, comparando com 
-    características encontradas na natureza e outros jogos. O tamanho do mapa
-    deve ser pseudo infinito e carregar apenas regiões próximas da câmera.
+    ou nenhum esforço do usuário. 
+    Neste trabalho é apresentada uma técnica capaz de gerar proceduralmente 5 
+    biomas visualmente distintos, distribuí-los em regiões e suavizar suas fronteiras.
+    O resultado é um terreno adequado para uso em jogos de computador.
     \keyword{Geração procedural de conteúdo}
     \keyword{Mapas de altura}
     \keyword{jogos 3D}
@@ -244,12 +243,9 @@
 Digital games are always improving, increasing in complexity and using more and more content.
 Time spent to produce this content requires a lot of human effort.
 With the intent of coping with this challenge, procedural generation of content can produce graphical content with little or no human intervention.
-In this work we will analyze features of the terrain, such as plains and mountain ranges, and 
-implement an unattended algorithm that produces a world with many regions, each containing terrain with one these features, which we call biomes. 
-The border of different biomes must be continuous. 
-The size of the world will be pseudo-infinite, but only regions close to the camera will be loaded in memory.
-To evaluate our algorithm, we will judge the results visually, comparing them with either nature or games.
-
+This work detais a technique able to procedually generate 5 visually distinct biomes,
+spreading them in regions and smooth their borders.
+The result is a terrain suited for computer games.
 \end{englishabstract}
 
 %% Lista de Ilustrações (opc)

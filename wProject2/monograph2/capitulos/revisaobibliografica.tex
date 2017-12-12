@@ -3,6 +3,8 @@ Neste Capítulo, serão abordados alguns conceitos e técnicas necessárias para
 compreender o trabalho proposto, que é 
 gerar malha e mapa de altura com tamanho pseudo-infinitos, de maneira procedural
 e não assistida, suportando mais de um bioma.
+Se entende por técnica não assistida quando não é necessário intervenção humana nos 
+terrenos gerados pelo algoritmo \cite{gabrielle2016canion}.
 
 \section{Biomas}
 Neste trabalho o conceito de bioma vai ser outro, o resultado deste
@@ -145,7 +147,7 @@ dimensões respectivamente.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figuras/perlin2d.png}
-    \caption{Gerando ruído de Perlin para duas dimensões}
+    \caption{Gerando ruído de Perlin para duas dimensões}Interpolação
     \label{fig:perlin2d}
 \end{figure}
 
@@ -217,8 +219,9 @@ O trabalho do \cite{carli2012canion} não só gera o mapa de altura, mas também
 faz busca de percursos de rio e agentes no mapa.
 
 A semelhança deste 
-trabalho com o proposto, é que se faz uso da manipulação dos resultados do ruído de
+trabalho com o proposto, é que se faz uso da manipulação dos resultados do ruído
 de Perlin para recriar alguns padrões de relevo e também é uma técnica não assistida.
+
 
 Entretanto no projeto que 
 estou propondo se faz necessário ter pelo menos duas manipulações de ruído distintas
@@ -261,13 +264,12 @@ e será necessário suavizar as fronteiras para mantelas contínuas.
 
 \subsection{Trabalho de Bevilacqua}
 O trabalho de \cite{fernando2009costas} que gera bordas para terrenos, diferente dos 
-outros trabalhos correlatos o de \cite{fernando2009costas} gera terrenos com tamanhos
-pseudo-infinitos, calculando aspectos apenas do terreno perto do jogador ou câmera, 
-da mesma maneira o trabalho aqui proposto pode ser usado.
+outros trabalhos correlatos. Os terrenos são gerados com tamanhos
+pseudo-infinitos, calculando aspectos apenas do terreno perto do jogador ou câmera.
 
 Um dos problemas encontrados por \cite{fernando2009costas} foi de descontinuidade %foto aqui
-nas costas, figura \ref{fig:fe_fe1}. Ele resolveu usando o problema aplicando ruído unidimensional na distância da costa
-para o mar figura \ref{fig:fe_fe2}. A descontinuidade entre biomas deste trabalho será resolvida por interpolação 
+nas costas, figura \ref{fig:fe_fe1}. Ele resolveu aplicando ruído unidimensional na distância da costa
+para o mar, figura \ref{fig:fe_fe2}. A descontinuidade entre biomas neste trabalho será resolvida por interpolação 
 entre biomas distintos.
 
 \begin{figure}[H]
