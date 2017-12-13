@@ -10,7 +10,14 @@ monograph2/main-tcc.toc
 monograph2/main-tcc.bbl
 
 #------Files generate by latex in apresentacao------
-
+apresentacao2/apresentacao.aux
+apresentacao2/apresentacao.bbl
+apresentacao2/apresentacao.nav
+apresentacao2/apresentacao.out
+apresentacao2/apresentacao.snm
+apresentacao2/apresentacao.toc
+apresentacao2/apresentacao.pdf
+apresentacao2/apresentacao.blg
 
 #------arquivo de backup criado pelo aspell------
 *.bak

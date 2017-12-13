@@ -1,0 +1,120 @@
+%pdflatex apresentacao.tex 
+%bibtex apresentacao.aux
+%pdflatex apresentacao.tex 
+%pdflatex apresentacao.tex 
+
+% \documentclass[handout,xcolor=pdftex,dvipsnames,table]{beamer}
+
+%\documentclass[aspectratio=169]{beamer} % WIDESCREEN
+\documentclass[t]{beamer} % Aspecto 4:3
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,brazil]{babel}
+%\usepackage{natbib}
+
+\usepackage{tikz}
+
+% usando tema personalizado.
+% arquivo beamerthemeUFFS.sty deve estar no mesmo diretório do .tex
+\usepackage{beamerthemeUFFS}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{animate}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+
+\hypersetup{
+    pdfstartview={Fit},
+    pdftitle={Geração procedural de biomas},
+ 	pdfsubject={ApresentacaoDefesaTCC1},
+ 	pdfauthor={João Carlos Becker}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+\title{Geração procedural de terrenos com biomas distintos para jogos}
+\author{João Carlos Becker} 
+
+%\date{28 de junho de 2016}
+\institute{Orientador: Emilio Wuerges\\Ciência da Computação\\
+Universidade Federal da Fronteira Sul - Chapecó}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\setstretch{1} %espaçamento
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north east,yshift=2pt] at (current page.north east) {\includegraphics[height=1cm]{img/logo_curso}};
+\end{tikzpicture}}
+
+\setbeamertemplate{footline}{
+	\color{white}
+     \\
+    }
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\addtocounter{framenumber}{-1}
+
+% Descomente as linhas abaixo se desejar colocar um sumário de todas as seções
+%\begin{frame}[t]{Sumário}
+%\tableofcontents
+%\end{frame}
+\setbeamertemplate{footline}{
+    \color{black}
+    \hfill \insertframenumber\,/\,\inserttotalframenumber~
+}
+
+%Utilizado para alinhar figuras
+%\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+%\setbeamertemplate{caption}{\insertcaption}
+
+\def\sectionname{}
+\def\insertsectionnumber{}
+\def\subsectionname{}
+\def\insertsubsectionnumber{}
+
+\AtBeginSection{\frame{\sectionpage}\addtocounter{framenumber}{-1}}
+
+
+\AtBeginSubsection{\frame{\subsectionpage}\addtocounter{framenumber}{-1} }
+\AtBeginSubsubsection{\frame{\subsubsectionpage}\addtocounter{framenumber}{-1} }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inicio do documento
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{slides/introducao}
+\input{slides/biomas}
+\input{slides/regioes}
+%\input{slides/perlinNoise}
+%\input{slides/mapasAltura}
+%\input{slides/metodologia}
+
+
+\setbeamertemplate{footline}{
+	\color{white}
+     \\
+    }
+
+\begin{frame}[allowframebreaks]{Referências} % allowframebreaks -> Referências grandes
+   \bibliography{referencias}
+   \bibliographystyle{apalike}
+\end{frame}
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+%% Coloquei o  livro em  anotacoes.bib. Pode incluir  outras referências
+%% alí. (AG)
+
+\end{document}
