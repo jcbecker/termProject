@@ -1,9 +1,18 @@
 \begin{frame}{Biomas}
     \begin{itemize} \setlength\itemsep{1em}
-        \item Neste trabalho biomas são características de relevo;
-        \item Foram implementados cinco biomas distintos;
-        \item Suas características de cor e cálculo de altura foram escolhidos arbitrariamente
-        para serem distitos.
+        \item Biomas são:
+        \begin{itemize}
+            \item Relevo
+            \item Cor
+        \end{itemize}
+        \item Foram implementados cinco biomas distintos
+        \item Cada um deles com sues parâmetros para uma função de ruído de Perlin
+        \begin{itemize}
+            \item $\theta$ quantidade de oitavas
+            \item $f$ frequência
+        \end{itemize}
+        \item Biomas usam maneiras diferente de usar o resultado
+        do ruído de perlin para calcular altura
     \end{itemize}
     
 %    \begin{figure}
@@ -33,7 +42,7 @@
     \begin{figure}[H]
         \centering
         \includegraphics[width=.9\textwidth]{img/biomas/bssPlains.png}
-        \caption{Bioma: Planícies.}
+        \caption{Bioma: Planícies, $\theta = 4, f = 10 $.}
         \label{fig:img_biomas_bssPlains}
     \end{figure}
     
@@ -44,7 +53,7 @@
     \begin{figure}[H]
         \centering
         \includegraphics[width=.9\textwidth]{img/biomas/bssMontains.png}
-        \caption{Bioma: Montanhas.}
+        \caption{Bioma: Montanhas, $\theta =  8, f = 18$.}
         \label{fig:img_biomas_bssMontains}
     \end{figure}
     
@@ -55,7 +64,7 @@
     \begin{figure}[H]
         \centering
         \includegraphics[width=.9\textwidth]{img/biomas/bssValley.png}
-        \caption{Bioma: Vales.}
+        \caption{Bioma: Vales, $\theta = 8, f = 8$.}
         \label{fig:img_biomas_bssValley}
     \end{figure}
     
@@ -66,7 +75,7 @@
     \begin{figure}[H]
         \centering
         \includegraphics[width=.9\textwidth]{img/biomas/bssDesert.png}
-        \caption{Bioma: Deserto.}
+        \caption{Bioma: Deserto, $\theta = 2, f = 6$.}
         \label{fig:img_biomas_bssDesert}
     \end{figure}
     
@@ -77,7 +86,7 @@
     \begin{figure}[H]
         \centering
         \includegraphics[width=.9\textwidth]{img/biomas/bssCanyons.png}
-        \caption{Bioma: Cânyons.}
+        \caption{Bioma: Cânyons, $\theta = 4, f = 6$.}
         \label{fig:img_biomas_bssCanyons}
     \end{figure}
     

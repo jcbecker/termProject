@@ -1,11 +1,6 @@
-\begin{frame}{Regiões dos Biomas}
+\begin{frame}{Malha de Biomas}
     \begin{itemize} \setlength\itemsep{1em}
-        \item As regiões de biomas são separadas em áreas quadradas;
-        \item Em seguida é usado o par $(dxs, dzs)$ de cada área como parâmetro 
-        de uma função ruído;
-        \item Os biomas tem uma área defenida pelo parâmtro $b$;
-        \item A frequência com que mudam os biomas ao longo de terreno 
-        é $1/fb$.
+        \item As regiões de biomas tem áreas quadradas de lado $b$;
     \end{itemize}
 \end{frame}
 
@@ -77,12 +72,14 @@
 
 \begin{frame}{Regiões dos Biomas}
     \begin{itemize} \setlength\itemsep{1em}
-        \item As regiões de biomas são separadas em áreas quadradas;
-        \item Em seguida é usado o par $(dxs, dzs)$ de cada área como parâmetro 
-        de uma função ruído;
-        \item Os biomas tem uma área defenida pelo parâmtro $b$;
-        \item A frequência com que mudam os biomas ao longo de terreno 
-        é $1/fb$.
+        \item Cada região usa a chave $(dxs, dzs)$ como parâmetro de ruído para definir
+        \item A frequência com que mudam os biomas ao longo da malha é $1/fb$.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=.6\textwidth]{img/re2bfb/distnoise.png}
+            \caption{Distribuições de biomas, ruído ao fundo \cite{shiffman2012nature}.}
+            \label{fig:img_re2bfb_distnoise}
+        \end{figure}
     \end{itemize}
 \end{frame}
 
