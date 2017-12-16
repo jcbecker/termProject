@@ -7,7 +7,7 @@ Se entende por técnica não assistida quando não é necessário intervenção 
 terrenos gerados pelo algoritmo \cite{gabrielle2016canion}.
 
 \section{Biomas}
-Neste trabalho o conceito de bioma vai ser padrões de relevo, já que o resultado do trabalho
+Neste trabalho o conceito de bioma é padrões de relevo, já que o resultado do trabalho
 é mapas de altura, então a única característica que é relevante
 são as altitudes do solo e seus padrões, descartando dados como tipo da
 vegetação e sua distribuição, umidade e entre outros. Então no restante 
@@ -24,16 +24,16 @@ termo e entre seus biomas se encontra \textit{Extreme Hills} e \textit{Plains}.
 
 Normalmente jogos tem um padrão de arte, os biomas que neles são mostrados não 
 precisam ser realistas e nem respeitar a natureza real ou as regras da física. Aqui será 
-abordado a implementação de uma técnica que consiste separar regiões de biomas, e criar
+abordado a implementação de uma técnica que consiste em separar regiões de biomas, e criar
 um terreno aplicável para jogos com múltiplos biomas.
 
 \section{Representação das Regiões}
 %Um bioma vai pertencer a um conjunto de regiões, na imagem \ref{fig:squadStripBiomes}
 %que usa uma malha de quadrados, onde os segmentos de retas vermelhas são fronteiras entre
 %biomas.
-A maneira de separar regiões de biomas será com áreas quadradas, cada uma delas com
+A maneira de separar regiões de biomas é com áreas quadradas, cada uma delas com
 tamanho $b^{2}$, cada região tem um identificador $(dxs, dzs)$, esse identificador
-será usado como entrada em uma função de ruído, O valor deste retornado deste ruído vai 
+será usado como entrada em uma função de ruído, O valor retornado deste ruído vai 
 determinar o bioma da região em questão. Na figura \ref{fig:squadStripBiomes} temos
 um exemplo com várias regiões, algumas dessas regiões fazendo fronteira entre biomas, 
 nela é visível 3 biomas distintos.
@@ -99,10 +99,14 @@ eles, porem se montado um gráfico com eles, o resultado não teria um aspecto
 orgânico, então para o terreno ter um relevo mais parecido com o encontrado na 
 natureza é usado uma função de ruído \cite{shiffman2012nature}, está comparação
 pode ser feita com a imagem \ref{fig:randomAndNoise}. 
+A função de ruído usa interpolação de pontos aletários para determinar seu resultado.
+Por exemplo podemos determinar a altura$(y)$ em um gráfico, usando $(x)$ como 
+parâmetro, tendo $y = Noise(x)$, uma possível representação seria a parte da esquerda na
+figura \ref{fig:randomAndNoise}, tendo o ($x$) na horizontale ($y$) na vertical.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figuras/randomAndNoise.png}
-    \caption{Da esquerda, função de ruído, função de pontos aleatórios. Por \cite{shiffman2012nature}}
+    \caption{Na esquerda uma função de ruído, na direita pontos aleatórios de uma função \textit{rand}. Por \cite{shiffman2012nature}}
     \label{fig:randomAndNoise}
 \end{figure}
 
@@ -131,13 +135,13 @@ como o mesmo exemplifica na ilustração \ref{fig:1dto2dnoise}.
 \end{figure}
 
 O \textit{ruído de Perlin} usa a função ruído várias vezes, cada uma é chamada
-de oitava. Oitava usa amplitude e frequência diferente, a quantidade de oitavas
-usada varia de implementações para necessidades, a primeira oitava é gerada com uma
-amplitude alta e frequência baixa, as próxima oitava tem a metade da amplitude e 
-o dobro da frequência, o ruído de Perlin é a soma de todas as oitavas computadas,
+de oitava. Oitava usa amplitude e frequência diferente, a primeira oitava é gerada com uma
+amplitude alta e frequência baixa, a próxima oitava tem a metade da amplitude e 
+o dobro da frequência. Cada oitava tem a metade da amplitude e o dobro da frequência da oitava anterior.
+O ruído de Perlin é a soma de todas as oitavas computadas,
 adaptado de Hugo Elias \cite{carli2012canion} gerou as imagens
 \ref{fig:perlin1d} e \ref{fig:perlin2d} do ruído de Perlin em uma e duas
-dimensões respectivamente.
+dimensões respectivamente. Na imagem \ref{fig:perlin1d} pode ser visto seis oitavas.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figuras/perlin1d.png}
@@ -152,8 +156,7 @@ dimensões respectivamente.
 \end{figure}
 
 \section{Mapas de Altura}
-Mapas de altura é uma maneira de representar altitudes de um terreno, e essa
-será uma das saídas desta implementação proposta, mapas de altura costumam ser, imagens
+Mapas de altura é uma maneira de representar altitudes de um terreno. Mapas de altura são imagens
 onde os pontos mais claros representam pontos mais elevados e os escuros regiões mais baixas.
 A imagem \ref{fig:perlin2d} já traz exemplos de mapas de altura.
 
@@ -182,13 +185,13 @@ de $x$ com $x_{0}$ como peso, representado na equação \ref{eq:interLinear}.
   \end{split}
 \end{equation}
 
-Neste trabalho será usado interpolação linear para suavizar altura e cor quando
-o vértice está em área de fronteira, no trabalho de \cite{carli2012canion} interpolação 
-foi usado para gerar altura entre planaltos de alturas distintas em seus cânyons, no 
-trabalho de \cite{fernando2009costas} foi usado interpolação para definir a textura 
-em altitude do terreno.
+Neste trabalho é usada interpolação linear para suavizar altura e cor quando
+o vértice está em área de fronteira. No trabalho de Carli \cite{carli2012canion}, a interpolação 
+foi usada para gerar altura entre planaltos de alturas distintas em seus cânyons. No 
+trabalho de Bevilacqua \cite{fernando2009costas} foi usada interpolação para definir a textura 
+em  determinadas altitudes do terreno.
 
-A função de interpolação usada será a $mix$(mistura), ela vai usar o peso de proporção $a$, 
+A função de interpolação usada é a $mix$(mistura). Ela usa o peso de proporção $a$, 
 com $a \in \mathbb{Q}: 0 \leq a \leq 1$, para interpolar valores $x$ e $y$. Os valores $x$ e $y$
 podem ser uma estrutura de $array$ ou um escalar em $\mathbb{Q}$, mas $x$ e $y$ precisam ser do mesmo tipo.
 Essa função está descrita na equação \ref{eq:mixfunc}.
@@ -205,8 +208,8 @@ Essa função está descrita na equação \ref{eq:mixfunc}.
 \section{Trabalhos Correlatos}
 \subsection{Trabalho de Carli}
 O algoritmo para criar o terreno deve ser implementado conforme as
-características do bioma alvo, como exemplo, a implementação de 
-\cite{gabrielle2016canion} e \cite{carli2012canion}, ambos geram relevos de
+características do bioma alvo, como exemplo, a implementação de Souza
+\cite{gabrielle2016canion} e Carli \cite{carli2012canion}, ambos geram relevos de
 cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
 \begin{figure}[H]
     \centering
@@ -215,31 +218,31 @@ cânions, como podemos visualizar na figura \ref{fig:carli2012result}.
     \label{fig:carli2012result}
 \end{figure}
 
-O trabalho do \cite{carli2012canion} não só gera o mapa de altura, mas também
+O trabalho do Carli \cite{carli2012canion} não só gera o mapa de altura, mas também
 faz busca de percursos de rio e agentes no mapa.
 
 A semelhança do 
-trabalho dele com o este, é que se faz uso da manipulação dos resultados do ruído
+trabalho dele com este, é que se faz uso da manipulação dos resultados do ruído
 de Perlin para recriar alguns padrões de relevo e também é uma técnica não assistida.
 
 
-Entretanto no projeto que 
-estou propondo se faz necessário ter pelo menos duas manipulações de ruído distintas
+Entretanto, no trabalho  
+que apresento aqui, se faz necessário ter pelo menos duas manipulações de ruído distintas
 e criar fronteiras contínuas quando as mesmas se encontram. O trabalho 
-do \cite{carli2012canion} se preocupa com os parâmetros usados no ruído e manipulação do
-resultado, já que o objetivo dele foi criar cânyons realistas, aqui estes parâmetros serão arbitrários
+do Carli \cite{carli2012canion} se preocupa com os parâmetros usados no ruído e manipulação do
+resultado, já que o objetivo dele foi criar cânyons realistas. Aqui estes parâmetros serão arbitrários
 sem a intensão de criar terrenos realistas, mas sim propor uma técnica que cria terreno de múltiplos biomas com fronteira suaves.
 
 \subsection{Técnica de Patel}
-Na técnica de \cite{patel2010polygonal}, que gera ilha proceduralmente, cada uma podendo ter
+Na técnica de Patel \cite{patel2010polygonal}, que gera ilhas proceduralmente, cada uma podendo ter
 múltiplos biomas. Para começar é criado um diagrama de Voronoi, onde cada \textit{site}
 vai representar uma região do mapa, os \textit{sites} são gerados em posições
-aleatórias, seguido por algoritmo de Lloyd's no diagrama para
+aleatórias, seguido pelo algoritmo de Lloyd's sobre o diagrama para
 deixar as regiões mais relaxadas.
 Então é usados uma sequencia de ruídos bidimensionais sobre o mapa para decidir
 áreas de oceano ou ilha, altura da região e bioma da região, seguido por funções
 de ruídos unidimensionais para as bordas da ilha e fronteiras das regiões ter
-uma aparência mais natural, por fim tendo como resultado final ilustrado na
+uma aparência mais natural. O resultado final é ilustrado na
 figura \ref{fig:voronoi-map-goal-distorted}.
 \begin{figure}[H]
     \centering
@@ -248,28 +251,29 @@ figura \ref{fig:voronoi-map-goal-distorted}.
     \label{fig:voronoi-map-goal-distorted}
 \end{figure}
 
-Da mesma maneira que \cite{patel2010polygonal} separa zonas e regiões para bioma,
-a técnica que será proposta também fará, todavia o técnica proposta por \cite{patel2010polygonal}
-tem regiões demarcadas por um diagrama de Voronoi, a técnica deste trabalho vai 
+Da mesma maneira que Patel \cite{patel2010polygonal} separa zonas e regiões para bioma,
+também foi feito neste trabalho, separando o terreno em regiões e 
+atribuindo um bioma para cada região. Todavia na técnica mostrada por Patel \cite{patel2010polygonal}
+tem regiões demarcadas por um diagrama de Voronoi, enquanto a técnica deste trabalho vai 
 usar regiões quadradas de $b$ por $b$ para demarcar áreas de biomas.
-Para atribuir um bioma a uma região será feito da mesma maneira que \cite{patel2010polygonal}
+A atribuição de um bioma a uma região é feito da mesma maneira que Patel \cite{patel2010polygonal}
 usando um identificador da região como entrada para uma função de ruído, em seguida
-usar a resposta do ruído para escolher o bioma de determinada região.
+usando a resposta do ruído para escolher o bioma de determinada região.
 
-No trabalho de \cite{patel2010polygonal} não tem diferentes manipulações de ruído
+O trabalho de Patel \cite{patel2010polygonal} não tem diferentes manipulações de ruído
 para biomas distintos, logo todos os biomas tem o mesmo padrão de relevo e as 
 fronteiras são contínuas sem necessidade de interpolar fronteiras, que é o 
-oposto do trabalho aqui proposto, cada bioma terá características de relevo distintas 
-e será necessário suavizar as fronteiras para mantelas contínuas.
+oposto deste trabalho. Neste trabalho biomas tem características de relevo distintas 
+e foi necessário suavizar as fronteiras para mantelas contínuas.
 
 \subsection{Trabalho de Bevilacqua}
-O trabalho de \cite{fernando2009costas} que gera bordas para terrenos, diferente dos 
-outros trabalhos correlatos. Os terrenos são gerados com tamanhos
+O trabalho de Bevilacqua \cite{fernando2009costas} que gera bordas para terrenos, diferente dos 
+outros trabalhos correlatos, os terrenos são gerados com tamanhos
 pseudo-infinitos, calculando aspectos apenas do terreno perto do jogador ou câmera.
 
-Um dos problemas encontrados por \cite{fernando2009costas} foi de descontinuidade %foto aqui
-nas costas, figura \ref{fig:fe_fe1}. Ele resolveu aplicando ruído unidimensional na distância da costa
-para o mar, figura \ref{fig:fe_fe2}. A descontinuidade entre biomas neste trabalho será resolvida por interpolação 
+Um dos problemas encontrados por Bevilacqua foi de descontinuidade %foto aqui
+nas costas, figura \ref{fig:fe_fe1}. Ele resolveu o problema aplicando ruído unidimensional na distância da costa
+para o mar, figura \ref{fig:fe_fe2}. A descontinuidade entre biomas neste trabalho foi resolvida por interpolação 
 entre biomas distintos.
 
 \begin{figure}[H]

@@ -1,17 +1,17 @@
 \chapter{Resultados}
-A técnica de geração procedural de terrenos desse trabalho cria uma 
+A técnica de geração procedural de terrenos deste trabalho cria uma 
 malha de triângulos para desenhar o terreno. A abordagem é procedural, sem nenhuma 
-intervenção humana, os resultados apresentam regiões para diferentes biomas, o
+intervenção humana. Os resultados apresentam regiões para diferentes biomas. O
 algoritmo implementado é capaz de deixar as fronteiras entre esses biomas com características 
 contínuas, tendo uma transição gradual e linear entre os biomas.
 Os parâmetros para se criar um terreno são:
 \begin{itemize}
-    \item Cada bioma tem seus parâmetros de ruídos ($\theta$, $f$), cores e funções de alturas associados, os
+    \item Cada bioma tem seus parâmetros de ruído: oitavas ($\theta$) e frequência ($f$). Também cores e funções de alturas associados, os
     biomas implementados podem ser vistos nas figuras \ref{fig:bssComBiomasFixados};
     \item No terreno existem regiões quadradas de tamanho $b^{2}$ como mostra a figura \ref{fig:comparandoareadebiomasyeah};
     \item Os biomas podem variar numa frequência de $1/fb$ para cada terreno
     gerado, resultado visível nas imagens \ref{fig:comparandofreqdebiomasyeah};
-    \item A fronteira entre biomas é interpolada para ter uma transição suave as imagens \ref{fig:wcborder4biomes}
+    \item A fronteira entre biomas é interpolada para ter uma transição suave. As imagens \ref{fig:wcborder4biomes}
     apresentam o pior caso, fronteira entre quatro biomas distintos;
     \item A área afetada pela interpolação é definida pelo parâmetro $l$, sua influência 
     pode ser notada na imagem \ref{fig:borderslcomp}.
@@ -42,12 +42,14 @@ com o fim de ter uma aparência distinta e ser possível visualizar as áreas co
 \end{figure}
 
 As regiões dos biomas são separadas em áreas quadradas de proporção $b$, para definir
-qual bioma pertence a cada área é usado o ruído, mas dessa vez a entrada se dá por valores
-truncados da localização dividida por $b$ e temos o parâmetro $fb$ que define a frequência nas
-mudanças de bioma. A influência destes parâmetros podem ser visualizados nas imagens \ref{fig:comparandoareadebiomasyeah} e \ref{fig:comparandofreqdebiomasyeah}.
+qual bioma é encontrado em cada área, é usado uma função ruído.
+A entrada do ruído é um valor $(dxs, dzs)$, os vértices que tem os mesmos $(dxs, dzs)$
+estão contidos na mesma área, é escolhido um intervalo no resultado da função de ruído
+para definir o bioma de cada região $(dxs, dzs)$. O parâmetro $fb$ que define a frequência nas
+mudanças de bioma. A influência destes parâmetros ($b$ e $fb$) podem ser visualizados nas imagens \ref{fig:comparandoareadebiomasyeah} e \ref{fig:comparandofreqdebiomasyeah}.
 
 A vantagem de usar ruído para decidir qual bioma pertence a qual 
-região é que ele matem próximo biomas de valores parecidos, assim como este trabalho o de
+região é que ele mantem próximo biomas de valores parecidos. Assim como este trabalho o de Patel
 \cite{patel2010polygonal} também se aproveitou desta característica.
 
 \begin{figure}[H]
@@ -81,13 +83,13 @@ região é que ele matem próximo biomas de valores parecidos, assim como este t
 \end{figure}
 
 Para a fronteira entre os biomas distintos obter uma forma mais orgânica, e deixar o 
-terreno com melhor jogabilidade, já que descontinuidade no terreno seria um empecilho em alguns jogos.
-Foi feito interpolação linear nas ocorrências de fronteiras, nas diagonais de área de bioma foi 
-usado interpolação bilinear, já que este cobre o pior caso, que seria fronteira entre quatro biomas distintos,
+terreno com melhor jogabilidade, já que descontinuidade no terreno seria um empecilho em alguns jogos,
+foi feito uma interpolação linear nas ocorrências de fronteiras. Nos cantos das áreas de bioma foi 
+usado interpolação bilinear, já que este cobre o pior caso, que é fronteira entre quatro biomas distintos,
 mostrado nas figuras \ref{fig:wcborder4biomes}.%debug: figura pior caso ref aqui
 
-A distância em que uma interpolação começa a ser feita é definida pelo parâmetro $l$,
-quanto maior for $l$ maior será a área de interpolação e mais suave será transição de um bioma para o outro,
+A distância em que uma interpolação começa a ser feita é definida pelo parâmetro $l$.
+Quanto maior for $l$, maior será a área de interpolação e mais suave será transição de um bioma para o outro,
 sua influência pode ser comparada nas imagens \ref{fig:borderslcomp}.
 
 \begin{figure}[H]

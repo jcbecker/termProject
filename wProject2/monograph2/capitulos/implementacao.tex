@@ -21,41 +21,48 @@
 %DEBUG: Mover para fundamentação teórica?
 
 \section{Descrição dos vértices}
-Um vértice $v \in V$ é posição no espaço e a cor. A
-posição é notada por $v.pos$, e $v.pos$ é composto por 
+Um vértice $v \in V$ é a posição no espaço e cor. A
+posição é denotada por $v.pos$, onde $v.pos$ é composto por 
 $\{x, y, z\} \in \mathbb{Q}^3$. A cor
-é notada por $\{r, g, b \in \mathbb{Q}:0 \leq r, g, b \leq 1\}$ onde cada um é,
-respectivamente, proporção de vermelho, verde e azul.
+é denotada por $\{r, g, b \in \mathbb{Q}:0 \leq r, g, b \leq 1\}$ onde $\{r, g, b\}$ é,
+respectivamente, a proporção de vermelho, verde e azul.
 
 %\subsubsection{Implementação do sistema de Navegação}
 
 \section{\textit{Terrain chunk}}
+
+\textit{Terrain chunk} é um pedaço do terreno que foi calculado e pode ser desenhado
+na tela, um dos parâmetros é o ponto em que a \textit{Terrain chunk} começa $(x_{s}, z_{s})$, 
+quanto maior for o $k$, maior vai ser a área de cobertura da  \textit{Terrain chunk}, como pode ser visto
+na figura \ref{fig:coordenadasuahsuahs}.
+
 Representando um fragmento do terreno, o objeto \textit{Terrain chunk} é responsável
 por gerar uma malha para o terreno com $k^2$ vértices, uma \textit{Terrain chunk} usa
 a seguinte tupla para inicialização: 
 $terrainChunk(seed, \Delta{v}, k, x_{s}, z_{s}, b, l)$
 %referenciar as fatias do fernando
 \begin{itemize}
-    \item $seed \in \mathbb{N}$ representa a semente para começar o motor de números
-    pseudo-aleatórios;
-    \item $\Delta{v} \in \mathbb{Q}:0 < \Delta{v} < l/2$ é a distância entre vértices adjacentes na
-    projeção do plano $X \times Z$;
-    \item $k \in \mathbb{N}>4$ é a quantidade de vértices em cada coluna ou 
-    linha, a malha tem $k^2$ vértices;
-    \item $x_{s} \in \mathbb{Q}:$ é o valor inicial no eixo $X$;
-    \item $z_{s} \in \mathbb{Q}:$ é o valor inicial no eixo $Z$;
-    \item $b \in \mathbb{N}>4:$ a área da região de cada bioma vai ser $b^2$;
-    \item $l \in \mathbb{N}:1 < l < b/2$ distância para fronteira entre biomas ser interpolada.
+    \item $seed$: Representa a semente para começar o motor de números
+    pseudo-aleatórios, $seed \in \mathbb{N}$;
+    \item $\Delta{v}$: Distância entre vértices adjacentes na
+    projeção do plano $X \times Z$ e $\Delta{v} \in \mathbb{Q}:0 < \Delta{v} < l/2$;
+    \item $k$: Quantidade de vértices em cada coluna e 
+    linha, a malha tem $k^2$ vértices com $k \in \mathbb{N}>4$;
+    \item $x_{s}$: Valor inicial no eixo $X$, com $x_{s} \in \mathbb{Q}$;
+    \item $z_{s}$: Valor inicial no eixo $Z$, com $z_{s} \in \mathbb{Q}$;
+    \item $b$: Regiões dos biomas são quadrados com lados $b$ por $b$, $b \in \mathbb{N}>4$;
+    \item $l$: Distância para fronteira entre biomas ser interpolada, tendo um $l \in \mathbb{N}:1 < l < b/2$.
 \end{itemize}
 
 
-Em cada execução da implementação os valores, que podem mudar de uma \textit{chunk} para 
-outra são apenas $x_{s}$ e $z_{s}$. Uma maneira de conseguir gerar terreno sobre demanda
-é usando a localização da câmera $(x_{c}, y_{c}, z_{c})$, quando ela se
-aproxima de alguma borda da \textit{chunk} atual
+Os valores $x_{s}$ e $z_{s}$ são os únicos 
+que mudam de uma \textit{chunk} para outra em cada execução da implementação.
+Uma maneira de conseguir gerar terreno sobre demanda
+é usando a localização da câmera $(x_{c}, y_{c}, z_{c})$. Quando a câmera se
+aproxima de alguma borda de \textit{chunk} 
 uma \textit{thread} é acionada pedindo para calcular uma nova chunk, com os parâmetros
-$x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$, assim que ela
-estiver calculada a mesma começa a ser renderizada, substituindo a chunk anterior.
+$x_{s} = x_{c}/\Delta{v} - k/2$ e $z_{s} = z_{c}/\Delta{v} - k/2$. Assim que ela
+estiver calculada a \textit{chunk} começa a ser renderizada, substituindo a \textit{chunk} anterior.
 
 \textit{Terrain chunk} detém as estrutura $V$, um \textit{array} unidimensional que armazena
 vértices da malha.
