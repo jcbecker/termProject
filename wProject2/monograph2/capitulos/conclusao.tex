@@ -1,7 +1,7 @@
 \chapter{Conclusões e Trabalhos futuros}
 
 Este trabalho mostrou como usar
-a saída do ruído de Perlin para poder criar biomas com relevo distinto em terrenos 3D onde as fronteiras entre os biomas são contínuas e suavizadas.
+o ruído de Perlin para poder criar biomas com relevo distinto em terrenos 3D onde as fronteiras entre os biomas são contínuas e suavizadas.
 Utilizando uma combinação de algoritmos e métodos, apresentamos detalhes da implementação de uma ferramenta geradora de um ambiente virtual onde os 
 terrenos são divididos entre planícies, montanhas, vales, desertos e cânyons. 
 Esses biomas tem altura e cor distintas, mas é possível utilizar a mesma técnica para suavizar
@@ -9,7 +9,7 @@ outras características como: temperatura, vegetação, frequência de vegetaç�
 
 A vantagem de utilizar uma abordagem não assistida para construção de um ambiente virtual é economizar esforço e tempo do desenvolvedor de jogos,
 permitindo que a geração de terrenos seja automatizada.  
-Isso pode ser facilmente ser usado para desenvolver um jogo na hora de distribuir 
+Isso pode ser facilmente usado para desenvolver um jogo na hora de distribuir 
 a raridade entre os biomas e a probabilidade de proximidade entre eles. Isso é visível em
 algumas das imagens \ref{fig:comparandofreqdebiomasyeah}.Essa técnica pode ajudar a desenvolver um terreno massivo para jogos com
 múltiplas características de terreno separadas em áreas quadradas.
@@ -20,12 +20,12 @@ múltiplas características de terreno separadas em áreas quadradas.
 \section{Trabalhos futuros}
 
 \begin{itemize}
-    \item Aplicar ruído unidimensional, nas fronteiras, desta maneira a área de fronteira
-    não será mais retângulos, e irá assumir uma forma mais orgânica.
+    \item Aplicar ruído unidimensional, nas fronteiras, desta maneira as áreas de fronteira
+    não serão mais retângulos, e irão assumir uma forma mais orgânica.
     \item Dividir as áreas de biomas usando diagrama de Voronoi sem perder a característica de fronteiras contínuas.
     \item Usar tesselação, criando quantidade de polígonos no terreno por demanda, 
-    isso vai aumentar o desempenho de \textit{frames} por segundo da aplicação, durante esse trabalho 
-    desempenho de \textit{fps} não foi levado em consideração por não ser objetivo deste projeto. E comparar os resultados de desempenho obtidos.
+    isso vai aumentar o desempenho de \textit{frames} por segundo da aplicação. 
+    Comparar resultados de desempenhos obtidos.
     \item Usar interpolações não lineares nas fronteiras.
     
 \end{itemize}

@@ -66,7 +66,7 @@ estiver calculada a \textit{chunk} começa a ser renderizada, substituindo a \te
 
 \textit{Terrain chunk} detém as estrutura $V$, um \textit{array} unidimensional que armazena
 vértices da malha.
-Antes de renderizar alguma chunk é necessário fazer uma translação com o vetor direção 
+Antes de renderizar alguma \textit{chunk} é necessário fazer uma translação com o vetor direção 
 $(x_{s} \cdot \Delta{v}, 0.0, z_{s} \cdot \Delta{v})$, já que internamente cada $v \in V$ vai 
 da posição $(0, 0)$ até $(\Delta{v} \cdot (k-1), \Delta{v} \cdot (k-1))$ figura \ref{fig:attt}, mas representando a área 
 no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v} \cdot (k-1), z_{s} + \Delta{v} \cdot (k-1))$ figura \ref{fig:affff}.
@@ -83,7 +83,8 @@ no mundo $(x_{s}, z_{s})$ até $(x_{s} + \Delta{v} \cdot (k-1), z_{s} + \Delta{v
 \section{Criando Malha de Triângulos}
 A maneira que um jogo renderiza seu terreno é com malha de triângulos \cite{dachsbacher2006interactive}.%refereincias
 Para representar um segmento de plano, é preciso de pelo menos $3$ vértices, 
-já que com apenas dois podemos apenas representar segmentos de retas. Com $4$ ou mais vértices,
+já que com apenas dois podemos apenas representar segmentos de retas. Todos os 
+vértices precisam estar contidos no mesmo plano, tendo o mesmo vetor normal associado. Com $4$ ou mais vértices,
 pelo menos um deles não teria a altura como variável livre, dessa maneira impossibilitando geração procedural de altura para todos os vértices.
 
 %Aqui vai o cálculo da equação do plano ou do vetor normal para mostrar o que
@@ -103,8 +104,8 @@ então existem dois triângulos na malha para serem renderizados, $T_{1} = \{ v_
     \label{fig:t1t2}
 \end{figure}
 
-O Algoritmo \ref{alg:genVectors} monta a estrutura $V$ com tamanho $k^2$, para cada $v \in V$
-é determinado $(x, z)$ e usa $y$ Algoritmo \ref{alg:vertexValuationm}. 
+O Algoritmo \ref{alg:genVectors} monta a estrutura $V$ com $k^2$ vértices, para cada $v \in V$
+é determinado $(x, z)$ e usa como $y$ o resultado do Algoritmo \ref{alg:vertexValuationm}. 
 Para definir a cor de cada vértice também é usado Algoritmo \ref{alg:vertexValuationm}. Em seguida é montado o
 \textit{array} $E$.
  
@@ -133,8 +134,8 @@ Para definir a cor de cada vértice também é usado Algoritmo \ref{alg:vertexVa
 \end{algorithm}
 
 Considerando que Algoritmo \ref{alg:vertexValuationm}($x, z$) retorne sempre a cor branca
-e a altura $0.0$, por hora os parâmetros $seed, b, l$ não terão influência, os mesmos 
-só serão usados na função Algoritmo\ref{alg:vertexValuationm}, e fixando os parâmetros: $x_{s}, z_{s} = 0$, 
+e a altura $0.0$, por hora, os parâmetros $seed, b, l$ não terão influência, pois os mesmos 
+só serão usados na função Algoritmo\ref{alg:vertexValuationm}. Portanto, fixando os parâmetros: $x_{s}, z_{s} = 0$, 
 podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:parametrosGrid}.
 
 \begin{figure}[H]
@@ -171,10 +172,10 @@ ponto $(x, z) \in \mathbb{Q}^{2}$, e retorna o valor de altura($h$), e $cor$ par
 E detém as seguintes varáveis:
 \begin{itemize}
     \item $Bioma \in \{$Planícies, Montanhas, Vales, Deserto, Cânyons$\}$: bioma de $(x, z)$;
-    \item $f_{Bioma} \in \mathbb{Q}$: frequência do bioma $Bioma$;
-    \item $afxz \in \mathbb{Q}$: frequência relativa ao tamanho da malha;
-    \item $h'$: valor retornado pelo $perlinNoise$;
-    \item $\theta_{Bioma} \in \mathbb{N}: \theta_{Bioma} > 0$ quantidade de oitavas a serem computadas do $Bioma$.
+    \item $f_{Bioma}$: frequência do bioma $Bioma$, $f_{Bioma} \in \mathbb{Q}$;
+    \item $afxz$: frequência relativa ao tamanho da malha, $afxz \in \mathbb{Q}$;
+    \item $h'$: valor retornado pelo $perlinNoise$, $h' \in \mathbb{Q}: -2 < h' < 2$;
+    \item $\theta_{Bioma}$: quantidade de oitavas a serem computadas do $Bioma$, $\theta_{Bioma} \in \mathbb{N}: \theta_{Bioma} > 0$.
 \end{itemize}
 
 
@@ -194,8 +195,8 @@ a cor branca, o resultado seria a figura\ref{fig:sssins}. Assim podemos perceber
     \label{fig:sssins}
 \end{figure}
 
-A função $perlinNoise(point, \theta)$, tendo um $point$ que pode pertencer ao
-conjunto $\mathbb{Q}$, $\mathbb{Q}^{2}$ ou $\mathbb{Q}^{3}$, retorna um valor $h' \in \mathbb{Q}$ para aquele $point$
+A função $perlinNoise(point, \theta)$, tendo um $point \in \mathbb{Q}^{2}$,
+retorna um valor $h' \in \mathbb{Q}$ para aquele $point$,
 usando $\theta$ oitavas. Podemos descrever a função $perlinNoise$ com a equação \ref{eq:thePerlinNoise22}.
 
 \begin{equation}\label{eq:thePerlinNoise22}
@@ -271,22 +272,17 @@ Parâmetros da figura \ref{fig:parametrosSeed}:
 
 \subsection{Cores}
 Como em um jogo, o terreno é representado por segmentos de planos, polígonos preenchidos e não um conjunto
-de vértices e arestas. O terreno será colorido apenas para facilitar a
+de vértices e arestas, o terreno será colorido apenas para facilitar a
 visualização. O valor $h'$ vai ficar com valores entre $-1$ e $1$, 
 quando passar desse intervalo temos certeza que $-2 < h' > 2$, já que a função Noise 
 usa um gradiente para gerar seus valores e o seu resultado jamais será maior que $1$
 e menor que $-1$ \cite{perlin1985image}, a entrada da função noise será um ponto($point$) no espaço, e $point \in \mathbb{Q}^{3}$.
-Na equação \ref{eq:thePerlinNoise} temos a recorrência de somatório da função
+Na equação \ref{eq:thePerlinNoise22} temos a recorrência de somatório da função
 \textit{Perlin Noise}, já nas equações \ref{eq:thePerlinNoisedesg1} e \ref{eq:thePerlinNoisedesg2}
 observasse os valores de borda, caso a função de \textit{Noise} sempre retornasse $1$ ou $-1$.
 
-\begin{equation}\label{eq:thePerlinNoise}
-  \begin{split}
-    perlinNoise(point, \theta) = \sum_{t=0}^{t=\theta} \frac{Noise(point \cdot 2^{t})}{2^{t}}
-  \end{split}
-\end{equation}
 A equação \ref{eq:thePerlinNoisedesg1} apresenta um caso degenerado caso a função
-\textit{Noise} sempre retornar $1$, o resultado de $2^{-\theta} \cdot (2^{\theta +1}-1)$
+\textit{Noise} sempre retorne $1$, o resultado de $2^{-\theta} \cdot (2^{\theta +1}-1)$
 apresenta o maior valor possível retornado na função \textit{perlinNoise} em função da quantidade 
 de oitavas($\theta$), analogamente a equação \ref{eq:thePerlinNoisedesg2} representa o menor valor.
  
@@ -310,8 +306,8 @@ de oitavas($\theta$), analogamente a equação \ref{eq:thePerlinNoisedesg2} repr
         $\theta$ & $0$ & $1$ & $2$ & $3$ & $4$ & $\infty$\\
         \hline
         $2^{-\theta} \cdot (2^{\theta +1}-1)$           & $1$  & $\frac{3}{2}$ & $\frac{7}{4}$ & $\frac{15}{8}$    & $\frac{31}{16}$ &   \\
-        Decimal na equação \ref{eq:thePerlinNoisedesg1} & $1$  & $1.5$   & $1.75$  & $1.875$ & $1.9375$  & $2$  \\
-        Decimal na equação \ref{eq:thePerlinNoisedesg2} & $-1$ & $-1.5$  & $-1.75$ & $-1.875$ & $1.9375$ & $-2$  \\
+        Resultado da equação \ref{eq:thePerlinNoisedesg1} & $1$  & $1.5$   & $1.75$  & $1.875$ & $1.9375$  & $2$  \\
+        Resultado da equação \ref{eq:thePerlinNoisedesg2} & $-1$ & $-1.5$  & $-1.75$ & $-1.875$ & $1.9375$ & $-2$  \\
         \hline
     \end{tabular}
 \end{table}
@@ -353,7 +349,7 @@ temos o resultado da figura \ref{fig:ssnhaha3}.
 \end{figure}
 
 \subsection{Manipulando ruído para criar Biomas}
-Para criar múltiplos biomas foi empregado valores de cores distintas para cada um deles, 
+Para criar múltiplos biomas foram empregados valores de cores distintas para cada um deles, 
 para que quando houvesse uma fronteira entre biomas a mesma pudesse ser mais notada. 
 Cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
 \begin{table}[H]
@@ -587,7 +583,7 @@ está acima da entrada $BH.acimaFlag \in \{true, false\}$ e a distância relativ
 da fronteira $BH.pDist \in \mathbb{Q}: 0 \leq BH.pDist \leq 1$. Caso a distância de $in$ até $b$ for bem 
 próxima de $l$ e menor que $l$ então o valor de $BH.pDist$ será proporcionalmente
 próximo a $1$. As variáveis
-$in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
+$in^{\star}, borda', borda'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
 
 \begin{algorithm}[H]\label{alg:borderTest}%Usando parâmetro e não k
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -600,8 +596,8 @@ $in^{\star}, borda', borada'' \in \mathbb{N}$ e $BH.pDist \in \mathbb{Q}$.
     $borda'' \leftarrow (in^{\star}/b) \cdot b$\;
     
     \If {$negativeFlag$}{
-        $borda' \leftarrow -borada'$\;
-        $borada'' \leftarrow -borada''$\;
+        $borda' \leftarrow -borda'$\;
+        $borda'' \leftarrow -borda''$\;
     }
     \tcc{Precisamos respeitar a restrição $l < b/2$ para o algoritmo entrar em apenas um dos seguintes casos}
     \If {abs$(borda' - in) < l$}{
@@ -723,12 +719,12 @@ Para suavizar as fronteiras é preciso saber quais valores de altura ($h$) e cor
 vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
 No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
 \begin{itemize}
-    \item Caso 1: $(x, y)$ está contida em uma fronteira com bioma $(dxs+1, dzs)$, 
+    \item Caso 1: $(x, z)$ está contida em uma fronteira com bioma $(dxs+1, dzs)$, 
     na imagem \ref{fig:paralgborder} $Bioma_{xp}$;
-    \item Caso 2: $(x, y)$ está contida em uma fronteira com bioma $(dxs, dzs+1)$, 
+    \item Caso 2: $(x, z)$ está contida em uma fronteira com bioma $(dxs, dzs+1)$, 
     na imagem \ref{fig:paralgborder} $Bioma_{zp}$;
     \item Caso 3: interseção dos Casos 1 e 2, então ambos já foram computados, 
-    e desta vez $(x, y)$ está em uma área de fronteira com os biomas $(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)$, 
+    e desta vez $(x, z)$ está em uma área de fronteira com os biomas $(dxs+1, dzs), (dxs, dzs+1), (dxs+1, dzs+1)$, 
     na imagem \ref{fig:paralgborder}, $Bioma_{xp}, Bioma_{zp}, Bioma_{xzp}$ respectivamente.
 \end{itemize}
 
