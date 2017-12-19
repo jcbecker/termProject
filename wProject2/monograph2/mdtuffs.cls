@@ -444,8 +444,8 @@
                 \indent\pageref{LastPage}~f.: il.; 30 cm. \par
 				\indent\iforientadora\advisornamef\else\advisorname\fi: \@advisorfirst\ \@advisorlast
 				\@ifundefined{@coadvisor}{}{\\ \indent\ifcoorientadora\coadvisornamef\else\coadvisorname\fi: \@coadvisorfirst\ \@coadvisorlast} \\
-				\indent \doctypenameCIP \ - \uffs, \@institute, \@altcourse, Chapec\'{o}, \@publyear. \par
-                \@cipkw I.~\@advisorlast, \@advisorfirst. \@ifundefined{@coadvisorfirst}{II.~T\'{\i}tulo.}{II.~\@coadvisorlast, \@coadvisorfirst. III.~T\'{\i}tulo.}\par
+				\indent \doctypenameCIP \ - \uffs, \@institute, Chapec\'{o}, \@publyear. \par
+                1. INTRODU\c{C}\~AO. 2. REFERENCIAL TE\'ORICO. 3. RESULTADOS. 4. IMPLEMENTA\c{C}\~AO. 5. CONCLUS\~OES E TRABALHOS FUTUROS. \@cipkw I.~\@advisorlast, \@advisorfirst. \@ifundefined{@coadvisorfirst}{II.~T\'{\i}tulo.}{II.~\@coadvisorlast, \@coadvisorfirst. III.~T\'{\i}tulo.}\par
         \vspace{4ex}
         \end{minipage}%
         }%
