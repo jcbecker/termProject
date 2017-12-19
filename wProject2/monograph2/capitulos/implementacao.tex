@@ -104,9 +104,9 @@ então existem dois triângulos na malha para serem renderizados, $T_{1} = \{ v_
     \label{fig:t1t2}
 \end{figure}
 
-O Algoritmo \ref{alg:genVectors} monta a estrutura $V$ com $k^2$ vértices, para cada $v \in V$
-é determinado $(x, z)$ e usa como $y$ o resultado do Algoritmo \ref{alg:vertexValuationm}. 
-Para definir a cor de cada vértice também é usado Algoritmo \ref{alg:vertexValuationm}. Em seguida é montado o
+O Algoritmo \ref{alg:genVectors}:(Construção da coleção de vértices e índices) monta a estrutura $V$ com $k^2$ vértices, para cada $v \in V$
+é determinado $(x, z)$ e usa como $y$ o resultado do Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices). 
+Para definir a cor de cada vértice também é usado Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices). Em seguida é montado o
 \textit{array} $E$.
  
 \begin{algorithm}[H]\label{alg:genVectors}
@@ -133,9 +133,9 @@ Para definir a cor de cada vértice também é usado Algoritmo \ref{alg:vertexVa
     \caption{Construção da coleção de vértices e índices.}
 \end{algorithm}
 
-Considerando que Algoritmo \ref{alg:vertexValuationm}($x, z$) retorne sempre a cor branca
+Considerando que Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices)($x, z$) retorne sempre a cor branca
 e a altura $0.0$, por hora, os parâmetros $seed, b, l$ não terão influência, pois os mesmos 
-só serão usados na função Algoritmo\ref{alg:vertexValuationm}. Portanto, fixando os parâmetros: $x_{s}, z_{s} = 0$, 
+só serão usados na função Algoritmo\ref{alg:vertexValuationm}:(Valoração de vértices). Portanto, fixando os parâmetros: $x_{s}, z_{s} = 0$, 
 podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:parametrosGrid}.
 
 \begin{figure}[H]
@@ -150,10 +150,10 @@ podemos analisar a influencia de $k$ e $\Delta_{v}$ nas figuras \ref{fig:paramet
 
 \section{Valoração dos vértices}
 
-O Algoritmo \ref{alg:vertexValuationm} será chamado para cada vértice $v \in V$. 
+O Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices) será chamado para cada vértice $v \in V$. 
 Este algoritmo será responsável para decidir os valores de $y$ e $cor$ associados
-a cada $v$ no Algoritmo \ref{alg:genVectors}. A altura do vértice está representada
-como $h$ no Algoritmo \ref{alg:vertexValuationm}.
+a cada $v$ no Algoritmo \ref{alg:genVectors}:(Construção da coleção de vértices e índices). A altura do vértice está representada
+como $h$ no Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices).
 
 \begin{algorithm}[H]\label{alg:vertexValuationm}%Usando parâmetro e não k
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -167,7 +167,7 @@ como $h$ no Algoritmo \ref{alg:vertexValuationm}.
     retorna $cor, h$\;
     \caption{Valoração de vértices.}
 \end{algorithm}
-O Algoritmo \ref{alg:vertexValuationm}, recebe como parâmetro um
+O Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices), recebe como parâmetro um
 ponto $(x, z) \in \mathbb{Q}^{2}$, e retorna o valor de altura($h$), e $cor$ para o valor de parâmetro.
 E detém as seguintes varáveis:
 \begin{itemize}
@@ -179,14 +179,14 @@ E detém as seguintes varáveis:
 \end{itemize}
 
 
-O Algoritmo \ref{alg:borderFinal} é uma sequencia direta da função de valoração 
-descrita acima(Algoritmo\ref{alg:vertexValuationm}), ambos pertencem ao mesmo escopo, o Algoritmo \ref{alg:borderFinal}
+O Algoritmo \ref{alg:borderFinal}:(Interpolação nas fronteiras) é uma sequencia direta da função de valoração 
+descrita acima(Algoritmo\ref{alg:vertexValuationm}:(Valoração de vértices)), ambos pertencem ao mesmo escopo, o Algoritmo \ref{alg:borderFinal}:(Interpolação nas fronteiras)
 se encarrega de fazer interpolação entre áreas de biomas quando $(x, z)$ pertence
 a alguma fronteira.
 
 \section{Aplicando Ruído de Perlin nos Vértices}
-Supondo que o Algoritmo \ref{alg:vertexValuationm} retorne sempre $h = (sin(x/10) + sin(z/10)) \cdot 4$ e 
-a cor branca, o resultado seria a figura\ref{fig:sssins}. Assim podemos perceber o papel do Algoritmo \ref{alg:vertexValuationm}.
+Supondo que o Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices) retorne sempre $h = (sin(x/10) + sin(z/10)) \cdot 4$ e 
+a cor branca, o resultado seria a figura\ref{fig:sssins}. Assim podemos perceber o papel do Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices).
 
 \begin{figure}[H]
     \centering
@@ -208,7 +208,7 @@ usando $\theta$ oitavas. Podemos descrever a função $perlinNoise$ com a equaç
 A função $Noise$ jamais vai retornar um valor maior que $1$ ou menor que $-1$ \cite{perlin1985image}, e o retorno dela
 está no conjunto $\mathbb{Q}$.
 
-Supondo que o Algoritmo \ref{alg:vertexValuationm} retorne sempre $h$ descrito na equação \ref{eq:thePerlinNoise223}
+Supondo que o Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices) retorne sempre $h$ descrito na equação \ref{eq:thePerlinNoise223}
 e cor branca, usando $afxz = k/f$, e usando os parâmetros descritos nas imagens \ref{fig:parametrosOctaves},
 \ref{fig:parametrosfreq} e \ref{fig:parametrosSeed} podemos visualizar seus resultados nas próprias imagens. Nas imagens \ref{fig:parametrosOctaves}
 é visto que quanto maior a quantidade de oitavas ($\theta$) mais enrugado fica o relevo. As imagens \ref{fig:parametrosfreq} mostram o comportamento do terreno com diferentes
@@ -317,9 +317,9 @@ de oitavas($\theta$), analogamente a equação \ref{eq:thePerlinNoisedesg2} repr
 
 %DEBUG: preciso mostrar a fómula de recorência pra isso, seria bom se a mesma já foce explicada na sessão de perlin noise.
 Assim podemos
-usar o Algoritmo \ref{alg:colorValuation} para definir a cor do vértice baseado na altura.
-$cor$ no algoritmo \ref{alg:colorValuation} é o valor recebido pelo Algoritmo \ref{alg:genVectors}
-quando chama Algoritmo \ref{alg:vertexValuationm}$(x_{s} + i, z_{s} + j).cor$.
+usar o Algoritmo \ref{alg:colorValuation}:(Coloração de vértices) para definir a cor do vértice baseado na altura.
+$cor$ no algoritmo \ref{alg:colorValuation}:(Coloração de vértices) é o valor recebido pelo Algoritmo \ref{alg:genVectors}:(Construção da coleção de vértices e índices)
+quando chama Algoritmo \ref{alg:vertexValuationm}:(Valoração de vértices)$(x_{s} + i, z_{s} + j).cor$.
 
 A função $clamp$ limita seu primeiro parâmetro em um intervalo, Por exemplo, se for 
 usado $clamp(x, a, b)$, a resposta será $x$ caso $a \leq x \leq b$, será $a$ se $a > x$ e $b$ se $x > b$.
@@ -373,11 +373,11 @@ Cores usadas para cada um dos biomas está na tabela \ref{tab:bioColors}.
 \end{table}
 
 Os valores descritos na tabela \ref{tab:bioColors} ainda não podem ser usados no
-Algoritmo \ref{alg:colorValuation} porque estão em formatos diferentes, dessa forma temos
+Algoritmo \ref{alg:colorValuation}:(Coloração de vértices) porque estão em formatos diferentes, dessa forma temos
 que: $minColor = \frac{minColor'}{255}$, $midColor = \frac{midColor'}{255}$ e $maxColor = \frac{maxColor'}{255}$ . Cada uma das cores recebe um valor
 $0 \leq r, g, b \leq 1$.
 Além de cada bioma ter uma frequência ($f$) e quantidade de oitavas ($\theta$) associadas
-também tem uma função de manipulação do ruído, o Algoritmo \ref{alg:hBioValuation}, 
+também tem uma função de manipulação do ruído, o Algoritmo \ref{alg:hBioValuation}:(Altura por bioma), 
 como entrada tem o valor $h'$ e $biomaTipo$ para definir a maneira com que a altura vai ser
 calculada.
 
@@ -406,7 +406,7 @@ calculada.
 
 Quando fixados os valores de cores com as mostradas
 na tabela \ref{tab:bioColors} e de $biomaTipo$, usando o
-Algoritmo \ref{alg:hBioValuation} é gerado mapas com um bioma,
+Algoritmo \ref{alg:hBioValuation}:(Altura por bioma) é gerado mapas com um bioma,
 os resultados são mostrados nas imagens \ref{fig:bssComBiomasFixados}.
 
 Para acessar os valores de algum bioma descrito na tabela \ref{tab:bioColors}, como oitava por exemplo,
@@ -499,7 +499,7 @@ B_{b} =
 
 Mas a intenção não é criar divisões nesse estilo de "xadrez" então será usado um 
 ruído como parâmetros $dxs$ e $dzs$ para definir o bioma de cada região é usado
-o Algoritmo \ref{alg:getBiomeXZ}.
+o Algoritmo \ref{alg:getBiomeXZ}:(Escolhendo biomas em áreas de tamanho $b$).
 
 \begin{algorithm}[H]\label{alg:getBiomeXZ}
     \SetKwInOut{Input}{entrada}\SetKwInOut{Output}{output}
@@ -575,12 +575,12 @@ a jogabilidade neste terreno. %descontinuos.png
 
 Para detectar a proximidade de um vértice a alguma fronteira podemos calcular o 
 quão próximo ele está de algum ponto divisível por $b$, isso será feito com 
-o Algoritmo \ref{alg:borderTest}. O algoritmo recebe uma entrada $in$ e calcula
+o Algoritmo \ref{alg:borderTest}:(Teste de fronteira). O algoritmo recebe uma entrada $in$ e calcula
 a distância euclidiana unidimensional com o valor divisível por $b$ mais próximo 
 de $in$. Caso essa distância for menor que $l$ então o vértice em questão é 
 fronteira.
 
-O Algoritmo \ref{alg:borderTest} retorna uma estrutura $BH$, com as informações
+O Algoritmo \ref{alg:borderTest}:(Teste de fronteira) retorna uma estrutura $BH$, com as informações
 se o parâmetro é uma fronteira $BH.bordaFlag \in \{true, false\}$, se a fronteira 
 está acima da entrada $BH.acimaFlag \in \{true, false\}$ e a distância relativa 
 da fronteira $BH.pDist \in \mathbb{Q}: 0 \leq BH.pDist \leq 1$. Caso a distância de $in$ até $b$ for bem 
@@ -720,7 +720,7 @@ os vértices da área $(dxs-1, dzs)$ estiverem sendo computadas.
 
 Para suavizar as fronteiras é preciso saber quais valores de altura ($h$) e cor o
 vértice que estamos calculando ($x, z$) teria se pertencesse ao bioma vizinho.
-No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
+No Algoritmo \ref{alg:borderFinal}:(Interpolação nas fronteiras), teremos casos em que:
 \begin{itemize}
     \item Caso 1: $(x, z)$ está contida em uma fronteira com bioma $(dxs+1, dzs)$, 
     na imagem \ref{fig:paralgborder} $Bioma_{xp}$;
@@ -734,7 +734,7 @@ No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{figuras/border/yeah.png}
-    \caption{Algumas variáveis do algoritmo \ref{alg:borderFinal}}
+    \caption{Algumas variáveis do algoritmo \ref{alg:borderFinal}:(Interpolação nas fronteiras)}
     \label{fig:paralgborder}
 \end{figure}
 
@@ -781,7 +781,7 @@ No Algoritmo \ref{alg:borderFinal}, teremos casos em que:
     \caption{Interpolação nas fronteiras.}
 \end{algorithm}
 
-No Algoritmo \ref{alg:borderFinal} as variáveis calculadas:
+No Algoritmo \ref{alg:borderFinal}:(Interpolação nas fronteiras) as variáveis calculadas:
 \begin{itemize}
     \item $h_{xp}$: altura do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{xp}$;
     \item $h_{zp}$: altura do ponto $(x, z)$ usando parâmetros e cálculos do bioma $Bioma_{zp}$;
