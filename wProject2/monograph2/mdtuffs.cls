@@ -444,7 +444,7 @@
                 \indent\pageref{LastPage}~f.: il.; 30 cm. \par
 				\indent\iforientadora\advisornamef\else\advisorname\fi: \@advisorfirst\ \@advisorlast
 				\@ifundefined{@coadvisor}{}{\\ \indent\ifcoorientadora\coadvisornamef\else\coadvisorname\fi: \@coadvisorfirst\ \@coadvisorlast} \\
-				\indent \doctypenameCIP \ - \uffs, \@institute, \@altcourse, RS, \@publyear. \par
+				\indent \doctypenameCIP \ - \uffs, \@institute, \@altcourse, Chapec\'{o}, \@publyear. \par
                 \@cipkw I.~\@advisorlast, \@advisorfirst. \@ifundefined{@coadvisorfirst}{II.~T\'{\i}tulo.}{II.~\@coadvisorlast, \@coadvisorfirst. III.~T\'{\i}tulo.}\par
         \vspace{4ex}
         \end{minipage}%
