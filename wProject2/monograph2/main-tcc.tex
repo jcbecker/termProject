@@ -17,6 +17,7 @@
 \usepackage{caption}
 \usepackage{subfig}             % para usar várias figuras em subfloats
 \usepackage{float}              % para utilizar a opção H nas figuras.
+\usepackage[final]{pdfpages}
 
 %\usepackage{pgf,tikz}
 %\usepackage{mathrsfs}
@@ -158,7 +159,8 @@
 %folha de aprovação
 
 %IMPORTANTE: Esta folha deverá ser impressa e assinada pela banca e depois digitalizada e inserida no arquivo final para entrega no repositório institucional.
-\makeapprove
+%\makeapprove
+\includepdf[]{scan.pdf}
 
 %%=============================================================================
 %% Dedicatória (opcional)
