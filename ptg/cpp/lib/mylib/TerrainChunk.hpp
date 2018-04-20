@@ -1,5 +1,5 @@
-#ifndef TERRAICHUNCK_HPP
-#define TERRAICHUNCK_HPP
+#ifndef TERRAICHUNK_HPP
+#define TERRAICHUNK_HPP
 
 #include <cstdio>
 
@@ -25,7 +25,7 @@ struct BorderHelper{
     double pDistToBorder;
 };
 
-class TerrainChunck{
+class TerrainChunk{
 private:
     unsigned int gridSize, seed;
     float vertexInterval;
@@ -41,7 +41,7 @@ public:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     
-    TerrainChunck(unsigned int pseed, float pvertexInterval, unsigned int pgridSize, float pxi, float pzi, unsigned int pBiosz, unsigned int pBioborderlen){
+    TerrainChunk(unsigned int pseed, float pvertexInterval, unsigned int pgridSize, float pxi, float pzi, unsigned int pBiosz, unsigned int pBioborderlen){
         this->seed = pseed;
         this->vertexInterval = pvertexInterval;
         this->gridSize = pgridSize;
@@ -518,7 +518,7 @@ private:
     }
     
 public:
-    void DrawChunck(){
+    void DrawChunk(){
         glBindVertexArray(this->VAO);
         glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);

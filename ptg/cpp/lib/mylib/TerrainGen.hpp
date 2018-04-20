@@ -2,32 +2,32 @@
 #define TERRAINGEN_HPP
 
 #include <glm/glm.hpp>
-#include <TerrainChunck.hpp>
+#include <TerrainChunk.hpp>
 #include <shader.hpp>
 
 
 class TerrainGen{
 private:
-    unsigned int seed, chunckSize;
+    unsigned int seed, chunkSize;
     float vertexInterval;
     unsigned int biomeSize, borderLen;
     Shader sProgram;
 public:
     //glm::vec3 globalPos;
-    TerrainChunck *tca1;
-    //TerrainChunck *tca2;
+    TerrainChunk *tca1;
+    //TerrainChunk *tca2;
     
     
     TerrainGen(unsigned int pSeed, unsigned int psp):sProgram(psp){
         this->seed = pSeed;
         this->vertexInterval = 0.5;
-        this->chunckSize = 1024*2;
+        this->chunkSize = 1024*2;
         this->biomeSize = 512;
         this->borderLen = 64;
     //    this->globalPos = glm::vec3(0.0f, 17.0f, -25.0f)
-        tca1 = new TerrainChunck(this->seed, this->vertexInterval, this->chunckSize, this->chunckSize/2.0f*-1.0f,  this->chunckSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
-    //    tca2 = new TerrainChunck(this->seed, this->vertexInterval, this->chunckSize, 0, 0, this->biomeSize, this->borderLen);
-        //tca2 = new TerrainChunck(this->seed, this->vertexInterval, this->chunckSize, 1024-1 , this->chunckSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
+        tca1 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, this->chunkSize/2.0f*-1.0f,  this->chunkSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
+    //    tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, 0, 0, this->biomeSize, this->borderLen);
+        //tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, 1024-1 , this->chunkSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
         
     }
     
@@ -36,21 +36,21 @@ public:
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, tca1->getInitialXZ());
         this->sProgram.setMat4("model", model);
-        tca1->DrawChunck();
+        tca1->DrawChunk();
         
         
         //model = glm::mat4(1.0f);
         //model = glm::translate(model, tca2->getInitialXZ());
         //this->sProgram.setMat4("model", model);
-        //tca2->DrawChunck();
+        //tca2->DrawChunk();
         
     }
     
     void rebuild(glm::vec3 cpos){
         //tca2->shutDown();
-        double offsetxz = this->chunckSize/2.0;
+        double offsetxz = this->chunkSize/2.0;
         
-        //tca2 = new TerrainChunck(this->seed, this->vertexInterval, this->chunckSize, cpos.x/this->vertexInterval - offsetxz, cpos.z/this->vertexInterval - offsetxz, this->biomeSize, this->borderLen);
+        //tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, cpos.x/this->vertexInterval - offsetxz, cpos.z/this->vertexInterval - offsetxz, this->biomeSize, this->borderLen);
         
         
     }
