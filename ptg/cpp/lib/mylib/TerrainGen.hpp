@@ -13,7 +13,6 @@ private:
     unsigned int biomeSize, borderLen;
     Shader sProgram;
 public:
-    //glm::vec3 globalPos;
     TerrainChunk *tca1;
     //TerrainChunk *tca2;
     
@@ -24,9 +23,8 @@ public:
         this->chunkSize = 1024*2;
         this->biomeSize = 512;
         this->borderLen = 64;
-    //    this->globalPos = glm::vec3(0.0f, 17.0f, -25.0f)
         tca1 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, this->chunkSize/2.0f*-1.0f,  this->chunkSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
-    //    tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, 0, 0, this->biomeSize, this->borderLen);
+        //tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, 0, 0, this->biomeSize, this->borderLen);
         //tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, 1024-1 , this->chunkSize/2.0f*-1.0f, this->biomeSize, this->borderLen);
         
     }
@@ -49,9 +47,6 @@ public:
     void rebuild(glm::vec3 cpos){
         //tca2->shutDown();
         double offsetxz = this->chunkSize/2.0;
-        
-        //tca2 = new TerrainChunk(this->seed, this->vertexInterval, this->chunkSize, cpos.x/this->vertexInterval - offsetxz, cpos.z/this->vertexInterval - offsetxz, this->biomeSize, this->borderLen);
-        
         
     }
     

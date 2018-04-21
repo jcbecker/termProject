@@ -5,7 +5,7 @@
 
 
 enum BiomeType : int{
-PLAINS = 0, MONTAINS = 1, VALLEY = 2, DESERT = 3, CANYONS = 4
+PLAINS = 0, MOUNTAINS = 1, VALLEY = 2, DESERT = 3, CANYONS = 4
     
 };
 
@@ -23,14 +23,7 @@ glm::vec3 rgbTransform(glm::vec3 inrgb){
 }
 
 BiomeValues getTheBiomeDescription(BiomeType pbt){
-    /*
-    descrip.bFrequence =
-    descrip.bOctaves   =
-    descrip.minColor   = rgbTransform(glm::vec3());
-    descrip.midColor   = rgbTransform(glm::vec3());
-    descrip.maxColor   = rgbTransform(glm::vec3());
     
-    */
     
     BiomeValues descrip;
     //--------------------------------------------------------------------------PLAINS
@@ -41,7 +34,7 @@ BiomeValues getTheBiomeDescription(BiomeType pbt){
         descrip.midColor   = rgbTransform(glm::vec3(154.0,205.0,50.0));
         descrip.maxColor   = rgbTransform(glm::vec3(143.0,188.0,143.0));//(143,188,143)
         
-    }else if(pbt == MONTAINS){//------------------------------------------------MONTAINS
+    }else if(pbt == MOUNTAINS){//------------------------------------------------MOUNTAINS
         descrip.bFrequence = 18.0;
         descrip.bOctaves   = 8;
         descrip.minColor   = rgbTransform(glm::vec3(128.0, 128.0, 0.0));
