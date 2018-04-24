@@ -34,7 +34,7 @@ void Camera::moveForwarRel(float deltaT){
 void Camera::moveBackwardRel(float deltaT){
     this->pos -= front * (movSpeed * deltaT);
 }
-void Camera::moveLeftRel(float deltaT){//Right vecor is equal to glm::normalize(glm::cross(cameraFront, cameraUp))
+void Camera::moveLeftRel(float deltaT){//Right vector is equal to glm::normalize(glm::cross(cameraFront, cameraUp))
     this->pos -= glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
 }
 void Camera::moveRightRel(float deltaT){
@@ -50,7 +50,7 @@ void Camera::moveBackwardRelXZ(float deltaT){
     this->pos -= front * (movSpeed * deltaT);
     this->pos.y = auxy;
 }
-void Camera::moveLeftRelXZ(float deltaT){//Right vecor is equal to glm::normalize(glm::cross(cameraFront, cameraUp))
+void Camera::moveLeftRelXZ(float deltaT){//Right vector is equal to glm::normalize(glm::cross(cameraFront, cameraUp))
     float auxy = this->pos.y;
     this->pos -= glm::normalize(glm::cross(front, up)) * (movSpeed * deltaT);
     this->pos.y = auxy;

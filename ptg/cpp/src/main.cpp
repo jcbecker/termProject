@@ -2,11 +2,6 @@
 #include<ptg.hpp>
 
 
-float myabs(float a){
-    if(a < 0) return a*-1;
-    return a;
-}
-
 bool showMesh;
 bool showAxes;
 bool rebuildflag;
