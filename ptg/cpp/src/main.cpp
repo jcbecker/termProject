@@ -37,7 +37,7 @@ int main(){
     glfwSetCursorPosCallback(window, cursorPosCallback);
     glfwSetScrollCallback(window, scrollCallback);
     
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);//No cursor, is for camera mode
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);//No cursor, camera mode only
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
@@ -49,7 +49,8 @@ int main(){
     //Configure global opengl state to use z-buffer
     glEnable(GL_DEPTH_TEST);
     
-    Shader terrainProgram("shader/terrain.vs", "shader/terrain.fs"); // you can name your shader files however you like
+    //read shader files
+    Shader terrainProgram("shader/terrain.vs", "shader/terrain.fs");
     
     
     float myAxes[] = {
@@ -136,8 +137,6 @@ int main(){
         view  = cam.getViewMatrix();
         glfwGetWindowSize(window, &cscr_w, &cscr_h);//essa função é threadsafe
         projection = glm::perspective(glm::radians(cam.zoomC), (float)cscr_w / (float)cscr_h, 0.1f, 2200.0f);
-        // retrieve the matrix uniform locations
-        // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         terrainProgram.setMat4("projection", projection);
         terrainProgram.setMat4("view", view);
         
@@ -158,9 +157,6 @@ int main(){
             rebuildflag = false;
         }
         
-        //glDrawArrays(GL_POINTS, 0, 1024*1024);
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        //glDrawElements(GL_TRIANGLES, 1023*1023*6, GL_UNSIGNED_INT, 0);
         
         if(showMesh){
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -194,28 +190,20 @@ static void errorCallback(int error, const char* description){
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){//input callBack
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)//close window
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if (key == GLFW_KEY_M && action == GLFW_PRESS)
+    if (key == GLFW_KEY_M && action == GLFW_PRESS)//intercalate, mesh and fill terrain
         showMesh = !showMesh;
-    if (key == GLFW_KEY_K && action == GLFW_PRESS)
+    if (key == GLFW_KEY_K && action == GLFW_PRESS)//show/hide axes
         showAxes = !showAxes;
-    if (key == GLFW_KEY_P && action == GLFW_PRESS){
+    if (key == GLFW_KEY_P && action == GLFW_PRESS){//move camera to specific location with specific angle view
         Camera* cam = (Camera*)glfwGetWindowUserPointer(window);
-        //cam->pos = glm::vec3(-89.697205, 53.212006, -73.306412);
-        //cam->front = glm::vec3(-0.952503, -0.289032, -0.095911);
-        //(-62.243267, 167.922119, 466.284637),(0.751850, -0.372178, -0.544247)
-        
-        
-        //cam->pos = glm::vec3(-62.243267, 167.922119, 466.284637);
-        //cam->front = glm::vec3(0.751850, -0.372178, -0.544247);
-        //(463.676422, 834.113159, -979.279053),(0.012264, -0.624562, 0.780879)
         cam->pos = glm::vec3(42.237156, 142.904083, -199.660156);
         cam->front = glm::vec3(0.921904, -0.365689, -0.127925);
         
     }
     
-    if (key == GLFW_KEY_R && action == GLFW_PRESS){
+    if (key == GLFW_KEY_R && action == GLFW_PRESS){//build a new terrain chunk in the camera position
         rebuildflag = true;
     }
 }
