@@ -10,6 +10,18 @@ distinct biomes, spread them in regions and smooth their borders. The area, freq
 and smoothness of the biomes and the terrain can be adjusted through parameters. The resulting
 work is a terrain generator suited for computer games development.
 
+### Biomes
+
+![5 Terrain in distinct biomes](images/biomes.png?raw=true "Biomes")
+
+![6 Images with different frequencies of distribution of biomes](images/biomefrequency.png?raw=true "BiomesFrequency")
+
+![Discontinuous terrain and another continuous](images/interpolation1.png?raw=true "Border comparison1")
+
+![4 images to see the influence of interpolation](images/interpolation2.png?raw=true "Border comparison2")
+
+
+
 ## How to build
 
 ```shell
