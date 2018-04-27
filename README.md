@@ -37,6 +37,8 @@ work is a terrain generator suited for computer games development.
 * The project was developed in arch linux with gnome and wayland, with no intention of being cross-platform;
 * The x file was written to run on my pc, but it could probably run on other systems with some modifications.
 
+* The [Perlin noise](<https://github.com/Reputeless/PerlinNoise>) implementation was writed by [Ryo Suzuki](<https://github.com/Reputeless>)
+
 ### Dependencies
 
 * Graphic card whith driver who support modern OpenGL (3.3v and 4.5v)
