@@ -63,3 +63,7 @@ make
 ```shell
 ./ptg
 ```
+
+## License
+
+termProject is licensed under the terms of the [MIT](https://choosealicense.com/licenses/mit/) Open Source license and is available for free
