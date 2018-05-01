@@ -1,5 +1,5 @@
 # termProject
-Repository to organize my term project, is a terrain generator
+This is the repository of my term project: a terrain generator.
 ![3-dimensional perspective height map](images/screenShot1.png?raw=true "Preview")
 
 ### Abstract
