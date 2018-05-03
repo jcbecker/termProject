@@ -11,18 +11,18 @@ and smoothness of the biomes and the terrain can be adjusted through parameters.
 work is a terrain generator suited for computer games development.
 
 ### Biomes
-* The terrain may have 5 biomes, each one with different ways of calculating the relief.
-* It's possible to create more biomes with few modifications
+* The terrain may have 5 biomes, each one with different ways of calculating the relief;
+* It's possible to create more biomes with few modifications;
 
 
 ![5 Terrain in distinct biomes](images/biomes.png?raw=true "Biomes")
 
-* Biomes have square areas, the probability of the adjacent square being the same biome is controlled
+* Biomes have square areas, the probability of the adjacent square being the same biome is controlled;
 
 ![6 Images with different frequencies of distribution of biomes](images/biomefrequency.png?raw=true "BiomesFrequency")
 
-* The boundaries are continuous by interpolation
-* The distance from the interpolation is controlled
+* The boundaries are continuous by interpolation;
+* The distance from the interpolation is controlled.
 
 ![Discontinuous terrain and another continuous](images/interpolation1.png?raw=true "Border comparison1")
 
@@ -35,18 +35,19 @@ work is a terrain generator suited for computer games development.
 ### About
 
 * The project was developed in arch linux with gnome and wayland, with no intention of being cross-platform;
-* The x file was written to run on my pc, but it could probably run on other systems with some modifications.
+* The x file was written to run on my pc, but it could probably run on other systems with some modifications;
 
-* The [Perlin noise](<https://github.com/Reputeless/PerlinNoise>) implementation was writed by [Ryo Suzuki](<https://github.com/Reputeless>)
+* The [Perlin noise](<https://github.com/Reputeless/PerlinNoise>) implementation was writed by [Ryo Suzuki](<https://github.com/Reputeless>).
 
 ### Dependencies
 
-* Graphic card whith driver who support modern OpenGL (3.3v and 4.5v)
-* C++: compiler
-* GLFW: provided in git submodule
-* GLAD: provided in git submodule
-* GLM: provided in git submodule
+* Graphic card whith driver who support modern OpenGL (3.3v and 4.5v);
+* C++: compiler;
+* GLFW: provided in git submodule;
+* GLAD: provided in git submodule;
+* GLM: provided in git submodule.
 
+* Mail me if I forgot something, beckerjc95@gmail.com.
 ### How to build
 
 ```shell
@@ -68,4 +69,4 @@ make
 
 ## License
 
-termProject is licensed under the terms of the [MIT](https://choosealicense.com/licenses/mit/) Open Source license and is available for free
+termProject is licensed under the terms of the [MIT](https://choosealicense.com/licenses/mit/) Open Source license and is available for free.
